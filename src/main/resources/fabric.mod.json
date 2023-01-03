@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "dssb",
+	"version": "${version}",
+	"name": "DidSomeoneSayBingo",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"EncryptedThoughts"
+	],
+	"contact": {
+		"sources": "https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo"
+	},
+	"license": "MIT",
+	"icon": "assets/dssb/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"encrypted.dssb.ExampleMod"
+		],
+		"client": [
+			"encrypted.dssb.ExampleModClient"
+		]
+	},
+	"mixins": [
+		"dssb.mixin.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.12",
+		"minecraft": "~1.19.3",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
