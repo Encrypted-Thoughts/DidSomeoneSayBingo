@@ -3,10 +3,11 @@
 	"minVersion": "0.8",
 	"package": "encrypted.dssb.mixin",
 	"compatibilityLevel": "JAVA_17",
-	"mixins": [],
-	"client": [
-		"ExampleMixin"
+	"mixins": [
+		"InventoryChangedCriterionMixin",
+		"PlayerManagerMixin"
 	],
+	"client": [],
 	"injectors": {
 		"defaultRequire": 1
 	}

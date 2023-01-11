@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "dssb",
+	"id": "dssbingo",
 	"version": "${version}",
 	"name": "DidSomeoneSayBingo",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A server side version of bingo made for fabric.",
 	"authors": [
 		"EncryptedThoughts"
 	],
@@ -15,10 +15,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"encrypted.dssb.ExampleMod"
-		],
-		"client": [
-			"encrypted.dssb.ExampleModClient"
+			"encrypted.dssb.BingoMod"
 		]
 	},
 	"mixins": [
@@ -29,8 +26,5 @@
 		"minecraft": "~1.19.3",
 		"java": ">=17",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
