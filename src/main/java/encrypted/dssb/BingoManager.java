@@ -165,15 +165,15 @@ public class BingoManager {
                 MutableText text = null;
                 switch (mode.toLowerCase()) {
                     case "bingo" -> {
-                        text = Text.literal("Game mode set to Regular Bingo.").formatted(Formatting.WHITE);
+                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Regular Bingo").formatted(Formatting.GREEN));
                         Game = new Bingo(server, CurrentItems);
                     }
                     case "lockout" -> {
-                        text = Text.literal("Game mode set to Lockout Bingo.").formatted(Formatting.WHITE);
+                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Lockout Bingo").formatted(Formatting.GREEN));
                         Game = new Lockout(server, CurrentItems);
                     }
                     case "blackout" -> {
-                        text = Text.literal("Game mode set to Blackout Bingo.").formatted(Formatting.WHITE);
+                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Blackout Bingo").formatted(Formatting.GREEN));
                         Game = new Blackout(server, CurrentItems);
                     }
                 }
@@ -590,13 +590,13 @@ public class BingoManager {
 
     public static void runOnPlayerConnectionEvent(ServerPlayerEntity player) {
         MessageHelper.sendSystemMessage(player, Text.literal("Welcome to Bingo!").formatted(Formatting.GREEN));
-        MessageHelper.sendSystemMessage(player, Text.literal("Right click a sign to join a team or do /join <team>.").formatted(Formatting.WHITE));
-        MessageHelper.sendSystemMessage(player, Text.literal("For more information about the various commands that exist do /bingo.").formatted(Formatting.WHITE));
+        MessageHelper.sendSystemMessage(player, Text.literal("Right click a sign to join a team or do '/bingo team join <team>'").formatted(Formatting.WHITE));
+        MessageHelper.sendSystemMessage(player, Text.literal("For more information about the various commands that exist do '/bingo'").formatted(Formatting.WHITE));
 
         try {
             BingoSettingsCommand.tellSettings(player);
         } catch (CommandSyntaxException e) {
-            BingoMod.LOGGER.error("Unable to tell player: %s the command options.".formatted(player.getDisplayName().getString()));
+            BingoMod.LOGGER.error("Unable to tell player: %s the command options".formatted(player.getDisplayName().getString()));
             e.printStackTrace();
         }
 

@@ -79,14 +79,14 @@ public class BingoSettingsCommand {
                                         .then(literal("none")
                                                 .executes(ctx -> {
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Starting equipment set to None.").formatted(Formatting.WHITE));
+                                                            Text.literal("Starting equipment set to ").formatted(Formatting.WHITE).append(Text.literal("None").formatted(Formatting.GREEN)));
                                                     BingoManager.GameSettings.StartingGear = new ArrayList<>();
                                                     return Command.SINGLE_SUCCESS;
                                                 }))
                                         .then(literal("stone")
                                                 .executes(ctx -> {
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Starting equipment set to Stone.").formatted(Formatting.WHITE));
+                                                            Text.literal("Starting equipment set to ").formatted(Formatting.WHITE).append(Text.literal("Stone").formatted(Formatting.GREEN)));
 
                                                     BingoManager.GameSettings.StartingGear.removeIf(gear ->
                                                             gear.Name.contains("_pickaxe") ||
@@ -103,7 +103,7 @@ public class BingoSettingsCommand {
                                         .then(literal("iron")
                                                 .executes(ctx -> {
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Starting equipment set to Iron.").formatted(Formatting.WHITE));
+                                                            Text.literal("Starting equipment set to ").formatted(Formatting.WHITE).append(Text.literal("Iron").formatted(Formatting.GREEN)));
                                                     BingoManager.GameSettings.StartingGear.removeIf(gear ->
                                                             gear.Name.contains("_pickaxe") ||
                                                                     gear.Name.contains("_shovel") ||
@@ -119,7 +119,7 @@ public class BingoSettingsCommand {
                                         .then(literal("diamond")
                                                 .executes(ctx -> {
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Starting equipment set to Diamond.").formatted(Formatting.WHITE));
+                                                            Text.literal("Starting equipment set to ").formatted(Formatting.WHITE).append(Text.literal("Diamond").formatted(Formatting.GREEN)));
                                                     BingoManager.GameSettings.StartingGear.removeIf(gear ->
                                                             gear.Name.contains("_pickaxe") ||
                                                                     gear.Name.contains("_shovel") ||
@@ -210,7 +210,7 @@ public class BingoSettingsCommand {
                                         .then(literal("clear")
                                                 .executes(ctx -> {
                                                     BingoManager.GameSettings.Effects.clear();
-                                                    var text = Text.literal("All added effects cleared.").formatted(Formatting.GOLD);
+                                                    var text = Text.literal("All added effects cleared").formatted(Formatting.GOLD);
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
                                                     return Command.SINGLE_SUCCESS;
                                                 })))
@@ -220,21 +220,21 @@ public class BingoSettingsCommand {
                                         .then(literal("small")
                                                 .executes(ctx -> {
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Starting play area set to Small.").formatted(Formatting.WHITE));
+                                                            Text.literal("Starting play area set to ").formatted(Formatting.WHITE).append(Text.literal("Small").formatted(Formatting.GREEN)));
                                                     BingoManager.GameSettings.TPRandomizationRadius = BingoMod.CONFIG.TPRandomizationSizes.SmallRadius;
                                                     return Command.SINGLE_SUCCESS;
                                                 }))
                                         .then(literal("medium")
                                                 .executes(ctx -> {
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Starting play area set to Medium.").formatted(Formatting.WHITE));
+                                                            Text.literal("Starting play area set to ").formatted(Formatting.WHITE).append(Text.literal("Medium").formatted(Formatting.GREEN)));
                                                     BingoManager.GameSettings.TPRandomizationRadius = BingoMod.CONFIG.TPRandomizationSizes.MediumRadius;
                                                     return Command.SINGLE_SUCCESS;
                                                 }))
                                         .then(literal("large")
                                                 .executes(ctx -> {
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Starting play area set to Large.").formatted(Formatting.WHITE));
+                                                            Text.literal("Starting play area set to ").formatted(Formatting.WHITE).append(Text.literal("Large").formatted(Formatting.GREEN)));
                                                     BingoManager.GameSettings.TPRandomizationRadius = BingoMod.CONFIG.TPRandomizationSizes.LargeRadius;
                                                     return Command.SINGLE_SUCCESS;
                                                 })))
@@ -246,7 +246,7 @@ public class BingoSettingsCommand {
                                                     var dimension = DimensionArgumentType.getDimensionArgument(ctx, "dimension");
                                                     var name = dimension.getRegistryKey().getValue().toString();
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Dimension set to %s.".formatted(name)).formatted(Formatting.WHITE));
+                                                            Text.literal("Dimension set to ").formatted(Formatting.WHITE).append(name).formatted(Formatting.GREEN));
                                                     GameSettings.Dimension = name;
                                                     return Command.SINGLE_SUCCESS;
                                                 })))

@@ -31,7 +31,7 @@ public class BingoProfilesCommand {
                                                 if (profile.Name.equals(profileName)) {
                                                     GameSettings = profile;
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Game profile set to %s".formatted(profileName)).formatted(Formatting.WHITE));
+                                                            Text.literal("Game profile set to ").formatted(Formatting.WHITE).append(Text.literal(profileName).formatted(Formatting.GREEN)));
                                                     return Command.SINGLE_SUCCESS;
                                                 }
                                             }
