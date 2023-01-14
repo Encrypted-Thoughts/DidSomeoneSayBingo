@@ -115,14 +115,20 @@ public class BingoManager {
                 CurrentItems = new ArrayList<>();
                 var possibleItems = new ArrayList<>(GameSettings.Items.stream().toList());
 
-                for (var i = 0; i < 25; i++) {
+                var tries = 0;
+                var count = 0;
+                while (count < 25) {
+                    tries++;
                     var group = getRandomItem(possibleItems);
                     var random = ThreadLocalRandom.current().nextInt(0, group.Items.length);
                     var possible = group.Items[random];
                     var item = getItemByName(possible);
 
-                    CurrentItems.add(item);
-                    possibleItems.remove(group);
+                    if (item != null && (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(item.toString())) || tries > 100)) {
+                        CurrentItems.add(item);
+                        possibleItems.remove(group);
+                        count++;
+                    }
                 }
 
                 Game = switch (GameSettings.GameMode.toLowerCase()) {

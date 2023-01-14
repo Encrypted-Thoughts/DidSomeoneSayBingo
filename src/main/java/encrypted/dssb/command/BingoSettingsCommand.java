@@ -302,6 +302,7 @@ public class BingoSettingsCommand {
             player.sendMessage(text);
         }
 
+        /*
         if (GameSettings.StartingGear.size() > 0) {
             text = Text.literal("Starting Gear: ").formatted(Formatting.GREEN);
             player.sendMessage(text);
@@ -337,7 +338,7 @@ public class BingoSettingsCommand {
             text = Text.literal("Effects: ").formatted(Formatting.GREEN).append(Text.literal("No Effects").formatted(Formatting.WHITE));
             player.sendMessage(text);
         }
-
+         */
         return Command.SINGLE_SUCCESS;
     }
 }
