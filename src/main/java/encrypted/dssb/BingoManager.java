@@ -172,14 +172,17 @@ public class BingoManager {
                 switch (mode.toLowerCase()) {
                     case "bingo" -> {
                         text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Regular Bingo").formatted(Formatting.GREEN));
+                        GameSettings.GameMode = "Bingo";
                         Game = new Bingo(server, CurrentItems);
                     }
                     case "lockout" -> {
                         text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Lockout Bingo").formatted(Formatting.GREEN));
+                        GameSettings.GameMode = "Lockout";
                         Game = new Lockout(server, CurrentItems);
                     }
                     case "blackout" -> {
                         text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Blackout Bingo").formatted(Formatting.GREEN));
+                        GameSettings.GameMode = "Blackout";
                         Game = new Blackout(server, CurrentItems);
                     }
                 }
