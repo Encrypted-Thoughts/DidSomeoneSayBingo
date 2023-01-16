@@ -15,4 +15,12 @@ public class StartingItem {
         OnRespawn = onRespawn;
         AutoEquip = autoEquip;
     }
+
+    public StartingItem(String name, int amount, boolean onRespawn, boolean autoEquip, ArrayList<Enchantment> enchantments) {
+        Name = name;
+        Amount = amount;
+        OnRespawn = onRespawn;
+        AutoEquip = autoEquip;
+        Enchantments = enchantments;
+    }
 }

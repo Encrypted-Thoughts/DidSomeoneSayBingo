@@ -4,7 +4,11 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.config.gameprofiles.StartingItem;
@@ -15,17 +19,15 @@ import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.command.argument.RegistryEntryArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 import static encrypted.dssb.BingoManager.*;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -215,6 +217,47 @@ public class BingoSettingsCommand {
                                                     return Command.SINGLE_SUCCESS;
                                                 })))
 
+                                // Set the item pools to play with
+                                .then(literal("items")
+                                        .then(literal("add")
+                                                .then(argument("pool", StringArgumentType.greedyString())
+                                                        .suggests(BingoSettingsCommand::GetItemPoolSuggestions)
+                                                        .executes(ctx -> {
+                                                            var poolName = StringArgumentType.getString(ctx, "pool");
+                                                            GameSettings.ItemPools.add(poolName);
+
+                                                            var text = Text.literal(poolName + " item pool added").formatted(Formatting.GOLD);
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                            return Command.SINGLE_SUCCESS;
+                                                        })))
+
+                                        .then(literal("remove")
+                                                .then(argument("pool", StringArgumentType.greedyString())
+                                                        .suggests(BingoSettingsCommand::GetItemPoolSuggestions)
+                                                        .executes(ctx -> {
+                                                            var poolName = StringArgumentType.getString(ctx, "pool");
+                                                            var removed = GameSettings.ItemPools.removeIf(p -> p.equals(poolName));
+
+                                                            if (!removed) {
+                                                                var text = Text.literal(poolName + " isn't in the current list of item pools").formatted(Formatting.RED);
+                                                                var player = ctx.getSource().getPlayer();
+                                                                if (player != null)
+                                                                    MessageHelper.sendSystemMessage(player, text);
+                                                            } else {
+                                                                var text = Text.literal(poolName + " item pool removed").formatted(Formatting.GOLD);
+                                                                MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                            }
+                                                            return Command.SINGLE_SUCCESS;
+                                                        })))
+
+                                        .then(literal("clear")
+                                                .executes(ctx -> {
+                                                    GameSettings.ItemPools.clear();
+                                                    var text = Text.literal("All added item pools cleared").formatted(Formatting.GOLD);
+                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                    return Command.SINGLE_SUCCESS;
+                                                })))
+
                                 // Set spawn radius
                                 .then(literal("radius")
                                         .then(literal("small")
@@ -340,5 +383,13 @@ public class BingoSettingsCommand {
         }
          */
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static CompletableFuture<Suggestions> GetItemPoolSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+        for (var pool : BingoMod.ItemPools) {
+            if (pool.Name.toLowerCase().contains(builder.getRemainingLowerCase()))
+                builder.suggest(pool.Name);
+        }
+        return builder.buildFuture();
     }
 }

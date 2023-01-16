@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.command.BingoSettingsCommand;
 import encrypted.dssb.config.gameprofiles.GameProfileConfig;
-import encrypted.dssb.config.gameprofiles.PossibleItemGroup;
+import encrypted.dssb.config.itempools.ItemGroup;
 import encrypted.dssb.gamemode.Bingo;
 import encrypted.dssb.gamemode.Blackout;
 import encrypted.dssb.gamemode.GameMode;
@@ -113,7 +113,13 @@ public class BingoManager {
             try {
 
                 CurrentItems = new ArrayList<>();
-                var possibleItems = new ArrayList<>(GameSettings.Items.stream().toList());
+                var possibleItems = new ArrayList<ItemGroup>();
+                for (var name : GameSettings.ItemPools) {
+                    for (var pool : BingoMod.ItemPools) {
+                        if (pool.Name.equals(name))
+                            possibleItems.addAll(pool.Items);
+                    }
+                }
 
                 var tries = 0;
                 var count = 0;
@@ -278,7 +284,7 @@ public class BingoManager {
         }
     }
 
-    public static PossibleItemGroup getRandomItem(ArrayList<PossibleItemGroup> items) {
+    public static ItemGroup getRandomItem(ArrayList<ItemGroup> items) {
         var values = items.stream().mapToDouble(item -> item.Weight).toArray();
         var totalWeight = Arrays.stream(values).sum();
         int idx = 0;

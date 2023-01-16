@@ -1,10 +1,10 @@
-package encrypted.dssb.config.gameprofiles;
+package encrypted.dssb.config.itempools;
 
-public class PossibleItemGroup {
+public class ItemGroup {
     public String Name = "";
     public double Weight;
     public String[] Items;
-    public PossibleItemGroup(String[] items) {
+    public ItemGroup(String[] items) {
         Items = items;
         Weight = 1.0;
     }

@@ -18,4 +18,14 @@ public class StatusEffect {
         ShowIcon = true;
         OnRespawn = onRespawn;
     }
+
+    public StatusEffect(String type, int duration, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, boolean onRespawn) {
+        Type = type;
+        Duration = duration;
+        Amplifier = amplifier;
+        Ambient = ambient;
+        ShowParticles = showParticles;
+        ShowIcon = showIcon;
+        OnRespawn = onRespawn;
+    }
 }

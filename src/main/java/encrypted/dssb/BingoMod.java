@@ -3,10 +3,12 @@ package encrypted.dssb;
 import encrypted.dssb.command.BingoCommands;
 import encrypted.dssb.config.BingoConfig;
 import encrypted.dssb.config.gameprofiles.GameProfileConfig;
-import encrypted.dssb.config.gameprofiles.defaultconfigs.EasyProfileConfig;
-import encrypted.dssb.config.gameprofiles.defaultconfigs.HardProfileConfig;
-import encrypted.dssb.config.gameprofiles.defaultconfigs.NetherProfileConfig;
-import encrypted.dssb.config.gameprofiles.defaultconfigs.NormalProfileConfig;
+import encrypted.dssb.config.gameprofiles.defaultconfigs.*;
+import encrypted.dssb.config.itempools.ItemPool;
+import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
+import encrypted.dssb.config.itempools.defaultpools.OverworldEasyItemPool;
+import encrypted.dssb.config.itempools.defaultpools.OverworldHardItemPool;
+import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
 import encrypted.dssb.config.replaceblocks.ReplacementBlocksConfig;
 import encrypted.dssb.util.MapRenderHelper;
 import net.fabricmc.api.ModInitializer;
@@ -30,6 +32,7 @@ public class BingoMod implements ModInitializer {
 	public static BingoConfig CONFIG = new BingoConfig();
 	public static ReplacementBlocksConfig REPLACEMENT_BLOCKS = new ReplacementBlocksConfig();
 	public static ArrayList<GameProfileConfig> GameProfiles = new ArrayList<>();
+	public static ArrayList<ItemPool> ItemPools = new ArrayList<>();
 
 	@Override
 	public void onInitialize() {
@@ -60,16 +63,46 @@ public class BingoMod implements ModInitializer {
 
 		REPLACEMENT_BLOCKS.ReadFromFile();
 
+		ItemPools = new ArrayList<>();
+		var poolDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/itempools").toFile();
+		if (poolDirectory.exists()) {
+			var files = poolDirectory.listFiles();
+			if (files != null) {
+				for (var file : files)
+					ItemPools.add(new ItemPool(file));
+			}
+		} else {
+			if (poolDirectory.mkdirs()) {
+				ItemPool pool = new OverworldEasyItemPool();
+				ItemPools.add(pool);
+				pool.SaveToFile(pool.Name);
+
+				pool = new OverworldNormalItemPool();
+				ItemPools.add(pool);
+				pool.SaveToFile(pool.Name);
+
+				pool = new OverworldHardItemPool();
+				ItemPools.add(pool);
+				pool.SaveToFile(pool.Name);
+
+				pool = new NetherItemPool();
+				ItemPools.add(pool);
+				pool.SaveToFile(pool.Name);
+			} else
+				BingoMod.LOGGER.error("Unable to create directory to store item pool files.");
+		}
+
+
 		GameProfiles = new ArrayList<>();
-		var directory = FabricLoader.getInstance().getConfigDir().resolve("bingo/profiles").toFile();
-		if (directory.exists()) {
-			var files = directory.listFiles();
+		var profileDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/profiles").toFile();
+		if (profileDirectory.exists()) {
+			var files = profileDirectory.listFiles();
 			if (files != null) {
 				for (var file : files)
 					GameProfiles.add(new GameProfileConfig(file));
 			}
 		} else {
-			if (directory.mkdirs()) {
+			if (profileDirectory.mkdirs()) {
 				GameProfileConfig profile = new EasyProfileConfig();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
@@ -83,6 +116,14 @@ public class BingoMod implements ModInitializer {
 				profile.SaveToFile(profile.Name);
 
 				profile = new NetherProfileConfig();
+				GameProfiles.add(profile);
+				profile.SaveToFile(profile.Name);
+
+				profile = new CursedBingoProfileConfig();
+				GameProfiles.add(profile);
+				profile.SaveToFile(profile.Name);
+
+				profile = new SuperBingoProfileConfig();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
 			} else
