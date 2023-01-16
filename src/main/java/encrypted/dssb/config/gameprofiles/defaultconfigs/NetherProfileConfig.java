@@ -6,7 +6,6 @@ import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class NetherProfileConfig extends GameProfileConfig {
@@ -15,12 +14,12 @@ public class NetherProfileConfig extends GameProfileConfig {
         Dimension = "minecraft:the_nether";
         YSpawnOffset = 0;
         MaxYLevel = 110;
-        Effects = new ArrayList<>(Arrays.asList(
+        Effects = new ArrayList<>(List.of(
                 new StatusEffect("fire_resistance", 20, 100, true),
                 new StatusEffect("slow_falling", 20, 6, true),
                 new StatusEffect("regeneration", 20, 100, true)
         ));
-        StartingGear = new ArrayList<>(Arrays.asList(
+        StartingGear = new ArrayList<>(List.of(
                 new StartingItem("minecraft:diamond_pickaxe", 1, true, false),
                 new StartingItem("minecraft:diamond_shovel", 1, true, false),
                 new StartingItem("minecraft:diamond_axe", 1, true, false),
