@@ -4,12 +4,12 @@ import encrypted.dssb.config.itempools.ItemGroup;
 import encrypted.dssb.config.itempools.ItemPool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class NetherItemPool extends ItemPool {
     public NetherItemPool() {
         Name = "Nether";
-        Items = new ArrayList<>(Arrays.asList(
+        Items = new ArrayList<>(List.of(
                 new ItemGroup(new String[]{
                         "soul_sand",
                         "soul_soil"

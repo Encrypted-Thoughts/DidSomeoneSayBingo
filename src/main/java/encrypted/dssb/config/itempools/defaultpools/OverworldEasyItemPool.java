@@ -4,12 +4,12 @@ import encrypted.dssb.config.itempools.ItemGroup;
 import encrypted.dssb.config.itempools.ItemPool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class OverworldEasyItemPool extends ItemPool {
     public OverworldEasyItemPool() {
         Name = "Overworld - Easy";
-        Items = new ArrayList<>(Arrays.asList(
+        Items = new ArrayList<>(List.of(
                 new ItemGroup(new String[]{
                         "raw_copper_block",
                         "raw_copper"

@@ -7,14 +7,13 @@ import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SuperBingoProfileConfig extends GameProfileConfig {
 
     public SuperBingoProfileConfig() {
         Name = "Super Bingo";
-        Effects = new ArrayList<>(Arrays.asList(
+        Effects = new ArrayList<>(List.of(
             new StatusEffect("slow_falling", 20, 6, true),
                 new StatusEffect("regeneration", 99999, 100, false, false, false, true),
                 new StatusEffect("fire_resistance", 99999, 100, false, false, false, true),
@@ -24,7 +23,7 @@ public class SuperBingoProfileConfig extends GameProfileConfig {
                 new StatusEffect("jump_boost", 99999, 2, false, false, false, true),
                 new StatusEffect("strength", 99999, 3, false, false, false, true)
         ));
-        StartingGear = new ArrayList<>(Arrays.asList(
+        StartingGear = new ArrayList<>(List.of(
             new StartingItem("minecraft:netherite_pickaxe", 1, true, false),
             new StartingItem("minecraft:netherite_shovel", 1, true, false),
             new StartingItem("minecraft:netherite_axe", 1, true, false),

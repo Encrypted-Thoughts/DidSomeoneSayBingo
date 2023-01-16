@@ -6,18 +6,17 @@ import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class NormalProfileConfig extends GameProfileConfig {
 
     public NormalProfileConfig() {
         Name = "Overworld - Normal";
-        Effects = new ArrayList<>(Arrays.asList(
+        Effects = new ArrayList<>(List.of(
             new StatusEffect("slow_falling", 20, 6, true),
             new StatusEffect("regeneration", 20, 100, true)
         ));
-        StartingGear = new ArrayList<>(Arrays.asList(
+        StartingGear = new ArrayList<>(List.of(
             new StartingItem("minecraft:stone_pickaxe", 1, true, false),
             new StartingItem("minecraft:stone_shovel", 1, true, false),
             new StartingItem("minecraft:stone_axe", 1, true, false),
