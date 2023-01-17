@@ -35,9 +35,9 @@ public class GameProfile {
         PlayAreaRadius = copy.PlayAreaRadius;
         TimeLimit = copy.TimeLimit;
         TPRandomizationRadius = copy.TPRandomizationRadius;
-        Effects = copy.Effects;
-        StartingGear = copy.StartingGear;
-        ItemPools = copy.ItemPools;
+        Effects = new ArrayList<>(copy.Effects);
+        StartingGear = new ArrayList<>(copy.StartingGear);
+        ItemPools = new ArrayList<>(copy.ItemPools);
     }
 
     public GameProfile(File file) {
