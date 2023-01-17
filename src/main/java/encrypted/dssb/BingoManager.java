@@ -106,15 +106,11 @@ public class BingoManager {
     }
 
     public static int generate(ServerPlayerEntity player, MinecraftServer server, boolean start) throws CommandSyntaxException {
-        if (GameSettings.ItemPools.size() == 0)
-            MessageHelper.sendSystemMessage(player, Text.literal("No item pool selected. Add an item pool to play.").formatted(Formatting.RED));
-        else if (GenerateInProgress)
+        if (GenerateInProgress)
             MessageHelper.sendSystemMessage(player, Text.literal("Still generating previous board.").formatted(Formatting.RED));
         else {
             GenerateInProgress = true;
             try {
-
-                CurrentItems = new ArrayList<>();
                 var possibleItems = new ArrayList<ItemGroup>();
                 for (var name : GameSettings.ItemPools) {
                     for (var pool : BingoMod.ItemPools) {
@@ -123,6 +119,13 @@ public class BingoManager {
                     }
                 }
 
+                if (possibleItems.size() < 25) {
+                    MessageHelper.sendSystemMessage(player, Text.literal("Not enough enough possible items in item pools to generate a bingo card.").formatted(Formatting.RED));
+                    GenerateInProgress = false;
+                    return Command.SINGLE_SUCCESS;
+                }
+
+                CurrentItems = new ArrayList<>();
                 var tries = 0;
                 var count = 0;
                 while (count < 25) {
