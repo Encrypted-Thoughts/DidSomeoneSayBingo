@@ -2,7 +2,7 @@ package encrypted.dssb;
 
 import encrypted.dssb.command.BingoCommands;
 import encrypted.dssb.config.BingoConfig;
-import encrypted.dssb.config.gameprofiles.GameProfileConfig;
+import encrypted.dssb.config.gameprofiles.GameProfile;
 import encrypted.dssb.config.gameprofiles.defaultconfigs.*;
 import encrypted.dssb.config.itempools.ItemPool;
 import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
@@ -31,7 +31,7 @@ public class BingoMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static BingoConfig CONFIG = new BingoConfig();
 	public static ReplacementBlocksConfig REPLACEMENT_BLOCKS = new ReplacementBlocksConfig();
-	public static ArrayList<GameProfileConfig> GameProfiles = new ArrayList<>();
+	public static ArrayList<GameProfile> GameProfiles = new ArrayList<>();
 	public static ArrayList<ItemPool> ItemPools = new ArrayList<>();
 
 	@Override
@@ -43,10 +43,10 @@ public class BingoMod implements ModInitializer {
 		MapRenderHelper.loadBingoCardBorder();
 
 		if (GameProfiles.size() > 0) {
-			GameSettings = GameProfiles.get(0);
+			GameSettings = new GameProfile(GameProfiles.get(0));
 			for (var profile : GameProfiles) {
 				if (profile.Name.equals(CONFIG.DefaultGameProfile)) {
-					GameSettings = profile;
+					GameSettings = new GameProfile(profile);
 					break;
 				}
 			}
@@ -99,31 +99,31 @@ public class BingoMod implements ModInitializer {
 			var files = profileDirectory.listFiles();
 			if (files != null) {
 				for (var file : files)
-					GameProfiles.add(new GameProfileConfig(file));
+					GameProfiles.add(new GameProfile(file));
 			}
 		} else {
 			if (profileDirectory.mkdirs()) {
-				GameProfileConfig profile = new EasyProfileConfig();
+				GameProfile profile = new EasyProfile();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
 
-				profile = new HardProfileConfig();
+				profile = new HardProfile();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
 
-				profile = new NormalProfileConfig();
+				profile = new NormalProfile();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
 
-				profile = new NetherProfileConfig();
+				profile = new NetherProfile();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
 
-				profile = new CursedBingoProfileConfig();
+				profile = new CursedBingoProfile();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
 
-				profile = new SuperBingoProfileConfig();
+				profile = new SuperBingoProfile();
 				GameProfiles.add(profile);
 				profile.SaveToFile(profile.Name);
 			} else

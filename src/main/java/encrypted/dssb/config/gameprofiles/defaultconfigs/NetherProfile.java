@@ -1,6 +1,6 @@
 package encrypted.dssb.config.gameprofiles.defaultconfigs;
 
-import encrypted.dssb.config.gameprofiles.GameProfileConfig;
+import encrypted.dssb.config.gameprofiles.GameProfile;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
@@ -8,8 +8,8 @@ import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NetherProfileConfig extends GameProfileConfig {
-    public NetherProfileConfig() {
+public class NetherProfile extends GameProfile {
+    public NetherProfile() {
         Name = "Nether";
         Dimension = "minecraft:the_nether";
         YSpawnOffset = 0;

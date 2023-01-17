@@ -1,6 +1,6 @@
 package encrypted.dssb.config.gameprofiles.defaultconfigs;
 
-import encrypted.dssb.config.gameprofiles.GameProfileConfig;
+import encrypted.dssb.config.gameprofiles.GameProfile;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.OverworldHardItemPool;
@@ -8,8 +8,8 @@ import encrypted.dssb.config.itempools.defaultpools.OverworldHardItemPool;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HardProfileConfig extends GameProfileConfig {
-    public HardProfileConfig() {
+public class HardProfile extends GameProfile {
+    public HardProfile() {
         Name = "Overworld - Hard";
         Effects = new ArrayList<>(List.of(
             new StatusEffect("slow_falling", 20, 6, true),

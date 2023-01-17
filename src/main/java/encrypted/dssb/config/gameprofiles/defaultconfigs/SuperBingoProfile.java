@@ -1,7 +1,7 @@
 package encrypted.dssb.config.gameprofiles.defaultconfigs;
 
 import encrypted.dssb.config.gameprofiles.Enchantment;
-import encrypted.dssb.config.gameprofiles.GameProfileConfig;
+import encrypted.dssb.config.gameprofiles.GameProfile;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
@@ -9,9 +9,9 @@ import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuperBingoProfileConfig extends GameProfileConfig {
+public class SuperBingoProfile extends GameProfile {
 
-    public SuperBingoProfileConfig() {
+    public SuperBingoProfile() {
         Name = "Super Bingo";
         GameMode = "Blackout";
         Effects = new ArrayList<>(List.of(

@@ -7,6 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import encrypted.dssb.BingoMod;
+import encrypted.dssb.config.gameprofiles.GameProfile;
 import encrypted.dssb.util.MessageHelper;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -29,7 +30,7 @@ public class BingoProfilesCommand {
                                             var profileName = StringArgumentType.getString(ctx, "name");
                                             for (var profile : BingoMod.GameProfiles) {
                                                 if (profile.Name.equals(profileName)) {
-                                                    GameSettings = profile;
+                                                    GameSettings = new GameProfile(profile);
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
                                                             Text.literal("Game profile set to ").formatted(Formatting.WHITE).append(Text.literal(profileName).formatted(Formatting.GREEN)));
                                                     return Command.SINGLE_SUCCESS;
@@ -42,8 +43,8 @@ public class BingoProfilesCommand {
                                                     Text.literal("No game profile called %s found.".formatted(profileName)).formatted(Formatting.WHITE));
 
                                             return Command.SINGLE_SUCCESS;
-                                        })))
-
+                                        }))));
+/*
                         .then(literal("save")
                                 .requires(source -> source.hasPermissionLevel(2))
                                 .then(argument("name", StringArgumentType.greedyString())
@@ -71,6 +72,7 @@ public class BingoProfilesCommand {
 
                                             return Command.SINGLE_SUCCESS;
                                         }))));
+ */
     }
 
     private static CompletableFuture<Suggestions> GetGameProfileSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {

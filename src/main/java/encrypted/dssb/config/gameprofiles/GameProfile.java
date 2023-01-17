@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class GameProfileConfig {
+public class GameProfile {
     public String Name;
     public String Dimension = "minecraft:overworld";
     public String GameMode = "Bingo";
@@ -24,9 +24,23 @@ public class GameProfileConfig {
     public ArrayList<StartingItem> StartingGear = new ArrayList<>();
     public ArrayList<String> ItemPools = new ArrayList<>();
 
-    public GameProfileConfig() {}
+    public GameProfile() {}
 
-    public GameProfileConfig(File file) {
+    public GameProfile(GameProfile copy) {
+        Name = copy.Name;
+        Dimension = copy.Dimension;
+        GameMode = copy.GameMode;
+        YSpawnOffset = copy.YSpawnOffset;
+        MaxYLevel = copy.MaxYLevel;
+        PlayAreaRadius = copy.PlayAreaRadius;
+        TimeLimit = copy.TimeLimit;
+        TPRandomizationRadius = copy.TPRandomizationRadius;
+        Effects = copy.Effects;
+        StartingGear = copy.StartingGear;
+        ItemPools = copy.ItemPools;
+    }
+
+    public GameProfile(File file) {
         ReadFromFile(file);
     }
 
@@ -41,6 +55,7 @@ public class GameProfileConfig {
                 YSpawnOffset = temp.YSpawnOffset;
                 MaxYLevel = temp.MaxYLevel;
                 PlayAreaRadius = temp.PlayAreaRadius;
+                TimeLimit = temp.TimeLimit;
                 TPRandomizationRadius = temp.TPRandomizationRadius;
                 Effects = temp.Effects;
                 StartingGear = temp.StartingGear;
