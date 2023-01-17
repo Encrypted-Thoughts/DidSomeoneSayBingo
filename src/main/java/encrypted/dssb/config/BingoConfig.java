@@ -30,6 +30,7 @@ public class BingoConfig {
                 DefaultGameProfile = temp.DefaultGameProfile;
                 DisplayBoardCoords = temp.DisplayBoardCoords;
                 TPRandomizationSizes = temp.TPRandomizationSizes;
+                AssignRandomTeamOnJoin = temp.AssignRandomTeamOnJoin;
             } catch (FileNotFoundException e) {
                 BingoMod.LOGGER.error("Failed to read a config file.");
                 e.printStackTrace();
