@@ -3,7 +3,7 @@ package encrypted.dssb;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.command.BingoSettingsCommand;
-import encrypted.dssb.config.gameprofiles.GameProfile;
+import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.itempools.ItemGroup;
 import encrypted.dssb.gamemode.Bingo;
 import encrypted.dssb.gamemode.Blackout;
@@ -48,7 +48,7 @@ import java.util.stream.IntStream;
 public class BingoManager {
 
     public static GameMode Game = null;
-    public static GameProfile GameSettings;
+    public static GamePreset GameSettings;
     public static ArrayList<Item> CurrentItems = new ArrayList<>();
     public static boolean GameInProgress = false;
     public static boolean GenerateInProgress = false;

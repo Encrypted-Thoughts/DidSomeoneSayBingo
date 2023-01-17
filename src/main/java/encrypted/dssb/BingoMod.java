@@ -2,7 +2,7 @@ package encrypted.dssb;
 
 import encrypted.dssb.command.BingoCommands;
 import encrypted.dssb.config.BingoConfig;
-import encrypted.dssb.config.gameprofiles.GameProfile;
+import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.defaultconfigs.*;
 import encrypted.dssb.config.itempools.ItemPool;
 import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
@@ -31,7 +31,7 @@ public class BingoMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static BingoConfig CONFIG = new BingoConfig();
 	public static ReplacementBlocksConfig REPLACEMENT_BLOCKS = new ReplacementBlocksConfig();
-	public static ArrayList<GameProfile> GameProfiles = new ArrayList<>();
+	public static ArrayList<GamePreset> GamePresets = new ArrayList<>();
 	public static ArrayList<ItemPool> ItemPools = new ArrayList<>();
 
 	@Override
@@ -42,11 +42,11 @@ public class BingoMod implements ModInitializer {
 		MapRenderHelper.loadTeamSlotAreas();
 		MapRenderHelper.loadBingoCardBorder();
 
-		if (GameProfiles.size() > 0) {
-			GameSettings = new GameProfile(GameProfiles.get(0));
-			for (var profile : GameProfiles) {
-				if (profile.Name.equals(CONFIG.DefaultGameProfile)) {
-					GameSettings = new GameProfile(profile);
+		if (GamePresets.size() > 0) {
+			GameSettings = new GamePreset(GamePresets.get(0));
+			for (var preset : GamePresets) {
+				if (preset.Name.equals(CONFIG.DefaultGameProfile)) {
+					GameSettings = new GamePreset(preset);
 					break;
 				}
 			}
@@ -93,39 +93,39 @@ public class BingoMod implements ModInitializer {
 		}
 
 
-		GameProfiles = new ArrayList<>();
-		var profileDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/profiles").toFile();
-		if (profileDirectory.exists()) {
-			var files = profileDirectory.listFiles();
+		GamePresets = new ArrayList<>();
+		var presetDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/presets").toFile();
+		if (presetDirectory.exists()) {
+			var files = presetDirectory.listFiles();
 			if (files != null) {
 				for (var file : files)
-					GameProfiles.add(new GameProfile(file));
+					GamePresets.add(new GamePreset(file));
 			}
 		} else {
-			if (profileDirectory.mkdirs()) {
-				GameProfile profile = new EasyProfile();
-				GameProfiles.add(profile);
-				profile.SaveToFile(profile.Name);
+			if (presetDirectory.mkdirs()) {
+				GamePreset preset = new EasyPreset();
+				GamePresets.add(preset);
+				preset.SaveToFile(preset.Name);
 
-				profile = new HardProfile();
-				GameProfiles.add(profile);
-				profile.SaveToFile(profile.Name);
+				preset = new HardPreset();
+				GamePresets.add(preset);
+				preset.SaveToFile(preset.Name);
 
-				profile = new NormalProfile();
-				GameProfiles.add(profile);
-				profile.SaveToFile(profile.Name);
+				preset = new NormalPreset();
+				GamePresets.add(preset);
+				preset.SaveToFile(preset.Name);
 
-				profile = new NetherProfile();
-				GameProfiles.add(profile);
-				profile.SaveToFile(profile.Name);
+				preset = new NetherPreset();
+				GamePresets.add(preset);
+				preset.SaveToFile(preset.Name);
 
-				profile = new CursedBingoProfile();
-				GameProfiles.add(profile);
-				profile.SaveToFile(profile.Name);
+				preset = new CursedPreset();
+				GamePresets.add(preset);
+				preset.SaveToFile(preset.Name);
 
-				profile = new SuperBingoProfile();
-				GameProfiles.add(profile);
-				profile.SaveToFile(profile.Name);
+				preset = new SuperPreset();
+				GamePresets.add(preset);
+				preset.SaveToFile(preset.Name);
 			} else
 				BingoMod.LOGGER.error("Unable to create directory to store game profile files.");
 		}

@@ -320,7 +320,7 @@ public class BingoSettingsCommand {
     }
 
     private static int randomizeSettings(MinecraftServer server) {
-        GameSettings = BingoMod.GameProfiles.get(new Random().nextInt(BingoMod.GameProfiles.size()));
+        GameSettings = BingoMod.GamePresets.get(new Random().nextInt(BingoMod.GamePresets.size()));
         MessageHelper.broadcastChat(server.getPlayerManager(), Text.literal("Game set to: ").formatted(Formatting.GREEN).append(Text.literal(GameSettings.Name).formatted(Formatting.WHITE)));
 
         return Command.SINGLE_SUCCESS;

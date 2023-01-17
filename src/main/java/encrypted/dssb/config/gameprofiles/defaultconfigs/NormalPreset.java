@@ -1,6 +1,6 @@
 package encrypted.dssb.config.gameprofiles.defaultconfigs;
 
-import encrypted.dssb.config.gameprofiles.GameProfile;
+import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
@@ -8,9 +8,9 @@ import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NormalProfile extends GameProfile {
+public class NormalPreset extends GamePreset {
 
-    public NormalProfile() {
+    public NormalPreset() {
         Name = "Overworld - Normal";
         Effects = new ArrayList<>(List.of(
             new StatusEffect("slow_falling", 20, 6, true),

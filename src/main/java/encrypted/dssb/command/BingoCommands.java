@@ -16,7 +16,7 @@ public class BingoCommands {
         BingoStartCommand.register(dispatcher);
         BingoEndCommand.register(dispatcher);
         BingoPVPCommand.register(dispatcher);
-        BingoProfilesCommand.register(dispatcher);
+        BingoPresetsCommand.register(dispatcher);
         BingoSpawnCommand.register(dispatcher);
         BingoGetMapCommand.register(dispatcher);
         BingoTeamsCommand.register(dispatcher);

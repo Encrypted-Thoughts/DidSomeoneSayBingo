@@ -1,7 +1,7 @@
 package encrypted.dssb.config.gameprofiles.defaultconfigs;
 
 import encrypted.dssb.config.gameprofiles.Enchantment;
-import encrypted.dssb.config.gameprofiles.GameProfile;
+import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
@@ -9,10 +9,10 @@ import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CursedBingoProfile extends GameProfile {
+public class CursedPreset extends GamePreset {
 
-    public CursedBingoProfile() {
-        Name = "Cursed Bingo";
+    public CursedPreset() {
+        Name = "Overworld - Cursed";
         Effects = new ArrayList<>(List.of(
             new StatusEffect("slow_falling", 20, 6, true),
             new StatusEffect("regeneration", 20, 100, true),

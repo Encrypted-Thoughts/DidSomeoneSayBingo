@@ -1,16 +1,16 @@
 package encrypted.dssb.config.gameprofiles.defaultconfigs;
 
-import encrypted.dssb.config.gameprofiles.GameProfile;
+import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
-import encrypted.dssb.config.itempools.defaultpools.OverworldHardItemPool;
+import encrypted.dssb.config.itempools.defaultpools.OverworldEasyItemPool;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HardProfile extends GameProfile {
-    public HardProfile() {
-        Name = "Overworld - Hard";
+public class EasyPreset extends GamePreset {
+    public EasyPreset() {
+        Name = "Overworld - Easy";
         Effects = new ArrayList<>(List.of(
             new StatusEffect("slow_falling", 20, 6, true),
             new StatusEffect("regeneration", 20, 100, true)
@@ -23,7 +23,7 @@ public class HardProfile extends GameProfile {
             new StartingItem("minecraft:bread", 64, true, false)
         ));
         ItemPools = new ArrayList<>(List.of(
-                new OverworldHardItemPool().Name
+                new OverworldEasyItemPool().Name
         ));
     }
 }

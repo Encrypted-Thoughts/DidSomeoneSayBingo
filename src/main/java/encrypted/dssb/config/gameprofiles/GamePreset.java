@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class GameProfile {
+public class GamePreset {
     public String Name;
     public String Dimension = "minecraft:overworld";
     public String GameMode = "Bingo";
@@ -24,9 +24,9 @@ public class GameProfile {
     public ArrayList<StartingItem> StartingGear = new ArrayList<>();
     public ArrayList<String> ItemPools = new ArrayList<>();
 
-    public GameProfile() {}
+    public GamePreset() {}
 
-    public GameProfile(GameProfile copy) {
+    public GamePreset(GamePreset copy) {
         Name = copy.Name;
         Dimension = copy.Dimension;
         GameMode = copy.GameMode;
@@ -40,7 +40,7 @@ public class GameProfile {
         ItemPools = new ArrayList<>(copy.ItemPools);
     }
 
-    public GameProfile(File file) {
+    public GamePreset(File file) {
         ReadFromFile(file);
     }
 
@@ -71,7 +71,7 @@ public class GameProfile {
         var gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             var json = gson.toJson(this);
-            var directory = path.resolve("bingo/profiles/").toFile();
+            var directory = path.resolve("bingo/presets/").toFile();
             if (!directory.exists())
                 if (!directory.mkdirs()) throw new Exception("Unable to create directory to store config files.");
             try (PrintWriter writer = new PrintWriter(directory.getPath() + "/%s.json".formatted(filename))) {
