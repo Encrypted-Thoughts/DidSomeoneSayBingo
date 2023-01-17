@@ -8,7 +8,9 @@
 		"EncryptedThoughts"
 	],
 	"contact": {
-		"sources": "https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo"
+		"homepage": "https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo",
+		"sources": "https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo",
+		"issues": "https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/dssb/icon.png",
