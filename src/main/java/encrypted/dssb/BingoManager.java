@@ -106,7 +106,9 @@ public class BingoManager {
     }
 
     public static int generate(ServerPlayerEntity player, MinecraftServer server, boolean start) throws CommandSyntaxException {
-        if (GenerateInProgress)
+        if (GameSettings.ItemPools.size() == 0)
+            MessageHelper.sendSystemMessage(player, Text.literal("No item pool selected. Add an item pool to play.").formatted(Formatting.RED));
+        else if (GenerateInProgress)
             MessageHelper.sendSystemMessage(player, Text.literal("Still generating previous board.").formatted(Formatting.RED));
         else {
             GenerateInProgress = true;
