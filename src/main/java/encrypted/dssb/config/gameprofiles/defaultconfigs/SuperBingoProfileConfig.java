@@ -13,6 +13,7 @@ public class SuperBingoProfileConfig extends GameProfileConfig {
 
     public SuperBingoProfileConfig() {
         Name = "Super Bingo";
+        GameMode = "Blackout";
         Effects = new ArrayList<>(List.of(
             new StatusEffect("slow_falling", 20, 6, true),
                 new StatusEffect("regeneration", 99999, 100, false, false, false, true),

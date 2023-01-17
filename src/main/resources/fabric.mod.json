@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "dssbingo",
 	"version": "${version}",
-	"name": "DidSomeoneSayBingo",
+	"name": "Did Someone Say Bingo?",
 	"description": "A server side version of bingo made for fabric.",
 	"authors": [
 		"EncryptedThoughts"
