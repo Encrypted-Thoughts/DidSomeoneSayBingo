@@ -11,161 +11,161 @@ public class NetherItemPool extends ItemPool {
         Name = "Nether";
         Items = new ArrayList<>(List.of(
                 new ItemGroup(new String[]{
-                        "soul_sand",
-                        "soul_soil"
+                        "minecraft:soul_sand",
+                        "minecraft:soul_soil"
                 }),
-                new ItemGroup(new String[]{"ender_pearl"}),
-                new ItemGroup(new String[]{"spectral_arrow"}),
-                new ItemGroup(new String[]{"soul_lantern"}),
+                new ItemGroup(new String[]{"minecraft:ender_pearl"}),
+                new ItemGroup(new String[]{"minecraft:spectral_arrow"}),
+                new ItemGroup(new String[]{"minecraft:soul_lantern"}),
                 new ItemGroup(new String[]{
-                        "crimson_roots",
-                        "warped_roots"
-                }),
-                new ItemGroup(new String[]{
-                        "iron_boots",
-                        "iron_chestplate",
-                        "iron_helmet",
-                        "iron_leggings",
-                        "iron_ingot",
-                        "iron_block",
-                        "iron_nugget",
-                        "iron_hoe"
+                        "minecraft:crimson_roots",
+                        "minecraft:warped_roots"
                 }),
                 new ItemGroup(new String[]{
-                        "bone",
-                        "bone_meal",
-                        "bone_block"
-                }),
-                new ItemGroup(new String[]{"soul_campfire"}),
-                new ItemGroup(new String[]{"lava_bucket"}),
-                new ItemGroup(new String[]{"rotten_flesh"}),
-                new ItemGroup(new String[]{"nether_sprouts"}),
-                new ItemGroup(new String[]{"blaze_powder"}),
-                new ItemGroup(new String[]{"arrow"}),
-                new ItemGroup(new String[]{
-                        "diamond_boots",
-                        "diamond_chestplate",
-                        "diamond_leggings",
-                        "diamond_helmet"
+                        "minecraft:iron_boots",
+                        "minecraft:iron_chestplate",
+                        "minecraft:iron_helmet",
+                        "minecraft:iron_leggings",
+                        "minecraft:iron_ingot",
+                        "minecraft:iron_block",
+                        "minecraft:iron_nugget",
+                        "minecraft:iron_hoe"
                 }),
                 new ItemGroup(new String[]{
-                        "crimson_stem",
-                        "crimson_planks",
-                        "crimson_door",
-                        "crimson_sign",
-                        "crimson_trapdoor",
-                        "stripped_crimson_stem"
+                        "minecraft:bone",
+                        "minecraft:bone_meal",
+                        "minecraft:bone_block"
                 }),
-                new ItemGroup(new String[]{"wither_skeleton_skull"}),
-                new ItemGroup(new String[]{"leather"}),
-                new ItemGroup(new String[]{"magma_cream"}),
+                new ItemGroup(new String[]{"minecraft:soul_campfire"}),
+                new ItemGroup(new String[]{"minecraft:lava_bucket"}),
+                new ItemGroup(new String[]{"minecraft:rotten_flesh"}),
+                new ItemGroup(new String[]{"minecraft:nether_sprouts"}),
+                new ItemGroup(new String[]{"minecraft:blaze_powder"}),
+                new ItemGroup(new String[]{"minecraft:arrow"}),
                 new ItemGroup(new String[]{
-                        "porkchop",
-                        "cooked_porkchop"
-                }),
-                new ItemGroup(new String[]{
-                        "golden_chestplate",
-                        "golden_helmet",
-                        "golden_leggings",
-                        "golden_boots"
+                        "minecraft:diamond_boots",
+                        "minecraft:diamond_chestplate",
+                        "minecraft:diamond_leggings",
+                        "minecraft:diamond_helmet"
                 }),
                 new ItemGroup(new String[]{
-                        "diamond",
-                        "diamond_block"
+                        "minecraft:crimson_stem",
+                        "minecraft:crimson_planks",
+                        "minecraft:crimson_door",
+                        "minecraft:crimson_sign",
+                        "minecraft:crimson_trapdoor",
+                        "minecraft:stripped_crimson_stem"
+                }),
+                new ItemGroup(new String[]{"minecraft:wither_skeleton_skull"}),
+                new ItemGroup(new String[]{"minecraft:leather"}),
+                new ItemGroup(new String[]{"minecraft:magma_cream"}),
+                new ItemGroup(new String[]{
+                        "minecraft:porkchop",
+                        "minecraft:cooked_porkchop"
                 }),
                 new ItemGroup(new String[]{
-                        "crimson_hanging_sign",
-                        "warped_hanging_sign"
+                        "minecraft:golden_chestplate",
+                        "minecraft:golden_helmet",
+                        "minecraft:golden_leggings",
+                        "minecraft:golden_boots"
                 }),
                 new ItemGroup(new String[]{
-                        "bow",
-                        "crossbow"
+                        "minecraft:diamond",
+                        "minecraft:diamond_block"
                 }),
                 new ItemGroup(new String[]{
-                        "fishing_rod",
-                        "warped_fungus_on_a_stick"
+                        "minecraft:crimson_hanging_sign",
+                        "minecraft:warped_hanging_sign"
                 }),
                 new ItemGroup(new String[]{
-                        "blackstone",
-                        "polished_blackstone",
-                        "polished_blackstone_bricks",
-                        "cracked_polished_blackstone_bricks",
-                        "chiseled_polished_blackstone"
+                        "minecraft:bow",
+                        "minecraft:crossbow"
                 }),
                 new ItemGroup(new String[]{
-                        "basalt",
-                        "polished_basalt"
-                }),
-                new ItemGroup(new String[]{"string"}),
-                new ItemGroup(new String[]{"glowstone"}),
-                new ItemGroup(new String[]{"ghast_tear"}),
-                new ItemGroup(new String[]{
-                        "quartz",
-                        "quartz_block",
-                        "quartz_bricks",
-                        "quartz_pillar",
-                        "chiseled_quartz_block"
+                        "minecraft:fishing_rod",
+                        "minecraft:warped_fungus_on_a_stick"
                 }),
                 new ItemGroup(new String[]{
-                        "warped_stem",
-                        "warped_planks",
-                        "warped_door",
-                        "warped_sign",
-                        "warped_trapdoor",
-                        "stripped_warped_stem"
+                        "minecraft:blackstone",
+                        "minecraft:polished_blackstone",
+                        "minecraft:polished_blackstone_bricks",
+                        "minecraft:cracked_polished_blackstone_bricks",
+                        "minecraft:chiseled_polished_blackstone"
                 }),
                 new ItemGroup(new String[]{
-                        "gold_block",
-                        "gold_ingot",
-                        "gold_nugget"
+                        "minecraft:basalt",
+                        "minecraft:polished_basalt"
+                }),
+                new ItemGroup(new String[]{"minecraft:string"}),
+                new ItemGroup(new String[]{"minecraft:glowstone"}),
+                new ItemGroup(new String[]{"minecraft:ghast_tear"}),
+                new ItemGroup(new String[]{
+                        "minecraft:quartz",
+                        "minecraft:quartz_block",
+                        "minecraft:quartz_bricks",
+                        "minecraft:quartz_pillar",
+                        "minecraft:chiseled_quartz_block"
                 }),
                 new ItemGroup(new String[]{
-                        "obsidian",
-                        "crying_obsidian"
+                        "minecraft:warped_stem",
+                        "minecraft:warped_planks",
+                        "minecraft:warped_door",
+                        "minecraft:warped_sign",
+                        "minecraft:warped_trapdoor",
+                        "minecraft:stripped_warped_stem"
                 }),
                 new ItemGroup(new String[]{
-                        "golden_axe",
-                        "golden_hoe",
-                        "golden_pickaxe",
-                        "golden_shovel",
-                        "golden_sword"
+                        "minecraft:gold_block",
+                        "minecraft:gold_ingot",
+                        "minecraft:gold_nugget"
                 }),
                 new ItemGroup(new String[]{
-                        "warped_fungus",
-                        "crimson_fungus"
+                        "minecraft:obsidian",
+                        "minecraft:crying_obsidian"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:golden_axe",
+                        "minecraft:golden_hoe",
+                        "minecraft:golden_pickaxe",
+                        "minecraft:golden_shovel",
+                        "minecraft:golden_sword"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:warped_fungus",
+                        "minecraft:crimson_fungus"
                 }),
                 new ItemGroup(new String[]{"shroomlight"}),
                 new ItemGroup(new String[]{
-                        "hopper",
-                        "iron_door",
-                        "iron_bars",
-                        "iron_trapdoor",
-                        "smithing_table",
-                        "chain",
-                        "tripwire_hook"
+                        "minecraft:hopper",
+                        "minecraft:iron_door",
+                        "minecraft:iron_bars",
+                        "minecraft:iron_trapdoor",
+                        "minecraft:smithing_table",
+                        "minecraft:chain",
+                        "minecraft:tripwire_hook"
                 }),
-                new ItemGroup(new String[]{"soul_torch"}),
+                new ItemGroup(new String[]{"minecraft:soul_torch"}),
                 new ItemGroup(new String[]{
-                        "nether_brick",
-                        "red_nether_bricks",
-                        "nether_bricks",
-                        "chiseled_nether_bricks",
-                        "cracked_nether_bricks"
+                        "minecraft:nether_brick",
+                        "minecraft:red_nether_bricks",
+                        "minecraft:nether_bricks",
+                        "minecraft:chiseled_nether_bricks",
+                        "minecraft:cracked_nether_bricks"
                 }),
-                new ItemGroup(new String[]{"name_tag"}),
-                new ItemGroup(new String[]{"blaze_rod"}),
-                new ItemGroup(new String[]{"diamond_hoe"}),
+                new ItemGroup(new String[]{"minecraft:name_tag"}),
+                new ItemGroup(new String[]{"minecraft:blaze_rod"}),
+                new ItemGroup(new String[]{"minecraft:diamond_hoe"}),
                 new ItemGroup(new String[]{
-                        "weeping_vines",
-                        "twisting_vines"
-                }),
-                new ItemGroup(new String[]{
-                        "gilded_blackstone"
+                        "minecraft:weeping_vines",
+                        "minecraft:twisting_vines"
                 }),
                 new ItemGroup(new String[]{
-                        "nether_wart_block",
-                        "nether_wart",
-                        "warped_wart_block"
+                        "minecraft:gilded_blackstone"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:nether_wart_block",
+                        "minecraft:nether_wart",
+                        "minecraft:warped_wart_block"
                 })
         ));
 

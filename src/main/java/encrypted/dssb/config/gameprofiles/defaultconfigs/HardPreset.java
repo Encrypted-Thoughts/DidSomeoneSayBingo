@@ -12,8 +12,8 @@ public class HardPreset extends GamePreset {
     public HardPreset() {
         Name = "Overworld - Hard";
         Effects = new ArrayList<>(List.of(
-            new StatusEffect("slow_falling", 20, 6, true),
-            new StatusEffect("regeneration", 20, 100, true)
+            new StatusEffect("minecraft:slow_falling", 20, 6, true),
+            new StatusEffect("minecraft:regeneration", 20, 100, true)
         ));
         StartingGear = new ArrayList<>(List.of(
             new StartingItem("minecraft:stone_pickaxe", 1, true, false),

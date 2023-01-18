@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoItem;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -40,15 +42,16 @@ public class ItemPool {
         var list = new ArrayList<ItemGroup>();
         for (var itemGroup : itemGroups) {
             var possibleItems = new ArrayList<String>();
-            for (var item : itemGroup.Items) {
+            for (var itemId : itemGroup.Items) {
                 try {
-                    var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(item));
+                    var item = Registries.ITEM.get(new Identifier(itemId));
+                    var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(item.getName().getString()));
                     if (stream == null)
-                        throw new Exception("Can't obtain stream for: /assets/bingo/items/%s.png".formatted(item));
+                        throw new Exception("Can't obtain stream for: /assets/bingo/items/%s.png".formatted(item.getName().getString()));
                     ImageIO.read(stream);
-                    possibleItems.add(item);
+                    possibleItems.add(itemId);
                 } catch (Exception e) {
-                    BingoMod.LOGGER.info("No asset for item: %s".formatted(item));
+                    BingoMod.LOGGER.info("No asset for item: %s".formatted(itemId));
                 }
             }
 

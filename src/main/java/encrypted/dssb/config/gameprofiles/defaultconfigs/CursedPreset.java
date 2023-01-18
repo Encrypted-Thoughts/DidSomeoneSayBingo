@@ -14,10 +14,10 @@ public class CursedPreset extends GamePreset {
     public CursedPreset() {
         Name = "Overworld - Cursed";
         Effects = new ArrayList<>(List.of(
-            new StatusEffect("slow_falling", 20, 6, true),
-            new StatusEffect("regeneration", 20, 100, true),
-            new StatusEffect("speed", 99999, 255, false, false, false, true),
-            new StatusEffect("blindness", 99999, 100, false, false, false, true)
+            new StatusEffect("minecraft:slow_falling", 20, 6, true),
+            new StatusEffect("minecraft:regeneration", 20, 100, true),
+            new StatusEffect("minecraft:speed", 99999, 255, false, false, false, true),
+            new StatusEffect("minecraft:blindness", 99999, 100, false, false, false, true)
         ));
         StartingGear = new ArrayList<>(List.of(
             new StartingItem("minecraft:iron_pickaxe", 1, true, false),

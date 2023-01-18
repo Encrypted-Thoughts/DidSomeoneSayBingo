@@ -133,9 +133,9 @@ public class BingoManager {
                     var group = getRandomItem(possibleItems);
                     var random = ThreadLocalRandom.current().nextInt(0, group.Items.length);
                     var possible = group.Items[random];
-                    var item = getItemByName(possible);
+                    var item = Registries.ITEM.get(new Identifier(possible));
 
-                    if (item != null && (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(item.toString())) || tries > 100)) {
+                    if (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(item.toString())) || tries > 100) {
                         CurrentItems.add(item);
                         possibleItems.remove(group);
                         count++;
@@ -298,14 +298,6 @@ public class BingoManager {
             if (r <= 0.0) break;
         }
         return items.get(idx);
-    }
-
-    public static Item getItemByName(String itemName) {
-        for (Item next : Registries.ITEM) {
-            if (next.toString().equals(itemName))
-                return next;
-        }
-        return null;
     }
 
     public static void randomizeTeams(MinecraftServer server) {

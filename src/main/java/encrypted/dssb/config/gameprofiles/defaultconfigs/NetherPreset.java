@@ -15,9 +15,9 @@ public class NetherPreset extends GamePreset {
         YSpawnOffset = 0;
         MaxYLevel = 110;
         Effects = new ArrayList<>(List.of(
-                new StatusEffect("fire_resistance", 20, 100, true),
-                new StatusEffect("slow_falling", 20, 6, true),
-                new StatusEffect("regeneration", 20, 100, true)
+                new StatusEffect("minecraft:fire_resistance", 20, 100, true),
+                new StatusEffect("minecraft:slow_falling", 20, 6, true),
+                new StatusEffect("minecraft:regeneration", 20, 100, true)
         ));
         StartingGear = new ArrayList<>(List.of(
                 new StartingItem("minecraft:diamond_pickaxe", 1, true, false),
