@@ -9,7 +9,7 @@
 DSSBingo is a fabric version of my interpretation of minecraft bingo intended to be able to run as a server side only mod where vanilla clients can join and play.
 
 ## Installation
-For installation instructions see: [Server]() or [Single Player]() 
+For installation instructions see: [Server](https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo/wiki/Installation#server) or [Single Player](https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo/wiki/Installation#single-player) 
 
 ## Commands
 Everything that happens in the mod can be controlled through the commands listed below.
