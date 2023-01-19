@@ -13,7 +13,7 @@ public class SuperPreset extends GamePreset {
 
     public SuperPreset() {
         Name = "Overworld - Super";
-        GameMode = "Blackout";
+        GameMode = "blackout";
         Effects = new ArrayList<>(List.of(
             new StatusEffect("minecraft:slow_falling", 20, 6, true),
                 new StatusEffect("minecraft:regeneration", 99999, 100, false, false, false, true),

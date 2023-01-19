@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class GamePreset {
     public String Name;
     public String Dimension = "minecraft:overworld";
-    public String GameMode = "Bingo";
+    public String GameMode = "bingo";
     public int YSpawnOffset = 50;
     public int MaxYLevel = 200;
     public int PlayAreaRadius = 1000000;
