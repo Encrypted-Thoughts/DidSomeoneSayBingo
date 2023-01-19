@@ -16,7 +16,7 @@ public class OverworldEasyItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:compass"}),
                 new ItemGroup(new String[]{"minecraft:crossbow"}),
-                new ItemGroup(new String[]{
+                new ItemGroup( new String[]{
                         "minecraft:golden_chestplate",
                         "minecraft:golden_helmet",
                         "minecraft:golden_leggings",
@@ -189,7 +189,6 @@ public class OverworldEasyItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:cauldron"}),
                 new ItemGroup(new String[]{"minecraft:rooted_dirt"}),
-                new ItemGroup(new String[]{"minecraft:red_sand"}),
                 new ItemGroup(new String[]{
                         "minecraft:chicken",
                         "minecraft:cooked_chicken"
@@ -275,7 +274,6 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:tropical_fish",
                         "minecraft:tropical_fish_bucket"
                 }),
-                new ItemGroup(new String[]{"minecraft:polished_deepslate"}),
                 new ItemGroup(new String[]{
                         "minecraft:salmon",
                         "minecraft:cooked_salmon",
@@ -346,16 +344,13 @@ public class OverworldEasyItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:leather_horse_armor"}),
                 new ItemGroup(new String[]{"minecraft:armor_stand"}),
-                new ItemGroup(new String[]{"minecraft:redstone_lamp"}),
-                new ItemGroup(new String[]{"minecraft:deepslate_bricks"}),
                 new ItemGroup(new String[]{"minecraft:magma_block"}),
-                new ItemGroup(new String[]{"minecraft:dandelion"}),
                 new ItemGroup(new String[]{
                         "minecraft:red_sandstone",
                         "minecraft:cut_red_sandstone",
-                        "minecraft:chiseled_red_sandstone"
+                        "minecraft:chiseled_red_sandstone",
+                        "minecraft:red_sand"
                 }),
-                new ItemGroup(new String[]{"minecraft:sand"}),
                 new ItemGroup(new String[]{"minecraft:wooden_axe"}),
                 new ItemGroup(new String[]{"minecraft:hopper"}),
                 new ItemGroup(new String[]{"minecraft:stick"}),
@@ -371,6 +366,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:orange_tulip",
                         "minecraft:oxeye_daisy",
                         "minecraft:lilac",
+                        "minecraft:dandelion",
                         "minecraft:lily_of_the_valley",
                         "minecraft:poppy",
                         "minecraft:rose_bush",
@@ -386,11 +382,12 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:paper"}),
                 new ItemGroup(new String[]{
                         "minecraft:chiseled_sandstone",
-                        "minecraft:cut_sandstone"
+                        "minecraft:cut_sandstone",
+                        "minecraft:sandstone",
+                        "minecraft:sand"
                 }),
                 new ItemGroup(new String[]{"minecraft:activator_rail"}),
                 new ItemGroup(new String[]{"minecraft:golden_apple"}),
-                new ItemGroup(new String[]{"minecraft:sandstone"}),
                 new ItemGroup(new String[]{"minecraft:crafting_table"}),
                 new ItemGroup(new String[]{
                         "minecraft:diorite",
@@ -398,6 +395,7 @@ public class OverworldEasyItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:cake"}),
                 new ItemGroup(new String[]{"minecraft:beetroot_soup"}),
+                new ItemGroup(new String[]{"minecraft:white_bed"}),
                 new ItemGroup(new String[]{
                         "minecraft:brick",
                         "minecraft:bricks"
@@ -415,16 +413,11 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:stripped_jungle_log"
                 }),
                 new ItemGroup(new String[]{"minecraft:wooden_shovel"}),
-                new ItemGroup(new String[]{
-                        "minecraft:pufferfish",
-                        "minecraft:pufferfish_bucket"
-                }),
                 new ItemGroup(new String[]{"minecraft:fermented_spider_eye"}),
                 new ItemGroup(new String[]{
                         "minecraft:raw_gold_block",
                         "minecraft:raw_gold"
                 }),
-                new ItemGroup(new String[]{"minecraft:goat_horn"}),
                 new ItemGroup(new String[]{"minecraft:string"}),
                 new ItemGroup(new String[]{
                         "minecraft:black_concrete",
@@ -496,7 +489,9 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:detector_rail"}),
                 new ItemGroup(new String[]{
                         "minecraft:deepslate",
-                        "minecraft:cobbled_deepslate"
+                        "minecraft:cobbled_deepslate",
+                        "minecraft:deepslate_bricks",
+                        "minecraft:polished_deepslate"
                 }),
                 new ItemGroup(new String[]{"minecraft:dropper"}),
                 new ItemGroup(new String[]{"minecraft:charcoal"}),
@@ -565,6 +560,7 @@ public class OverworldEasyItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:snow",
+                        "minecraft:snow_block",
                         "minecraft:snowball"
                 }),
                 new ItemGroup(new String[]{"minecraft:stone_bricks"}),

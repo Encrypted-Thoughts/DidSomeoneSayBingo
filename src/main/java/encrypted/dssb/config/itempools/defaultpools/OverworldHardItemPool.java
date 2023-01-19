@@ -477,7 +477,7 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:iron_helmet",
                         "minecraft:iron_leggings"
                 }),
-                new ItemGroup(new String[]{
+                new ItemGroup( new String[]{
                         "minecraft:raw_iron_block",
                         "minecraft:raw_iron"
                 }),
@@ -512,7 +512,8 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:stripped_jungle_log"
                 }),
                 new ItemGroup(new String[]{"minecraft:grindstone"}),
-                new ItemGroup(new String[]{"minecraft:golden_chestplate",
+                new ItemGroup(new String[]{
+                        "minecraft:golden_chestplate",
                         "minecraft:golden_helmet",
                         "minecraft:golden_leggings",
                         "minecraft:golden_boots"
@@ -536,7 +537,7 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:yellow_stained_glass"
                 }),
                 new ItemGroup(new String[]{"minecraft:saddle"}),
-                new ItemGroup(new String[]{
+                new ItemGroup( new String[]{
                         "minecraft:sponge",
                         "minecraft:wet_sponge"
                 }),

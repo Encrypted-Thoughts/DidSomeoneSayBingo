@@ -15,7 +15,6 @@ import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.util.MessageHelper;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.command.argument.RegistryEntryArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,6 +50,22 @@ public class BingoSettingsCommand {
                                 // Chose a random profile
                                 .then(literal("randomize")
                                         .executes(ctx -> randomizeSettings(ctx.getSource().getServer())))
+
+                                // Set y offset on spawning during bingo game
+                                .then(literal("ySpawnOffset")
+                                        .then(argument("offset", IntegerArgumentType.integer())
+                                                .executes(ctx -> {
+                                                    GameSettings.YSpawnOffset = IntegerArgumentType.getInteger(ctx, "offset");
+                                                    return Command.SINGLE_SUCCESS;
+                                                })))
+
+                                // Set max y level for spawning in targeted bingo dimension
+                                .then(literal("maxYLevel")
+                                        .then(argument("maxy", IntegerArgumentType.integer())
+                                                .executes(ctx -> {
+                                                    GameSettings.MaxYLevel = IntegerArgumentType.getInteger(ctx, "maxy");
+                                                    return Command.SINGLE_SUCCESS;
+                                                })))
 
                                 // Set the game mode to play
                                 .then(literal("gamemode")
@@ -284,13 +299,19 @@ public class BingoSettingsCommand {
 
                                 // Set profile dimension
                                 .then(literal("dimension")
-                                        .then(argument("dimension", DimensionArgumentType.dimension())
+                                        .then(argument("dimension", StringArgumentType.greedyString())
+                                                .suggests(BingoSettingsCommand::GetDimensionSuggestions)
                                                 .executes(ctx -> {
-                                                    var dimension = DimensionArgumentType.getDimensionArgument(ctx, "dimension");
-                                                    var name = dimension.getRegistryKey().getValue().toString();
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                            Text.literal("Dimension set to ").formatted(Formatting.WHITE).append(name).formatted(Formatting.GREEN));
-                                                    GameSettings.Dimension = name;
+                                                    var dimension = StringArgumentType.getString(ctx, "dimension");
+                                                    var player = ctx.getSource().getPlayer();
+                                                    if (!BingoMod.CONFIG.BingoDimensions.contains(dimension)) {
+                                                        if (player != null)
+                                                            MessageHelper.sendSystemMessage(player, Text.literal("%s is not a valid bingo dimension".formatted(dimension)).formatted(Formatting.RED));
+                                                    } else {
+                                                        MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                                Text.literal("Dimension set to ").formatted(Formatting.WHITE).append(dimension).formatted(Formatting.GREEN));
+                                                        GameSettings.Dimension = dimension;
+                                                    }
                                                     return Command.SINGLE_SUCCESS;
                                                 })))
 
@@ -390,6 +411,12 @@ public class BingoSettingsCommand {
             if (pool.Name.toLowerCase().contains(builder.getRemainingLowerCase()))
                 builder.suggest(pool.Name);
         }
+        return builder.buildFuture();
+    }
+
+    private static CompletableFuture<Suggestions> GetDimensionSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+        for (var dimension : BingoMod.CONFIG.BingoDimensions)
+            builder.suggest(dimension);
         return builder.buildFuture();
     }
 }

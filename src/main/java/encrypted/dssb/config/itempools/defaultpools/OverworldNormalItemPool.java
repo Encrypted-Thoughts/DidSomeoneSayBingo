@@ -24,7 +24,10 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:blast_furnace"}),
                 new ItemGroup(new String[]{"minecraft:dead_bush"}),
                 new ItemGroup(new String[]{"minecraft:coarse_dirt"}),
-                new ItemGroup(new String[]{"minecraft:blaze_powder"}),
+                new ItemGroup(new String[]{
+                        "minecraft:blaze_powder",
+                        "minecraft:blaze_rod"
+                }),
                 new ItemGroup(new String[]{
                         "minecraft:salmon",
                         "minecraft:cooked_salmon",
@@ -132,7 +135,8 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:rotten_flesh"}),
                 new ItemGroup(new String[]{
                         "minecraft:chiseled_sandstone",
-                        "minecraft:cut_sandstone"
+                        "minecraft:cut_sandstone",
+                        "minecraft:sandstone",
                 }),
                 new ItemGroup(new String[]{"minecraft:glow_berries"}),
                 new ItemGroup(new String[]{"minecraft:glowstone_dust"}),
@@ -290,6 +294,24 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:calcite"}),
                 new ItemGroup(new String[]{"minecraft:leather_horse_armor"}),
                 new ItemGroup(new String[]{
+                        "minecraft:black_bed",
+                        "minecraft:blue_bed",
+                        "minecraft:brown_bed",
+                        "minecraft:cyan_bed",
+                        "minecraft:gray_bed",
+                        "minecraft:green_bed",
+                        "minecraft:light_blue_bed",
+                        "minecraft:light_gray_bed",
+                        "minecraft:lime_bed",
+                        "minecraft:magenta_bed",
+                        "minecraft:orange_bed",
+                        "minecraft:pink_bed",
+                        "minecraft:purple_bed",
+                        "minecraft:red_bed",
+                        "minecraft:white_bed",
+                        "minecraft:yellow_bed",
+                }),
+                new ItemGroup(new String[]{
                         "minecraft:raw_copper_block",
                         "minecraft:raw_copper"
                 }),
@@ -333,7 +355,6 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:sweet_berries"}),
                 new ItemGroup(new String[]{"minecraft:dropper"}),
                 new ItemGroup(new String[]{"minecraft:tuff"}),
-                new ItemGroup(new String[]{"minecraft:red_sand"}),
                 new ItemGroup(new String[]{"minecraft:iron_bars"}),
                 new ItemGroup(new String[]{
                         "minecraft:lapis_block",
@@ -388,6 +409,7 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:observer"}),
                 new ItemGroup(new String[]{
                         "minecraft:snow",
+                        "minecraft:snow_block",
                         "minecraft:snowball"
                 }),
                 new ItemGroup(new String[]{

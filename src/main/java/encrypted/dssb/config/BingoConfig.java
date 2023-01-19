@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BingoConfig {
     public SpawnConfig SpawnSettings = new SpawnConfig();
@@ -18,6 +20,11 @@ public class BingoConfig {
     public Coordinates DisplayBoardCoords = new Coordinates(0, 200, 0);
     public TPRandomizationSize TPRandomizationSizes = new TPRandomizationSize();
     public Boolean AssignRandomTeamOnJoin = false;
+
+    public ArrayList<String> BingoDimensions = new ArrayList<>(List.of(
+            "minecraft:overworld",
+            "minecraft:the_nether"
+    ));
 
     public void ReadFromFile() {
         Path path = FabricLoader.getInstance().getConfigDir();
@@ -31,6 +38,7 @@ public class BingoConfig {
                 DisplayBoardCoords = temp.DisplayBoardCoords;
                 TPRandomizationSizes = temp.TPRandomizationSizes;
                 AssignRandomTeamOnJoin = temp.AssignRandomTeamOnJoin;
+                BingoDimensions = temp.BingoDimensions;
             } catch (FileNotFoundException e) {
                 BingoMod.LOGGER.error("Failed to read a config file.");
                 e.printStackTrace();

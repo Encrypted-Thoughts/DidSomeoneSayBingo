@@ -40,7 +40,6 @@ public class NetherItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:lava_bucket"}),
                 new ItemGroup(new String[]{"minecraft:rotten_flesh"}),
                 new ItemGroup(new String[]{"minecraft:nether_sprouts"}),
-                new ItemGroup(new String[]{"minecraft:blaze_powder"}),
                 new ItemGroup(new String[]{"minecraft:arrow"}),
                 new ItemGroup(new String[]{
                         "minecraft:diamond_boots",
@@ -153,7 +152,10 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:cracked_nether_bricks"
                 }),
                 new ItemGroup(new String[]{"minecraft:name_tag"}),
-                new ItemGroup(new String[]{"minecraft:blaze_rod"}),
+                new ItemGroup(new String[]{
+                        "minecraft:blaze_rod",
+                        "minecraft:blaze_powder"
+                }),
                 new ItemGroup(new String[]{"minecraft:diamond_hoe"}),
                 new ItemGroup(new String[]{
                         "minecraft:weeping_vines",
