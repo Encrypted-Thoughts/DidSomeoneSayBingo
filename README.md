@@ -24,7 +24,7 @@ Everything that happens in the mod can be controlled through the commands listed
 | `/bingo preset <preset>`                                                        | no      | Set the game settings to a predefined preset |
 | `/bingo settings`                                                               | no      | View current bingo settings |
 | `/bingo settings gamemode <mode>`                                               | no      | Set the game mode type to play. Bingo: just normal bingo. Lockout: Getting an item locks it out from other teams. Win on bingo or getting the majority of items. Blackout: Get all the items to win. |
-| `/bingo settings dimension <dimension>`                                         | no      | Set the dimension the game will start in |
+| `/bingo settings dimension <dimension>`                                         | yes     | Set the dimension the game will start in |
 | `/bingo settings timer <minutes>`                                               | no      | Set a time limit in minutes for the game. Set to 0 minutes for no timer. |
 | <code>/bingo settings radius <small&#124;medium&#124;large></code>              | no      | Set the size of the area that teams will be spawned in. This won't stop teams from spawning within 100 blocks of each other but reduces the chance they will with a larger area. |
 | `/bingo settings randomize`                                                     | no      | Set game settings to a random game preset |
