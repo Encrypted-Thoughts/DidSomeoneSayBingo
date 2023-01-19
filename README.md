@@ -52,6 +52,4 @@ Everything that happens in the mod can be controlled through the commands listed
 | <code>/bingo team spawn concrete <start&#124;stop&#124;coords></code>           | yes     | Set coordinates to change into the winning team colors in concrete on game end. |
 | <code>/bingo team spawn glass <start&#124;stop&#124;coords></code>              | yes     | Set coordinates to change into the winning team colors in glass on game end. |
 
-
-
 ![bingo card full](https://user-images.githubusercontent.com/50642352/213332281-6ba61f83-348b-4bb1-a0ee-d78bf36de9fd.png)
