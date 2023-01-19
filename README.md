@@ -1,4 +1,4 @@
-![bingo banner](https://user-images.githubusercontent.com/50642352/213352657-46381a86-df12-407f-8129-5923ced6382e.png)
+![Did Someone Say Bingo?](https://user-images.githubusercontent.com/50642352/213352657-46381a86-df12-407f-8129-5923ced6382e.png)
 ---
 
 ![License](https://img.shields.io/github/license/Encrypted-Thoughts/DidSomeoneSayBingo)
