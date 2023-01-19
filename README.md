@@ -1,9 +1,10 @@
-# Did Someone Say Bingo?
+![bingo banner](https://user-images.githubusercontent.com/50642352/213352657-46381a86-df12-407f-8129-5923ced6382e.png)
+---
+
 ![License](https://img.shields.io/github/license/Encrypted-Thoughts/DidSomeoneSayBingo)
 ![Issues](https://img.shields.io/github/issues/Encrypted-Thoughts/DidSomeoneSayBingo?label=Issues)
 ![Version](https://img.shields.io/github/v/tag/Encrypted-Thoughts/DidSomeoneSayBingo)
 ![Downloads](https://img.shields.io/github/downloads/Encrypted-Thoughts/DidSomeoneSayBingo/total)
-
 
 DSSBingo is a fabric version of my interpretation of minecraft bingo intended to be able to run as a server side only mod where vanilla clients can join and play.
 
