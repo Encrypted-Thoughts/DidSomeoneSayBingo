@@ -106,7 +106,6 @@ public abstract class GameMode {
                     100,
                     BingoManager.GameSettings.TPRandomizationRadius,
                     maxY,
-                    BingoManager.getValidPlayers(Server.getPlayerManager()),
                     true);
             for (var spawn : TeamSpawns.values())
                 world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, new ChunkPos(spawn), 1, 0);

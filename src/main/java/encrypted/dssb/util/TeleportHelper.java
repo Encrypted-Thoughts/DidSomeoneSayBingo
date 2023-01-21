@@ -1,14 +1,11 @@
 package encrypted.dssb.util;
 
-import com.google.common.collect.Maps;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.Dynamic4CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -52,7 +49,7 @@ public class TeleportHelper {
     private static final Dynamic4CommandExceptionType FAILED_ENTITIES_EXCEPTION = new Dynamic4CommandExceptionType((pilesCount, x, z, maxSpreadDistance) -> Text.translatable("commands.spreadplayers.failed.entities", pilesCount, x, z, maxSpreadDistance));
     private static final Dynamic2CommandExceptionType INVALID_HEIGHT_EXCEPTION = new Dynamic2CommandExceptionType((maxY, worldBottomY) -> Text.translatable("commands.spreadplayers.failed.invalid.height", maxY, worldBottomY));
 
-    public static HashMap<AbstractTeam, BlockPos> spreadPlayers(ServerWorld world, Vec2f center, float spreadDistance, float maxRange, int maxY, List<ServerPlayerEntity> players, boolean respectTeams) throws CommandSyntaxException {
+    public static HashMap<AbstractTeam, BlockPos> spreadPlayers(ServerWorld world, Vec2f center, float spreadDistance, float maxRange, int maxY, boolean respectTeams) throws CommandSyntaxException {
         int i = world.getBottomY();
         if (maxY < i)
             throw INVALID_HEIGHT_EXCEPTION.create(maxY, i);
@@ -63,7 +60,6 @@ public class TeleportHelper {
         double g = center.y + maxRange;
         var piles = TeleportHelper.makePiles(random, world.getScoreboard().getTeams().size(), d, e, f, g);
         TeleportHelper.spread(center, spreadDistance, world, random, d, e, f, g, maxY, piles, respectTeams);
-        getMinDistance(players, world, piles, maxY, respectTeams);
         return getTeamPiles(world, maxY, piles);
     }
 
@@ -157,34 +153,6 @@ public class TeleportHelper {
             piles[i] = pile;
         }
         return piles;
-    }
-
-    private static void getMinDistance(Collection<? extends Entity> entities, ServerWorld world, Pile[] piles, int maxY, boolean respectTeams) {
-        int i = 0;
-        Map<AbstractTeam, Pile> map = Maps.newHashMap();
-
-        double e;
-        for (var entity : entities) {
-            Pile pile;
-            if (respectTeams) {
-                AbstractTeam abstractTeam = entity instanceof PlayerEntity ? entity.getScoreboardTeam() : null;
-                if (!map.containsKey(abstractTeam))
-                    map.put(abstractTeam, piles[i++]);
-
-                pile = map.get(abstractTeam);
-            } else
-                pile = piles[i++];
-
-            entity.teleport((double) MathHelper.floor(pile.x) + 0.5, pile.getY(world, maxY), (double) MathHelper.floor(pile.z) + 0.5);
-            e = Double.MAX_VALUE;
-
-            for (Pile pile2 : piles) {
-                if (pile != pile2) {
-                    double f = pile.getDistance(pile2);
-                    e = Math.min(f, e);
-                }
-            }
-        }
     }
 
     static class Pile {
