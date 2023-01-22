@@ -257,7 +257,7 @@ public class BingoManager {
         var server = player.getServer();
         if (GameInProgress && Game != null && server != null) {
             var team = player.getScoreboardTeam();
-            var spawn = Game.TeamSpawns.get(team).offset(Direction.Axis.Y, Game.ySpawnOffset);
+            var spawn = Game.TeamSpawns.get(team).offset(Direction.Axis.Y, GameSettings.YSpawnOffset);
             var dimension = WorldHelper.getWorldRegistryKeyByName(server, BingoManager.GameSettings.Dimension);
             player.setSpawnPoint(dimension, spawn, 0, true, false);
         } else if (server != null) {
@@ -519,7 +519,7 @@ public class BingoManager {
 
         if (Game != null && Game.Starting) {
             for (var team : Game.TeamSpawns.entrySet()) {
-                var teamPos = team.getValue().offset(Direction.Axis.Y, Game.ySpawnOffset);
+                var teamPos = team.getValue().offset(Direction.Axis.Y, GameSettings.YSpawnOffset);
                 for (var player : getValidPlayers(server.getPlayerManager())) {
                     if (player.isTeamPlayer(team.getKey()) && !player.getBlockPos().equals(teamPos)) {
                         try {

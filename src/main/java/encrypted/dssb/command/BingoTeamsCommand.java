@@ -79,7 +79,7 @@ public class BingoTeamsCommand {
             BingoPlayers.add(player.getUuid());
         var text = Text.literal("%s joined team %s!".formatted(player.getDisplayName().getString(), team.getName())).formatted(team.getColor());
         MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
-        if (GameInProgress) {
+        if (GameInProgress && !Game.Initializing && !Game.Starting) {
             var server = player.getServer();
             if (server != null) {
                 BingoManager.givePlayerStatusEffects(player, true);
@@ -87,7 +87,7 @@ public class BingoTeamsCommand {
                 BingoManager.Game.teleportPlayerToTeamSpawn(
                         WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
                         player,
-                        Game.TeamSpawns.get(team).offset(Direction.Axis.Y, Game.ySpawnOffset)
+                        Game.TeamSpawns.get(team).offset(Direction.Axis.Y, GameSettings.YSpawnOffset)
                 );
             }
         }

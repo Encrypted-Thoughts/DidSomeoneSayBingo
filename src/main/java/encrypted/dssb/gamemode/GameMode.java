@@ -7,6 +7,7 @@ import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TeleportHelper;
 import encrypted.dssb.util.WorldHelper;
+import net.minecraft.block.Material;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,10 +22,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeKeys;
 
@@ -39,7 +38,6 @@ public abstract class GameMode {
     public BingoCard Card;
 
     public HashMap<AbstractTeam, BlockPos> TeamSpawns = new HashMap<>();
-    public int ySpawnOffset = 50;
 
     public boolean Initializing = false;
 
@@ -68,13 +66,10 @@ public abstract class GameMode {
     public abstract boolean checkBingo(AbstractTeam team);
 
     public void initialize() {
-
         var text = Text.literal("Loading...").formatted(Formatting.GREEN);
         MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
         var world = WorldHelper.getWorldByName(Server, BingoManager.GameSettings.Dimension);
-        var maxY = BingoManager.GameSettings.MaxYLevel;
-        ySpawnOffset = BingoManager.GameSettings.YSpawnOffset;
 
         if (world == null) {
             BingoMod.LOGGER.error("Unable to initialize game. World is null.");
@@ -93,28 +88,22 @@ public abstract class GameMode {
                 BingoManager.GameSettings.PlayAreaRadius - BingoManager.GameSettings.TPRandomizationRadius
         );
 
+        TeamSpawns = findTeamSpawns(
+                world,
+                new Vec2f(origin.getX(), origin.getZ()),
+                100,
+                BingoManager.GameSettings.TPRandomizationRadius,
+                BingoManager.GameSettings.MaxYLevel);
+        for (var spawn : TeamSpawns.values())
+            world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, new ChunkPos(spawn), 1, 0);
+
         for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
             player.getInventory().clear();
             player.getInventory().offHand.set(0, Card.getMap());
             player.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
         }
 
-        try {
-            TeamSpawns = TeleportHelper.spreadPlayers(
-                    world,
-                    new Vec2f(origin.getX(), origin.getZ()),
-                    100,
-                    BingoManager.GameSettings.TPRandomizationRadius,
-                    maxY,
-                    true);
-            for (var spawn : TeamSpawns.values())
-                world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, new ChunkPos(spawn), 1, 0);
-            Initializing = true;
-        } catch (CommandSyntaxException e) {
-            text = Text.literal("Unable to find teleport location(s).").formatted(Formatting.GREEN);
-            MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
-            e.printStackTrace();
-        }
+        Initializing = true;
     }
 
     public void playNotificationSound(World world) {
@@ -133,7 +122,7 @@ public abstract class GameMode {
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 300 * 20, 255, false, false, false));
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 300 * 20, 250, false, false, false));
-                    teleportPlayerToTeamSpawn(world, player, team.getValue().offset(Direction.Axis.Y, ySpawnOffset));
+                    teleportPlayerToTeamSpawn(world, player, team.getValue().offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset));
                 }
             }
         }
@@ -162,5 +151,46 @@ public abstract class GameMode {
             if (biome.getKey().isPresent() && biome.getKey().get() != BiomeKeys.OCEAN && biome.getKey().get() != BiomeKeys.BEACH)
                 return pos;
         }
+    }
+
+    public HashMap<AbstractTeam, BlockPos> findTeamSpawns(ServerWorld world, Vec2f center, float spreadDistance, float maxRange, int maxY) {
+        var spawns = new HashMap<AbstractTeam, BlockPos>();
+        var random = Random.create();
+
+        for (var team : world.getScoreboard().getTeams()) {
+            var attempts = 0;
+            var found = false;
+            while (!found && attempts < 100) {
+                attempts++;
+                var x = Math.floor(MathHelper.nextDouble(random, center.x - maxRange, center.x + maxRange));
+                var z = Math.floor(MathHelper.nextDouble(random, center.y - maxRange, center.y + maxRange));
+
+                // check if point is withing spread distance to another spawn
+                var tooClose = spawns.values().stream().anyMatch(spawn -> {
+                    var distance = Math.sqrt(Math.pow(x - spawn.getX(), 2) + Math.pow(z - spawn.getZ(), 2));
+                    return distance < spreadDistance;
+                });
+                if (tooClose) continue;
+
+                // get the top block
+                var mutable = new BlockPos.Mutable(x, maxY + 1, z);
+                var headValid = world.getBlockState(mutable).isAir();
+                mutable.move(Direction.DOWN);
+                var footValid = world.getBlockState(mutable).isAir();
+                if (!headValid || !footValid) continue;
+
+                while (world.getBlockState(mutable).isAir() && mutable.getY() > world.getBottomY())
+                    mutable.move(Direction.DOWN);
+
+                // check if top block is valid
+                var material = world.getBlockState(mutable).getMaterial();
+                if (material.isLiquid() || material == Material.FIRE) continue;
+
+                mutable.move(Direction.UP);
+                spawns.put(team, mutable);
+                found = true;
+            }
+        }
+        return spawns;
     }
 }
