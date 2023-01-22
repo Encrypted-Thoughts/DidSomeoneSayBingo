@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.BingoManager;
+import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -30,7 +31,7 @@ public class BingoTeamsCommand {
                                         .executes(ctx -> {
                                             var player = ctx.getSource().getPlayer();
                                             if (player != null) {
-                                                if (!GameInProgress)
+                                                if (Game.Status == GameStatus.Idle)
                                                     randomizeTeams(ctx.getSource().getServer());
                                                 else
                                                     MessageHelper.sendSystemMessage(player, Text.literal("Can't randomize teams while game in progress.").formatted(Formatting.RED));
@@ -42,7 +43,7 @@ public class BingoTeamsCommand {
                                                 .executes(ctx -> {
                                                     var player = ctx.getSource().getPlayer();
                                                     if (player != null) {
-                                                        if (!GameInProgress)
+                                                        if (Game.Status == GameStatus.Idle)
                                                             assignRandomTeams(ctx.getSource().getServer().getPlayerManager().getPlayerList(), ctx.getSource().getServer().getScoreboard(), IntegerArgumentType.getInteger(ctx, "numTeams"));
                                                         else
                                                             MessageHelper.sendSystemMessage(player, Text.literal("Can't randomize teams while game in progress.").formatted(Formatting.RED));
@@ -79,9 +80,10 @@ public class BingoTeamsCommand {
             BingoPlayers.add(player.getUuid());
         var text = Text.literal("%s joined team %s!".formatted(player.getDisplayName().getString(), team.getName())).formatted(team.getColor());
         MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
-        if (GameInProgress && !Game.Initializing && !Game.Starting) {
+        if (Game != null && Game.Status == GameStatus.Playing) {
             var server = player.getServer();
             if (server != null) {
+                player.getInventory().clear();
                 BingoManager.givePlayerStatusEffects(player, true);
                 BingoManager.givePlayerEquipment(player, true);
                 BingoManager.Game.teleportPlayerToTeamSpawn(

@@ -3,12 +3,13 @@ package encrypted.dssb.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import static encrypted.dssb.BingoManager.GameInProgress;
+import static encrypted.dssb.BingoManager.Game;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -21,7 +22,7 @@ public class BingoPVPCommand {
                                         .executes(ctx -> {
                                             var player = ctx.getSource().getPlayer();
                                             if (player != null) {
-                                                if (!GameInProgress || ctx.getSource().hasPermissionLevel(2)) {
+                                                if (Game.Status != GameStatus.Idle || ctx.getSource().hasPermissionLevel(2)) {
                                                     var bool = BoolArgumentType.getBool(ctx, "enabled");
                                                     ctx.getSource().getServer().setPvpEnabled(bool);
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), Text.literal(bool ? "PVP set to enabled." : "PVP disabled.").formatted(Formatting.WHITE));

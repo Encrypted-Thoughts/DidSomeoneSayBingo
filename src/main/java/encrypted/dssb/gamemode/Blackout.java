@@ -33,6 +33,7 @@ public class Blackout extends GameMode {
 
     @Override
     public void start() {
+        Status = GameStatus.Loading;
         var text = Text.literal("Game of Blackout Bingo starting!").formatted(Formatting.GREEN);
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), text);
 
@@ -53,7 +54,7 @@ public class Blackout extends GameMode {
             }
         }
 
-        Starting = false;
+        Status = GameStatus.Idle;
         TimerRunning = false;
     }
 
@@ -73,7 +74,7 @@ public class Blackout extends GameMode {
                     BingoManager.givePlayerStatusEffects(player, false);
                 }
 
-                Starting = false;
+                Status = GameStatus.Playing;
 
                 if (BingoManager.GameSettings.TimeLimit > 0) {
                     TimerRunning = true;
@@ -135,7 +136,6 @@ public class Blackout extends GameMode {
 
         BingoManager.tpAllToBingoSpawn(Server);
         BingoManager.resetPlayers(Server);
-        BingoManager.GameInProgress = false;
 
         if (maxTeam != null && !tie)
             handleWin(maxTeam.getKey());
@@ -172,6 +172,8 @@ public class Blackout extends GameMode {
                 }
             }
         }
+
+        Status = GameStatus.Idle;
     }
 
     @Override

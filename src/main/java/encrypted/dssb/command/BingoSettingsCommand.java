@@ -13,6 +13,7 @@ import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
+import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.ItemStackArgumentType;
@@ -319,7 +320,7 @@ public class BingoSettingsCommand {
                                 .then(literal("timer")
                                         .then(argument("minutes", IntegerArgumentType.integer())
                                                 .executes(ctx -> {
-                                                    if (!GameInProgress) {
+                                                    if (Game.Status == GameStatus.Idle) {
                                                         var minutes = IntegerArgumentType.getInteger(ctx, "minutes");
                                                         if (minutes == 0) {
                                                             BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, "minutes");

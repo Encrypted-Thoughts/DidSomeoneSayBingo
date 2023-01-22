@@ -4,7 +4,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
-import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TeleportHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.block.Material;
@@ -20,8 +19,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -31,7 +28,6 @@ import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class GameMode {
-
     public boolean DirtyCard = false;
     public MinecraftServer Server;
 
@@ -39,9 +35,7 @@ public abstract class GameMode {
 
     public HashMap<AbstractTeam, BlockPos> TeamSpawns = new HashMap<>();
 
-    public boolean Initializing = false;
-
-    public boolean Starting = false;
+    public GameStatus Status = GameStatus.Idle;
     public long CountDownStart;
     public long CurrentCountdownSecond;
 
@@ -66,9 +60,6 @@ public abstract class GameMode {
     public abstract boolean checkBingo(AbstractTeam team);
 
     public void initialize() {
-        var text = Text.literal("Loading...").formatted(Formatting.GREEN);
-        MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
-
         var world = WorldHelper.getWorldByName(Server, BingoManager.GameSettings.Dimension);
 
         if (world == null) {
@@ -76,8 +67,7 @@ public abstract class GameMode {
             return;
         }
 
-        if (DirtyCard)
-            Card.resetCard(world);
+        if (DirtyCard) Card.resetCard(world);
         DirtyCard = true;
 
         var origin = getRandomPos(
@@ -103,7 +93,7 @@ public abstract class GameMode {
             player.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
         }
 
-        Initializing = true;
+        Status = GameStatus.Initializing;
     }
 
     public void playNotificationSound(World world) {
