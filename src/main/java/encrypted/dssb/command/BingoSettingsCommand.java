@@ -239,6 +239,13 @@ public class BingoSettingsCommand {
                                                 .then(argument("pool", StringArgumentType.greedyString())
                                                         .suggests(BingoSettingsCommand::GetItemPoolSuggestions)
                                                         .executes(ctx -> {
+                                                            var player = ctx.getSource().getPlayer();
+                                                            if (Game != null && Game.Status != GameStatus.Idle) {
+                                                                if (player != null)
+                                                                    MessageHelper.sendSystemMessage(player, Text.literal("Can't change item pools while game in process.").formatted(Formatting.RED));
+                                                                return Command.SINGLE_SUCCESS;
+                                                            }
+
                                                             var poolName = StringArgumentType.getString(ctx, "pool");
                                                             GameSettings.ItemPools.add(poolName);
 
@@ -251,12 +258,18 @@ public class BingoSettingsCommand {
                                                 .then(argument("pool", StringArgumentType.greedyString())
                                                         .suggests(BingoSettingsCommand::GetItemPoolSuggestions)
                                                         .executes(ctx -> {
+                                                            var player = ctx.getSource().getPlayer();
+                                                            if (Game != null && Game.Status != GameStatus.Idle) {
+                                                                if (player != null)
+                                                                    MessageHelper.sendSystemMessage(player, Text.literal("Can't change item pools while game in process.").formatted(Formatting.RED));
+                                                                return Command.SINGLE_SUCCESS;
+                                                            }
+
                                                             var poolName = StringArgumentType.getString(ctx, "pool");
                                                             var removed = GameSettings.ItemPools.removeIf(p -> p.equals(poolName));
 
                                                             if (!removed) {
                                                                 var text = Text.literal(poolName + " isn't in the current list of item pools").formatted(Formatting.RED);
-                                                                var player = ctx.getSource().getPlayer();
                                                                 if (player != null)
                                                                     MessageHelper.sendSystemMessage(player, text);
                                                             } else {
@@ -268,6 +281,13 @@ public class BingoSettingsCommand {
 
                                         .then(literal("clear")
                                                 .executes(ctx -> {
+                                                    var player = ctx.getSource().getPlayer();
+                                                    if (Game != null && Game.Status != GameStatus.Idle) {
+                                                        if (player != null)
+                                                            MessageHelper.sendSystemMessage(player, Text.literal("Can't change item pools while game in process.").formatted(Formatting.RED));
+                                                        return Command.SINGLE_SUCCESS;
+                                                    }
+
                                                     GameSettings.ItemPools.clear();
                                                     var text = Text.literal("All added item pools cleared").formatted(Formatting.GOLD);
                                                     MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
@@ -303,8 +323,14 @@ public class BingoSettingsCommand {
                                         .then(argument("dimension", StringArgumentType.greedyString())
                                                 .suggests(BingoSettingsCommand::GetDimensionSuggestions)
                                                 .executes(ctx -> {
-                                                    var dimension = StringArgumentType.getString(ctx, "dimension");
                                                     var player = ctx.getSource().getPlayer();
+                                                    if (Game != null && Game.Status != GameStatus.Idle) {
+                                                        if (player != null)
+                                                            MessageHelper.sendSystemMessage(player, Text.literal("Can't change dimension while game in process.").formatted(Formatting.RED));
+                                                        return Command.SINGLE_SUCCESS;
+                                                    }
+
+                                                    var dimension = StringArgumentType.getString(ctx, "dimension");
                                                     if (!BingoMod.CONFIG.BingoDimensions.contains(dimension)) {
                                                         if (player != null)
                                                             MessageHelper.sendSystemMessage(player, Text.literal("%s is not a valid bingo dimension".formatted(dimension)).formatted(Formatting.RED));
@@ -313,6 +339,7 @@ public class BingoSettingsCommand {
                                                                 Text.literal("Dimension set to ").formatted(Formatting.WHITE).append(dimension).formatted(Formatting.GREEN));
                                                         GameSettings.Dimension = dimension;
                                                     }
+
                                                     return Command.SINGLE_SUCCESS;
                                                 })))
 
@@ -366,44 +393,6 @@ public class BingoSettingsCommand {
             text = Text.literal("PVP: ").formatted(Formatting.GREEN).append(Text.literal(server.isPvpEnabled() ? "YES" : "NO").formatted(Formatting.WHITE));
             player.sendMessage(text);
         }
-
-        /*
-        if (GameSettings.StartingGear.size() > 0) {
-            text = Text.literal("Starting Gear: ").formatted(Formatting.GREEN);
-            player.sendMessage(text);
-            for (var gear : GameSettings.StartingGear) {
-                var item = Registries.ITEM.get(new Identifier(gear.Name));
-                var message = "- " + gear.Amount + " " + item.getName().getString();
-                if (gear.Enchantments.size() > 0) {
-                    message += " - ";
-                    message += String.join(",", gear.Enchantments.stream().map(value ->
-                            Objects.requireNonNull(
-                                    Registries.ENCHANTMENT.get(new Identifier(value.Type))).getName(value.Level).getString()).toList());
-                }
-
-                text = Text.literal(message).formatted(Formatting.WHITE);
-                player.sendMessage(text);
-            }
-        } else {
-            text = Text.literal("Starting Gear: ").formatted(Formatting.GREEN).append(Text.literal("No Starting Gear").formatted(Formatting.WHITE));
-            player.sendMessage(text);
-        }
-
-        if (GameSettings.Effects.size() > 0) {
-            text = Text.literal("Effects: ").formatted(Formatting.GREEN);
-            player.sendMessage(text);
-            for (var entry : GameSettings.Effects) {
-                var effect = Registries.STATUS_EFFECT.get(new Identifier(entry.Type));
-                if (effect != null) {
-                    text = Text.literal("- " + effect.getName().getString() + " | " + entry.Amplifier + " | " + entry.Duration + " seconds").formatted(Formatting.WHITE);
-                    player.sendMessage(text);
-                }
-            }
-        } else {
-            text = Text.literal("Effects: ").formatted(Formatting.GREEN).append(Text.literal("No Effects").formatted(Formatting.WHITE));
-            player.sendMessage(text);
-        }
-         */
         return Command.SINGLE_SUCCESS;
     }
 
