@@ -84,6 +84,7 @@ public class BingoTeamsCommand {
             var server = player.getServer();
             if (server != null) {
                 player.getInventory().clear();
+                player.getInventory().offHand.set(0, Game.Card.getMap());
                 BingoManager.givePlayerStatusEffects(player, true);
                 BingoManager.givePlayerEquipment(player, true);
                 BingoManager.Game.teleportPlayerToTeamSpawn(

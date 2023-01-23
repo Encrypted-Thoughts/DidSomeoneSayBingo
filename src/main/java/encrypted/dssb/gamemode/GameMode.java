@@ -4,6 +4,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
+import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TeleportHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.block.Material;
@@ -14,17 +15,18 @@ import net.minecraft.item.Item;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeKeys;
 
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class GameMode {
@@ -78,22 +80,25 @@ public abstract class GameMode {
                 BingoManager.GameSettings.PlayAreaRadius - BingoManager.GameSettings.TPRandomizationRadius
         );
 
-        TeamSpawns = findTeamSpawns(
-                world,
-                new Vec2f(origin.getX(), origin.getZ()),
-                100,
-                BingoManager.GameSettings.TPRandomizationRadius,
-                BingoManager.GameSettings.MaxYLevel);
-        for (var spawn : TeamSpawns.values())
-            world.getChunkManager().addTicket(ChunkTicketType.POST_TELEPORT, new ChunkPos(spawn), 1, 0);
+        CompletableFuture.runAsync(() -> {
+            TeamSpawns = findTeamSpawns(
+                    world,
+                    new Vec2f(origin.getX(), origin.getZ()),
+                    100,
+                    BingoManager.GameSettings.TPRandomizationRadius,
+                    BingoManager.GameSettings.MaxYLevel);
 
-        for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
-            player.getInventory().clear();
-            player.getInventory().offHand.set(0, Card.getMap());
-            player.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
-        }
-
-        Status = GameStatus.Initializing;
+            for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
+                player.getInventory().clear();
+                player.getInventory().offHand.set(0, Card.getMap());
+                player.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
+            }
+            Status = GameStatus.Initializing;
+        }).exceptionally(ex -> {
+            MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), Text.literal("Problem finding team spawns."));
+            ex.printStackTrace();
+            return null;
+        });
     }
 
     public void playNotificationSound(World world) {

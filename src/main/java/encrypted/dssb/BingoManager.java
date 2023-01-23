@@ -35,7 +35,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.Heightmap;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -485,35 +484,25 @@ public class BingoManager {
                 var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
                 if (world == null) return;
 
-                var initialized = true;
-                for (var spawn : Game.TeamSpawns.values()) {
-                    var height = world.getTopY(Heightmap.Type.WORLD_SURFACE, spawn.getX(), spawn.getZ());
-                    if (height <= 0) {
-                        initialized = false;
-                        break;
-                    }
+                for (var tempWorld : server.getWorlds()) {
+                    tempWorld.setTimeOfDay(1000);
+                    tempWorld.setWeather(new Random().nextInt(0, 1000000), 0, false, false);
                 }
-                if (initialized) {
-                    for (var tempWorld : server.getWorlds()) {
-                        tempWorld.setTimeOfDay(1000);
-                        tempWorld.setWeather(new Random().nextInt(0, 1000000), 0, false, false);
-                    }
 
-                    Game.teleportPlayersToTeamSpawns(world);
-                    Game.CountDownStart = System.currentTimeMillis();
-                    Game.CurrentCountdownSecond = 0;
+                Game.teleportPlayersToTeamSpawns(world);
+                Game.CountDownStart = System.currentTimeMillis();
+                Game.CurrentCountdownSecond = 0;
 
-                    var text = Text.literal("Use /clarify <row> <col> if unsure of what an item on the board is.").formatted(Formatting.WHITE);
-                    MessageHelper.broadcastChat(server.getPlayerManager(), text);
-                    text = Text.literal("Use /teamtp to teleport to a random teammate that's more than 50 blocks away.").formatted(Formatting.GOLD);
-                    MessageHelper.broadcastChat(server.getPlayerManager(), text);
-                    text = Text.literal("Use /bingo getmap if you lose your bingo map to get another one.").formatted(Formatting.WHITE);
-                    MessageHelper.broadcastChat(server.getPlayerManager(), text);
-                    text = Text.literal("Use /bingo voteend if you want to start a vote to end the current game in a tie.").formatted(Formatting.GOLD);
-                    MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                var text = Text.literal("Use /clarify <row> <col> if unsure of what an item on the board is.").formatted(Formatting.WHITE);
+                MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                text = Text.literal("Use /teamtp to teleport to a random teammate that's more than 50 blocks away.").formatted(Formatting.GOLD);
+                MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                text = Text.literal("Use /bingo getmap if you lose your bingo map to get another one.").formatted(Formatting.WHITE);
+                MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                text = Text.literal("Use /bingo voteend if you want to start a vote to end the current game in a tie.").formatted(Formatting.GOLD);
+                MessageHelper.broadcastChat(server.getPlayerManager(), text);
 
-                    Game.Status = GameStatus.Starting;
-                }
+                Game.Status = GameStatus.Starting;
             }
             case Starting -> {
                 for (var team : Game.TeamSpawns.entrySet()) {
