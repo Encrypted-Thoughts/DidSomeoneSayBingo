@@ -560,7 +560,7 @@ public class OverworldEasyItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:snow",
-                        "minecraft:snow_block",
+                        //"minecraft:snow_block",
                         "minecraft:snowball"
                 }),
                 new ItemGroup(new String[]{"minecraft:stone_bricks"}),

@@ -294,14 +294,14 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:calcite"}),
                 new ItemGroup(new String[]{"minecraft:leather_horse_armor"}),
                 new ItemGroup(new String[]{
-                        "minecraft:black_bed",
+                        //"minecraft:black_bed",
                         "minecraft:blue_bed",
                         "minecraft:brown_bed",
-                        "minecraft:cyan_bed",
-                        "minecraft:gray_bed",
-                        "minecraft:green_bed",
-                        "minecraft:light_blue_bed",
-                        "minecraft:light_gray_bed",
+                        //"minecraft:cyan_bed",
+                        //"minecraft:gray_bed",
+                        //"minecraft:green_bed",
+                        //"minecraft:light_blue_bed",
+                        //"minecraft:light_gray_bed",
                         "minecraft:lime_bed",
                         "minecraft:magenta_bed",
                         "minecraft:orange_bed",
@@ -409,7 +409,7 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:observer"}),
                 new ItemGroup(new String[]{
                         "minecraft:snow",
-                        "minecraft:snow_block",
+                        //"minecraft:snow_block",
                         "minecraft:snowball"
                 }),
                 new ItemGroup(new String[]{

@@ -98,6 +98,37 @@ public class BingoManager {
         }
     }
 
+    public static ArrayList<ItemGroup> generateItemPool() {
+        var possibleItems = new ArrayList<ItemGroup>();
+        for (var name : GameSettings.ItemPools) {
+            for (var pool : BingoMod.ItemPools) {
+                if (pool.Name.equals(name))
+                    possibleItems.addAll(pool.Items);
+            }
+        }
+        return possibleItems;
+    }
+
+    public static ArrayList<Item> randomlySelectItems(ArrayList<ItemGroup> possibleItems, int amount) {
+        var items = new ArrayList<Item>();
+        var attempts = 0;
+        var count = 0;
+        while (count < amount) {
+            attempts++;
+            var group = getRandomItem(possibleItems);
+            var random = ThreadLocalRandom.current().nextInt(0, group.Items.length);
+            var possible = group.Items[random];
+            var item = Registries.ITEM.get(new Identifier(possible));
+
+            if (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(item.toString())) || attempts > 100) {
+                items.add(item);
+                possibleItems.remove(group);
+                count++;
+            }
+        }
+        return items;
+    }
+
     public static int generate(ServerPlayerEntity player, MinecraftServer server, boolean start) throws CommandSyntaxException {
         if (GenerateInProgress)
             MessageHelper.sendSystemMessage(player, Text.literal("Still generating previous board.").formatted(Formatting.RED));
@@ -106,13 +137,7 @@ public class BingoManager {
         else {
             GenerateInProgress = true;
             try {
-                var possibleItems = new ArrayList<ItemGroup>();
-                for (var name : GameSettings.ItemPools) {
-                    for (var pool : BingoMod.ItemPools) {
-                        if (pool.Name.equals(name))
-                            possibleItems.addAll(pool.Items);
-                    }
-                }
+                var possibleItems = generateItemPool();
 
                 if (possibleItems.size() < 25) {
                     MessageHelper.sendSystemMessage(player, Text.literal("Not enough enough possible items in item pools to generate a bingo card.").formatted(Formatting.RED));
@@ -120,31 +145,16 @@ public class BingoManager {
                     return Command.SINGLE_SUCCESS;
                 }
 
-                CurrentItems = new ArrayList<>();
-                var tries = 0;
-                var count = 0;
-                while (count < 25) {
-                    tries++;
-                    var group = getRandomItem(possibleItems);
-                    var random = ThreadLocalRandom.current().nextInt(0, group.Items.length);
-                    var possible = group.Items[random];
-                    var item = Registries.ITEM.get(new Identifier(possible));
-
-                    if (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(item.toString())) || tries > 100) {
-                        CurrentItems.add(item);
-                        possibleItems.remove(group);
-                        count++;
-                    }
-                }
+                CurrentItems = randomlySelectItems(possibleItems, 25);
 
                 Game = switch (GameSettings.GameMode.toLowerCase()) {
                     case "lockout" -> new Lockout(server, CurrentItems);
                     case "blackout" -> new Blackout(server, CurrentItems);
                     default -> new Bingo(server, CurrentItems);
                 };
-                buildBoard(player.getWorld(), BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
-                if (start)
-                    start(player, server);
+                var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
+                if (spawnWorld != null) buildBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
+                if (start) start(player, server);
             } catch (Exception e) {
                 MessageHelper.sendSystemMessage(player, Text.literal("Unable to generate board check system console for more information.").formatted(Formatting.RED));
                 e.printStackTrace();
@@ -420,6 +430,10 @@ public class BingoManager {
         }
     }
 
+    public static void runOnStartup(MinecraftServer server) {
+        createTeams(server);
+    }
+
     public static void createTeams(MinecraftServer server) {
         var scoreboard = server.getScoreboard();
         var teams = scoreboard.getTeamNames();
@@ -587,6 +601,28 @@ public class BingoManager {
     }
 
     public static void runOnPlayerConnectionEvent(ServerPlayerEntity player) {
+        var server = player.getServer();
+        if (Game == null && server != null) {
+            try {
+                var possibleItems = generateItemPool();
+                if (possibleItems.size() < 25) {
+                    BingoMod.LOGGER.warn("Not enough items in default item pool to initialize game items.");
+                    return;
+                }
+                CurrentItems = randomlySelectItems(possibleItems, 25);
+                Game = switch (GameSettings.GameMode.toLowerCase()) {
+                    case "lockout" -> new Lockout(server, CurrentItems);
+                    case "blackout" -> new Blackout(server, CurrentItems);
+                    default -> new Bingo(server, CurrentItems);
+                };
+                var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
+                if (spawnWorld != null) buildBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
+            } catch (Exception ex) {
+                BingoMod.LOGGER.error("Failure during server startup for handling initial bingo generation.");
+                ex.printStackTrace();
+            }
+        }
+
         MessageHelper.sendSystemMessage(player, Text.literal("Welcome to Bingo!").formatted(Formatting.GREEN));
         MessageHelper.sendSystemMessage(player, Text.literal("Right click a sign to join a team or do '/bingo team join <team>'").formatted(Formatting.WHITE));
         MessageHelper.sendSystemMessage(player, Text.literal("For more information about the various commands that exist do '/bingo'").formatted(Formatting.WHITE));
@@ -608,9 +644,9 @@ public class BingoManager {
             } else if (!BingoMod.CONFIG.AssignRandomTeamOnJoin)
                 player.getScoreboard().clearPlayerTeam(player.getName().getString());
 
-            if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnJoin)
+            if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnJoin && player.isAlive())
                 tpToBingoSpawn(player);
-        } else if (Game.Status == GameStatus.Idle && BingoMod.CONFIG.SpawnSettings.TeleportToHubOnJoin)
+        } else if (Game.Status == GameStatus.Idle && BingoMod.CONFIG.SpawnSettings.TeleportToHubOnJoin && player.isAlive())
             tpToBingoSpawn(player);
     }
 }
