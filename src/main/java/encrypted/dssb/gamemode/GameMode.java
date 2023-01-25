@@ -20,6 +20,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -81,12 +82,21 @@ public abstract class GameMode {
         );
 
         CompletableFuture.runAsync(() -> {
-            TeamSpawns = findTeamSpawns(
-                    world,
-                    new Vec2f(origin.getX(), origin.getZ()),
-                    100,
-                    BingoManager.GameSettings.TPRandomizationRadius,
-                    BingoManager.GameSettings.MaxYLevel);
+            for (var team : world.getScoreboard().getTeams()) {
+                var pos = findTeamSpawn(
+                        TeamSpawns,
+                        world,
+                        new Vec2f(origin.getX(), origin.getZ()),
+                        100,
+                        BingoManager.GameSettings.TPRandomizationRadius,
+                        BingoManager.GameSettings.MaxYLevel);
+                if (pos != null)
+                    TeamSpawns.put(team, pos);
+                else {
+                    MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), Text.literal("Unable to find spawn for %s team. Ending game.".formatted(team.getName())).formatted(Formatting.RED));
+                    end();
+                }
+            }
 
             for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
                 player.getInventory().clear();
@@ -148,44 +158,37 @@ public abstract class GameMode {
         }
     }
 
-    public HashMap<AbstractTeam, BlockPos> findTeamSpawns(ServerWorld world, Vec2f center, float spreadDistance, float maxRange, int maxY) {
-        var spawns = new HashMap<AbstractTeam, BlockPos>();
+    public BlockPos findTeamSpawn(HashMap<AbstractTeam, BlockPos> spawns, ServerWorld world, Vec2f center, float spreadDistance, float maxRange, int maxY) {
         var random = Random.create();
+        var attempts = 0;
+        while (attempts < 100) {
+            attempts++;
+            var x = Math.floor(MathHelper.nextDouble(random, center.x - maxRange, center.x + maxRange));
+            var z = Math.floor(MathHelper.nextDouble(random, center.y - maxRange, center.y + maxRange));
 
-        for (var team : world.getScoreboard().getTeams()) {
-            var attempts = 0;
-            var found = false;
-            while (!found && attempts < 100) {
-                attempts++;
-                var x = Math.floor(MathHelper.nextDouble(random, center.x - maxRange, center.x + maxRange));
-                var z = Math.floor(MathHelper.nextDouble(random, center.y - maxRange, center.y + maxRange));
+            // check if point is withing spread distance to another spawn
+            var tooClose = spawns.values().stream().anyMatch(spawn -> {
+                var distance = Math.sqrt(Math.pow(x - spawn.getX(), 2) + Math.pow(z - spawn.getZ(), 2));
+                return distance < spreadDistance;
+            });
+            if (tooClose) continue;
 
-                // check if point is withing spread distance to another spawn
-                var tooClose = spawns.values().stream().anyMatch(spawn -> {
-                    var distance = Math.sqrt(Math.pow(x - spawn.getX(), 2) + Math.pow(z - spawn.getZ(), 2));
-                    return distance < spreadDistance;
-                });
-                if (tooClose) continue;
+            // get the top block
+            var mutable = new BlockPos.Mutable(x, maxY + 1, z);
+            var headValid = world.getBlockState(mutable).isAir();
+            mutable.move(Direction.DOWN);
+            var footValid = world.getBlockState(mutable).isAir();
+            if (!headValid || !footValid) continue;
 
-                // get the top block
-                var mutable = new BlockPos.Mutable(x, maxY + 1, z);
-                var headValid = world.getBlockState(mutable).isAir();
+            while (world.getBlockState(mutable).isAir() && mutable.getY() > world.getBottomY())
                 mutable.move(Direction.DOWN);
-                var footValid = world.getBlockState(mutable).isAir();
-                if (!headValid || !footValid) continue;
 
-                while (world.getBlockState(mutable).isAir() && mutable.getY() > world.getBottomY())
-                    mutable.move(Direction.DOWN);
+            // check if top block is valid
+            var material = world.getBlockState(mutable).getMaterial();
+            if (material.isLiquid() || material == Material.FIRE) continue;
 
-                // check if top block is valid
-                var material = world.getBlockState(mutable).getMaterial();
-                if (material.isLiquid() || material == Material.FIRE) continue;
-
-                mutable.move(Direction.UP);
-                spawns.put(team, mutable);
-                found = true;
-            }
+            return mutable.move(Direction.UP);
         }
-        return spawns;
+        return null;
     }
 }

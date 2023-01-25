@@ -491,7 +491,7 @@ public class BingoManager {
         if (Game == null) return;
         switch (Game.Status) {
             case Loading -> {
-                var text = Text.literal("Loading...").formatted(Formatting.GREEN);
+                var text = Text.literal("Loading Team Spawns (%s/8)".formatted(Game.TeamSpawns.size())).formatted(Formatting.GREEN);
                 MessageHelper.broadcastOverlay(server.getPlayerManager(), text);
             }
             case Initializing -> {
