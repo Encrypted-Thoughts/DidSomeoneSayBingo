@@ -495,7 +495,6 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:diamond",
                         "minecraft:diamond_block"
                 }),
-                new ItemGroup(new String[]{"minecraft:crying_obsidian"}),
                 new ItemGroup(new String[]{"minecraft:bell"}),
                 new ItemGroup(new String[]{"minecraft:diamond_hoe"}),
                 new ItemGroup(new String[]{"minecraft:dispenser"}),

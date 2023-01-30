@@ -265,7 +265,6 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:stripped_spruce_wood"
                 }),
                 new ItemGroup(new String[]{"minecraft:brown_mushroom"}),
-                new ItemGroup(new String[]{"minecraft:crying_obsidian"}),
                 new ItemGroup(new String[]{"minecraft:lead"}),
                 new ItemGroup(new String[]{
                         "minecraft:dark_prismarine",
