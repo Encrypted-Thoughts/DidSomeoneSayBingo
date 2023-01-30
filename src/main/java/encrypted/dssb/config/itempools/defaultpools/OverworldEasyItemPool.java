@@ -33,7 +33,8 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:gold_block",
                         "minecraft:gold_ingot",
-                        "minecraft:gold_nugget"
+                        "minecraft:gold_nugget",
+                        "minecraft:light_weighted_pressure_plate"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:bucket",
@@ -50,7 +51,13 @@ public class OverworldEasyItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:mossy_cobblestone",
-                        "minecraft:mossy_stone_bricks"
+                        "minecraft:mossy_cobblestone_stairs",
+                        "minecraft:mossy_cobblestone_slab",
+                        "minecraft:mossy_cobblestone_wall",
+                        "minecraft:mossy_stone_bricks",
+                        "minecraft:mossy_stone_brick_stairs",
+                        "minecraft:mossy_stone_brick_slab",
+                        "minecraft:mossy_stone_brick_wall"
                 }),
                 new ItemGroup(new String[]{"minecraft:egg"}),
                 new ItemGroup(new String[]{"minecraft:iron_bars"}),
@@ -90,6 +97,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:mud_bricks",
                         "minecraft:mud_brick_stairs",
                         "minecraft:mud_brick_slab",
+                        "minecraft:mud_brick_wall",
                         "minecraft:mud",
                         "minecraft:packed_mud"
                 }),
@@ -104,15 +112,21 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:dark_oak_boat",
                         "minecraft:dark_oak_stairs",
                         "minecraft:dark_oak_slab",
+                        "minecraft:dark_oak_fence",
+                        "minecraft:dark_oak_fence_gate",
+                        "minecraft:dark_oak_leaves",
                         "minecraft:dark_oak_button",
+                        "minecraft:dark_oak_pressure_plate",
                         "minecraft:dark_oak_chest_boat",
                         "minecraft:dark_oak_door",
                         "minecraft:dark_oak_log",
+                        "minecraft:dark_oak_wood",
                         "minecraft:dark_oak_sapling",
                         "minecraft:dark_oak_sign",
                         "minecraft:dark_oak_planks",
                         "minecraft:dark_oak_trapdoor",
-                        "minecraft:stripped_dark_oak_log"
+                        "minecraft:stripped_dark_oak_log",
+                        "minecraft:stripped_dark_oak_wood"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:glow_ink_sac",
@@ -130,6 +144,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:andesite",
                         "minecraft:andesite_stairs",
                         "minecraft:andesite_slab",
+                        "minecraft:andesite_wall",
                         "minecraft:polished_andesite",
                         "minecraft:polished_andesite_stairs",
                         "minecraft:polished_andesite_slab"
@@ -143,15 +158,21 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:oak_boat",
                         "minecraft:oak_stairs",
                         "minecraft:oak_slab",
+                        "minecraft:oak_fence",
+                        "minecraft:oak_fence_gate",
+                        "minecraft:oak_pressure_plate",
                         "minecraft:oak_button",
                         "minecraft:oak_chest_boat",
                         "minecraft:oak_door",
                         "minecraft:oak_log",
+                        "minecraft:oak_wood",
                         "minecraft:oak_planks",
                         "minecraft:oak_sapling",
+                        "minecraft:oak_leaves",
                         "minecraft:oak_sign",
                         "minecraft:oak_trapdoor",
-                        "minecraft:stripped_oak_log"
+                        "minecraft:stripped_oak_log",
+                        "minecraft:stripped_oak_wood"
                 }),
                 new ItemGroup(new String[]{"minecraft:suspicious_stew"}),
                 new ItemGroup(new String[]{"minecraft:ladder"}),
@@ -164,15 +185,22 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:mangrove_boat",
                         "minecraft:mangrove_stairs",
                         "minecraft:mangrove_slab",
+                        "minecraft:mangrove_fence",
+                        "minecraft:mangrove_fence_gate",
+                        "minecraft:mangrove_pressure_plate",
+                        "minecraft:mangrove_roots",
                         "minecraft:mangrove_button",
                         "minecraft:mangrove_chest_boat",
+                        "minecraft:mangrove_leaves",
                         "minecraft:mangrove_door",
                         "minecraft:mangrove_log",
+                        "minecraft:mangrove_wood",
                         "minecraft:mangrove_planks",
                         "minecraft:mangrove_propagule",
                         "minecraft:mangrove_sign",
                         "minecraft:mangrove_trapdoor",
-                        "minecraft:stripped_mangrove_log"
+                        "minecraft:stripped_mangrove_log",
+                        "minecraft:stripped_mangrove_wood"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:black_wool",
@@ -220,6 +248,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:granite",
                         "minecraft:granite_stairs",
                         "minecraft:granite_slab",
+                        "minecraft:granite_wall",
                         "minecraft:polished_granite",
                         "minecraft:polished_granite_stairs",
                         "minecraft:polished_granite_slab"
@@ -241,6 +270,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:copper_ingot"
                 }),
                 new ItemGroup(new String[]{"minecraft:calcite"}),
+                new ItemGroup(new String[]{"minecraft:grass"}),
                 new ItemGroup(new String[]{"minecraft:composter"}),
                 new ItemGroup(new String[]{"minecraft:minecart"}),
                 new ItemGroup(new String[]{"minecraft:arrow"}),
@@ -274,7 +304,10 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:slime_ball",
                         "minecraft:slime_block"
                 }),
-                new ItemGroup(new String[]{"minecraft:moss_block"}),
+                new ItemGroup(new String[]{
+                        "minecraft:moss_block",
+                        "minecraft:moss_carpet"
+                }),
                 new ItemGroup(new String[]{
                         "minecraft:black_glazed_terracotta",
                         "minecraft:black_terracotta",
@@ -333,19 +366,22 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:acacia_stairs",
                         "minecraft:acacia_slab",
                         "minecraft:acacia_button",
+                        "minecraft:acacia_fence",
+                        "minecraft:acacia_fence_gate",
+                        "minecraft:acacia_leaves",
+                        "minecraft:acacia_pressure_plate",
                         "minecraft:acacia_chest_boat",
                         "minecraft:acacia_door",
                         "minecraft:acacia_log",
+                        "minecraft:acacia_wood",
                         "minecraft:acacia_planks",
                         "minecraft:stripped_acacia_log",
+                        "minecraft:stripped_acacia_wood",
                         "minecraft:acacia_sapling",
                         "minecraft:acacia_sign",
                         "minecraft:acacia_trapdoor"
                 }),
-                new ItemGroup(new String[]{
-                        "minecraft:carrot",
-                        "minecraft:golden_carrot"
-                }),
+                new ItemGroup(new String[]{"minecraft:carrot"}),
                 new ItemGroup(new String[]{
                         "minecraft:amethyst_block",
                         "minecraft:amethyst_shard"
@@ -414,6 +450,7 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:red_sandstone",
                         "minecraft:red_sandstone_stairs",
+                        "minecraft:red_sandstone_wall",
                         "minecraft:red_sandstone_slab",
                         "minecraft:cut_red_sandstone",
                         "minecraft:cut_red_sandstone_slab",
@@ -456,6 +493,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:sandstone",
                         "minecraft:sandstone_stairs",
                         "minecraft:sandstone_slab",
+                        "minecraft:sandstone_wall",
                         "minecraft:sand"
                 }),
                 new ItemGroup(new String[]{"minecraft:activator_rail"}),
@@ -465,6 +503,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:diorite",
                         "minecraft:diorite_stairs",
                         "minecraft:diorite_slab",
+                        "minecraft:diorite_wall",
                         "minecraft:polished_diorite",
                         "minecraft:polished_diorite_stairs",
                         "minecraft:polished_diorite_slab"
@@ -475,7 +514,9 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:brick",
                         "minecraft:bricks",
-                        "minecraft:brick_stairs"
+                        "minecraft:brick_stairs",
+                        "minecraft:brick_wall",
+                        "minecraft:brick_slab"
                 }),
                 new ItemGroup(new String[]{"minecraft:sea_pickle"}),
                 new ItemGroup(new String[]{
@@ -483,28 +524,40 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:jungle_stairs",
                         "minecraft:jungle_slab",
                         "minecraft:jungle_button",
+                        "minecraft:jungle_pressure_plate",
+                        "minecraft:jungle_fence",
+                        "minecraft:jungle_fence_gate",
+                        "minecraft:jungle_leaves",
                         "minecraft:jungle_chest_boat",
                         "minecraft:jungle_door",
                         "minecraft:jungle_log",
+                        "minecraft:jungle_wood",
                         "minecraft:jungle_planks",
                         "minecraft:jungle_sapling",
                         "minecraft:jungle_sign",
                         "minecraft:jungle_trapdoor",
-                        "minecraft:stripped_jungle_log"
+                        "minecraft:stripped_jungle_log",
+                        "minecraft:stripped_jungle_wood"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:spruce_boat",
                         "minecraft:spruce_stairs",
                         "minecraft:spruce_slab",
+                        "minecraft:spruce_fence",
+                        "minecraft:spruce_fence_gate",
+                        "minecraft:spruce_pressure_plate",
                         "minecraft:spruce_button",
                         "minecraft:spruce_chest_boat",
                         "minecraft:spruce_door",
                         "minecraft:spruce_log",
+                        "minecraft:spruce_wood",
                         "minecraft:spruce_planks",
                         "minecraft:spruce_sapling",
+                        "minecraft:spruce_leaves",
                         "minecraft:spruce_sign",
                         "minecraft:spruce_trapdoor",
-                        "minecraft:stripped_spruce_log"
+                        "minecraft:stripped_spruce_log",
+                        "minecraft:stripped_spruce_wood"
                 }),
                 new ItemGroup(new String[]{"minecraft:wooden_shovel"}),
                 new ItemGroup(new String[]{"minecraft:fermented_spider_eye"}),
@@ -586,15 +639,19 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:cobbled_deepslate",
                         "minecraft:cobbled_deepslate_stairs",
                         "minecraft:cobbled_deepslate_slab",
+                        "minecraft:cobbled_deepslate_wall",
                         "minecraft:deepslate_bricks",
                         "minecraft:deepslate_brick_stairs",
                         "minecraft:deepslate_brick_slab",
+                        "minecraft:deepslate_brick_wall",
                         "minecraft:deepslate_tiles",
                         "minecraft:deepslate_tile_stairs",
                         "minecraft:deepslate_tile_slab",
+                        "minecraft:deepslate_tile_wall",
                         "minecraft:polished_deepslate",
                         "minecraft:polished_deepslate_stairs",
-                        "minecraft:polished_deepslate_slab"
+                        "minecraft:polished_deepslate_slab",
+                        "minecraft:polished_deepslate_wall"
                 }),
                 new ItemGroup(new String[]{"minecraft:dropper"}),
                 new ItemGroup(new String[]{"minecraft:charcoal"}),
@@ -603,19 +660,25 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:birch_stairs",
                         "minecraft:birch_slab",
                         "minecraft:birch_button",
+                        "minecraft:birch_fence",
+                        "minecraft:birch_fence_gate",
+                        "minecraft:birch_pressure_plate",
                         "minecraft:birch_chest_boat",
                         "minecraft:birch_door",
                         "minecraft:birch_log",
+                        "minecraft:birch_wood",
                         "minecraft:birch_planks",
                         "minecraft:birch_sapling",
                         "minecraft:birch_sign",
                         "minecraft:birch_trapdoor",
-                        "minecraft:stripped_birch_log"
+                        "minecraft:stripped_birch_log",
+                        "minecraft:stripped_birch_wood"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:iron_ingot",
                         "minecraft:iron_block",
-                        "minecraft:iron_nugget"
+                        "minecraft:iron_nugget",
+                        "minecraft:heavy_weighted_pressure_plate"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:mutton",
@@ -637,7 +700,14 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:smithing_table"}),
                 new ItemGroup(new String[]{
                         "minecraft:cobblestone",
-                        "minecraft:stone"
+                        "minecraft:cobblestone_wall",
+                        "minecraft:cobblestone_stairs",
+                        "minecraft:cobblestone_slab",
+                        "minecraft:stone",
+                        "minecraft:stone_stairs",
+                        "minecraft:stone_slab",
+                        "minecraft:stone_button",
+                        "minecraft:stone_pressure_plate"
                 }),
                 new ItemGroup(new String[]{"minecraft:iron_trapdoor"}),
                 new ItemGroup(new String[]{
@@ -669,13 +739,19 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:snow_block",
                         "minecraft:snowball"
                 }),
-                new ItemGroup(new String[]{"minecraft:stone_bricks"}),
+                new ItemGroup(new String[]{
+                        "minecraft:stone_bricks",
+                        "minecraft:stone_brick_slab",
+                        "minecraft:stone_brick_stairs",
+                        "minecraft:stone_brick_wall"
+                }),
                 new ItemGroup(new String[]{
                         "minecraft:glow_item_frame",
                         "minecraft:item_frame"
                 }),
                 new ItemGroup(new String[]{"minecraft:apple"}),
                 new ItemGroup(new String[]{"minecraft:big_dripleaf"}),
+                new ItemGroup(new String[]{"minecraft:glow_lichen"}),
                 new ItemGroup(new String[]{"minecraft:glow_berries"}),
                 new ItemGroup(new String[]{"minecraft:loom"}),
                 new ItemGroup(new String[]{"minecraft:flower_pot"}),

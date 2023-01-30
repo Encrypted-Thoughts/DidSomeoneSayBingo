@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AllItemPool extends ItemPool {
 
-    public ArrayList<String> CreativeOnly = new ArrayList<>(List.of(
+    private final ArrayList<String> CreativeOnly = new ArrayList<>(List.of(
             "minecraft:air",
             "minecraft:warden_spawn_egg",
             "minecraft:petrified_oak_slab",
@@ -109,7 +109,14 @@ public class AllItemPool extends ItemPool {
             "minecraft:jigsaw",
             "minecraft:knowledge_book",
             "minecraft:light",
-            "minecraft:budding_amethyst"
+            "minecraft:budding_amethyst",
+            "minecraft:barrier",
+            "minecraft:structure_block",
+            "minecraft:dirt_path",
+            "minecraft:farmland",
+            "minecraft:bedrock",
+            "minecraft:chorus_plant",
+            "minecraft:end_portal_frame"
     ));
 
     public AllItemPool() {

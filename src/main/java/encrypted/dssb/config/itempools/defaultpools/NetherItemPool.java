@@ -59,14 +59,19 @@ public class NetherItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:crimson_stem",
+                        "minecraft:crimson_hyphae",
                         "minecraft:crimson_planks",
+                        "minecraft:crimson_pressure_plate",
                         "minecraft:crimson_stairs",
                         "minecraft:crimson_slab",
+                        "minecraft:crimson_fence",
+                        "minecraft:crimson_fence_gate",
                         "minecraft:crimson_button",
                         "minecraft:crimson_door",
                         "minecraft:crimson_sign",
                         "minecraft:crimson_trapdoor",
-                        "minecraft:stripped_crimson_stem"
+                        "minecraft:stripped_crimson_stem",
+                        "minecraft:stripped_crimson_hyphae"
                 }),
                 new ItemGroup(new String[]{"minecraft:wither_skeleton_skull"}),
                 new ItemGroup(new String[]{
@@ -108,12 +113,17 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:blackstone",
                         "minecraft:blackstone_stairs",
                         "minecraft:blackstone_slab",
+                        "minecraft:blackstone_wall",
                         "minecraft:polished_blackstone",
+                        "minecraft:polished_blackstone_pressure_plate",
+                        "minecraft:polished_blackstone_button",
                         "minecraft:polished_blackstone_stairs",
                         "minecraft:polished_blackstone_slab",
+                        "minecraft:polished_blackstone_wall",
                         "minecraft:polished_blackstone_bricks",
                         "minecraft:polished_blackstone_brick_stairs",
                         "minecraft:polished_blackstone_brick_slab",
+                        "minecraft:polished_blackstone_brick_wall",
                         "minecraft:cracked_polished_blackstone_bricks",
                         "minecraft:chiseled_polished_blackstone"
                 }),
@@ -126,22 +136,31 @@ public class NetherItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:ghast_tear"}),
                 new ItemGroup(new String[]{
                         "minecraft:quartz",
+                        "minecraft:chiseled_quartz_block",
                         "minecraft:quartz_block",
-                        "minecraft:quartz_stairs",
                         "minecraft:quartz_slab",
+                        "minecraft:quartz_stairs",
+                        "minecraft:smooth_quartz",
+                        "minecraft:smooth_quartz_slab",
+                        "minecraft:smooth_quartz_stairs",
                         "minecraft:quartz_bricks",
-                        "minecraft:quartz_pillar",
-                        "minecraft:chiseled_quartz_block"
+                        "minecraft:quartz_pillar"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:warped_stem",
+                        "minecraft:warped_hyphae",
                         "minecraft:warped_planks",
+                        "minecraft:warped_fence",
+                        "minecraft:warped_fence_gate",
+                        "minecraft:warped_button",
+                        "minecraft:warped_pressure_plate",
                         "minecraft:warped_stairs",
                         "minecraft:warped_slab",
                         "minecraft:warped_door",
                         "minecraft:warped_sign",
                         "minecraft:warped_trapdoor",
-                        "minecraft:stripped_warped_stem"
+                        "minecraft:stripped_warped_stem",
+                        "minecraft:stripped_warped_hyphae"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:gold_block",
@@ -179,9 +198,12 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:red_nether_bricks",
                         "minecraft:red_nether_brick_stairs",
                         "minecraft:red_nether_brick_slab",
+                        "minecraft:red_nether_brick_wall",
                         "minecraft:nether_bricks",
                         "minecraft:nether_brick_stairs",
                         "minecraft:nether_brick_slab",
+                        "minecraft:nether_brick_fence",
+                        "minecraft:nether_brick_wall",
                         "minecraft:chiseled_nether_bricks",
                         "minecraft:cracked_nether_bricks"
                 }),
