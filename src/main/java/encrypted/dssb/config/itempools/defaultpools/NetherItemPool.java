@@ -14,7 +14,17 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:soul_sand",
                         "minecraft:soul_soil"
                 }),
-                new ItemGroup(new String[]{"minecraft:ender_pearl"}),
+                new ItemGroup(new String[]{
+                        "minecraft:ender_pearl",
+                        "minecraft:ender_eye"
+                }),
+                new ItemGroup(new String[]{"minecraft:ender_chest"}),
+                new ItemGroup(new String[]{
+                        "minecraft:chest",
+                        "minecraft:composter",
+                        "minecraft:trapped_chest",
+                        "minecraft:barrel"
+                }),
                 new ItemGroup(new String[]{"minecraft:spectral_arrow"}),
                 new ItemGroup(new String[]{"minecraft:soul_lantern"}),
                 new ItemGroup(new String[]{
@@ -50,13 +60,23 @@ public class NetherItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:crimson_stem",
                         "minecraft:crimson_planks",
+                        "minecraft:crimson_stairs",
+                        "minecraft:crimson_slab",
+                        "minecraft:crimson_button",
                         "minecraft:crimson_door",
                         "minecraft:crimson_sign",
                         "minecraft:crimson_trapdoor",
                         "minecraft:stripped_crimson_stem"
                 }),
                 new ItemGroup(new String[]{"minecraft:wither_skeleton_skull"}),
-                new ItemGroup(new String[]{"minecraft:leather"}),
+                new ItemGroup(new String[]{
+                        "minecraft:leather",
+                        "minecraft:leather_helmet",
+                        "minecraft:leather_boots",
+                        "minecraft:leather_chestplate",
+                        "minecraft:leather_leggings",
+                        "minecraft:leather_horse_armor"
+                }),
                 new ItemGroup(new String[]{"minecraft:magma_cream"}),
                 new ItemGroup(new String[]{
                         "minecraft:porkchop",
@@ -86,8 +106,14 @@ public class NetherItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:blackstone",
+                        "minecraft:blackstone_stairs",
+                        "minecraft:blackstone_slab",
                         "minecraft:polished_blackstone",
+                        "minecraft:polished_blackstone_stairs",
+                        "minecraft:polished_blackstone_slab",
                         "minecraft:polished_blackstone_bricks",
+                        "minecraft:polished_blackstone_brick_stairs",
+                        "minecraft:polished_blackstone_brick_slab",
                         "minecraft:cracked_polished_blackstone_bricks",
                         "minecraft:chiseled_polished_blackstone"
                 }),
@@ -101,6 +127,8 @@ public class NetherItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:quartz",
                         "minecraft:quartz_block",
+                        "minecraft:quartz_stairs",
+                        "minecraft:quartz_slab",
                         "minecraft:quartz_bricks",
                         "minecraft:quartz_pillar",
                         "minecraft:chiseled_quartz_block"
@@ -108,6 +136,8 @@ public class NetherItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:warped_stem",
                         "minecraft:warped_planks",
+                        "minecraft:warped_stairs",
+                        "minecraft:warped_slab",
                         "minecraft:warped_door",
                         "minecraft:warped_sign",
                         "minecraft:warped_trapdoor",
@@ -147,7 +177,11 @@ public class NetherItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:nether_brick",
                         "minecraft:red_nether_bricks",
+                        "minecraft:red_nether_brick_stairs",
+                        "minecraft:red_nether_brick_slab",
                         "minecraft:nether_bricks",
+                        "minecraft:nether_brick_stairs",
+                        "minecraft:nether_brick_slab",
                         "minecraft:chiseled_nether_bricks",
                         "minecraft:cracked_nether_bricks"
                 }),

@@ -5,10 +5,7 @@ import encrypted.dssb.config.BingoConfig;
 import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.defaultconfigs.*;
 import encrypted.dssb.config.itempools.ItemPool;
-import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
-import encrypted.dssb.config.itempools.defaultpools.OverworldEasyItemPool;
-import encrypted.dssb.config.itempools.defaultpools.OverworldHardItemPool;
-import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
+import encrypted.dssb.config.itempools.defaultpools.*;
 import encrypted.dssb.config.replaceblocks.ReplacementBlocksConfig;
 import encrypted.dssb.util.MapRenderHelper;
 import net.fabricmc.api.ModInitializer;
@@ -86,6 +83,10 @@ public class BingoMod implements ModInitializer {
 				pool.SaveToFile(pool.Name);
 
 				pool = new NetherItemPool();
+				ItemPools.add(pool);
+				pool.SaveToFile(pool.Name);
+
+				pool = new AllItemPool();
 				ItemPools.add(pool);
 				pool.SaveToFile(pool.Name);
 			} else
