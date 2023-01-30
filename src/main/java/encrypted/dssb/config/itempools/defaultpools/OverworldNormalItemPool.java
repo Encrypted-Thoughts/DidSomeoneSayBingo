@@ -347,7 +347,11 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:golden_sword"
                 }),
                 new ItemGroup(new String[]{"minecraft:note_block"}),
-                new ItemGroup(new String[]{"minecraft:big_dripleaf"}),
+                new ItemGroup(new String[]{
+                        "minecraft:big_dripleaf",
+                        "minecraft:small_dripleaf",
+                        "minecraft:spore_blossom"
+                }),
                 new ItemGroup(new String[]{"minecraft:comparator"}),
                 new ItemGroup(new String[]{"minecraft:bow"}),
                 new ItemGroup(new String[]{"minecraft:daylight_detector"}),
