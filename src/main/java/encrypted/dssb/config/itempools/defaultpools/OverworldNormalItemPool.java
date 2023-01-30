@@ -569,6 +569,13 @@ public class OverworldNormalItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:cartography_table"}),
                 new ItemGroup(new String[]{
+                        "minecraft:dead_tube_coral_block",
+                        "minecraft:dead_horn_coral_block",
+                        "minecraft:dead_fire_coral_block",
+                        "minecraft:dead_bubble_coral_block",
+                        "minecraft:dead_brain_coral_block"
+                }),
+                new ItemGroup(new String[]{
                         "minecraft:potato",
                         "minecraft:baked_potato"
                 }),
