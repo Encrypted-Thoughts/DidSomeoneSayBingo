@@ -18,6 +18,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.AbstractTeam;
@@ -238,7 +239,13 @@ public class BingoManager {
     public static void resetPlayer(ServerPlayerEntity player) {
         player.setMovementSpeed(1);
         player.clearStatusEffects();
+
+        player.playerScreenHandler.clearCraftingSlots();
+        player.currentScreenHandler.setCursorStack(new ItemStack(Items.AIR));
         player.getInventory().clear();
+        player.currentScreenHandler.sendContentUpdates();
+        player.playerScreenHandler.onContentChanged(player.getInventory());
+
         if (Game != null)
             player.getInventory().insertStack(Game.Card.getMap());
         player.heal(player.getMaxHealth());
