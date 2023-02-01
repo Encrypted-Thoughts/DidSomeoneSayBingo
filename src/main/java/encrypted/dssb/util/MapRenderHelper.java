@@ -66,32 +66,28 @@ public class MapRenderHelper {
 
     public static int nearestColor(int imageColor) {
         var colors = getMapColors();
-        double[] imageVec = {
-                (double) ((imageColor >> 8) & 0xFF) / 255.0,
-                (double) ((imageColor >> 16) & 0xFF) / 255.0,
-                (double) (imageColor & 0xFF) / 255.0
-        };
+        var imageVec = new double[3];
+        imageVec[0] = (double) ((imageColor >> 8) & 0xFF) / 255.0;
+        imageVec[1] = (double) ((imageColor >> 16) & 0xFF) / 255.0;
+        imageVec[2] = (double) (imageColor & 0xFF) / 255.0;
         var alpha = (double) ((imageColor >> 24) & 0xFF);
 
         int closestColor = 0;
         double lowestDistance = 10000;
-        for (int k = 0; k < colors.size(); k++) {
-            var mcColor = 0xff000000 | colors.get(k).color;
-            double[] mcColorVec = {
-                    (double) ((mcColor >> 8) & 0xFF) / 255.0,
-                    (double) ((mcColor >> 16) & 0xFF) / 255.0,
-                    (double) (mcColor & 0xFF) / 255.0
-            };
+        for (var color : colors) {
+            var mcColor = 0xff000000 | color.color;
+            var mcColorVec = new double[3];
+            mcColorVec[0] = (double) ((mcColor >> 8) & 0xFF) / 255.0;
+            mcColorVec[1] = (double) ((mcColor >> 16) & 0xFF) / 255.0;
+            mcColorVec[2] = (double) (mcColor & 0xFF) / 255.0;
 
             var brightnesses = MapColor.Brightness.values();
-            for (int shadeInd = 0; shadeInd < brightnesses.length; shadeInd++) {
-                double distance = distance(imageVec, applyShade(mcColorVec, shadeInd));
+            for (var shade : brightnesses) {
+                double distance = distance(imageVec, applyShade(mcColorVec, shade.id));
                 if (distance < lowestDistance) {
                     lowestDistance = distance;
-                    if (k == 0 && alpha == 255)
-                        closestColor = 119;
-                    else
-                        closestColor = k * brightnesses.length + shadeInd;
+                    if (color.id == 0 && alpha == 255) closestColor = 119;
+                    else closestColor = color.id * brightnesses.length + shade.id;
                 }
             }
         }
