@@ -87,7 +87,7 @@ public class BingoCard {
 
     private void createMap(World world) {
         map = new ItemStack(Items.FILLED_MAP);
-        var id = world.getNextMapId();
+        var id = 1;
         var nbt = new NbtCompound();
 
         nbt.putString("dimension", world.getRegistryKey().getValue().toString());

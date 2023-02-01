@@ -102,8 +102,7 @@ public class MapRenderHelper {
             for (int row = 0; row < pixels.length; row++) {
                 for (int col = 0; col < pixels[row].length; col++) {
                     var nearest = nearestColor(pixels[row][col]);
-                    if (nearest == 0)
-                        nearest = 33; // gray
+                    if (nearest == 0) nearest = 33; // gray
                     bingoCardBorder[row][col] = nearest;
                 }
             }
@@ -149,9 +148,8 @@ public class MapRenderHelper {
 
         int[][] result = new int[height][width];
         for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
+            for (int col = 0; col < width; col++)
                 result[row][col] = image.getRGB(col, row);
-            }
         }
         return result;
     }
