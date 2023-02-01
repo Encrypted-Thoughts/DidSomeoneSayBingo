@@ -73,8 +73,8 @@ public class MapRenderHelper {
         };
         var alpha = (double) ((imageColor >> 24) & 0xFF);
 
-        int best_color = 0;
-        double lowest_distance = 10000;
+        int closestColor = 0;
+        double lowestDistance = 10000;
         for (int k = 0; k < colors.size(); k++) {
             var mcColor = 0xff000000 | colors.get(k).color;
             double[] mcColorVec = {
@@ -86,16 +86,16 @@ public class MapRenderHelper {
             var brightnesses = MapColor.Brightness.values();
             for (int shadeInd = 0; shadeInd < brightnesses.length; shadeInd++) {
                 double distance = distance(imageVec, applyShade(mcColorVec, shadeInd));
-                if (distance < lowest_distance) {
-                    lowest_distance = distance;
+                if (distance < lowestDistance) {
+                    lowestDistance = distance;
                     if (k == 0 && alpha == 255)
-                        best_color = 119;
+                        closestColor = 119;
                     else
-                        best_color = k * brightnesses.length + shadeInd;
+                        closestColor = k * brightnesses.length + shadeInd;
                 }
             }
         }
-        return best_color;
+        return closestColor;
     }
 
     public static void loadBingoCardBorder() {
