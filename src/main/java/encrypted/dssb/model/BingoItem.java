@@ -5,7 +5,6 @@ import encrypted.dssb.util.MapRenderHelper;
 import net.minecraft.item.Item;
 import net.minecraft.scoreboard.AbstractTeam;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import static encrypted.dssb.util.MapRenderHelper.*;
@@ -29,8 +28,7 @@ public class BingoItem {
             var pixels = MapRenderHelper.getPixelArrayOfImage("/assets/dssb/items/%s.png".formatted(item.toString()), 16, 16);
             for (int row = 0; row < rowSize; row++) {
                 for (int col = 0; col < colSize; col++) {
-                    var imageColor = new Color(pixels[row][col], true);
-                    var nearest = nearestColor(imageColor);
+                    var nearest = nearestColor(pixels[row][col]);
                     if (nearest == 0)
                         nearest = 37; // gray
                     slotPixels[row][col] = nearest;

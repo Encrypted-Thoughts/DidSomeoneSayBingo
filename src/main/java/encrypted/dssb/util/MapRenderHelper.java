@@ -5,13 +5,9 @@ import net.minecraft.block.MapColor;
 import net.minecraft.scoreboard.AbstractTeam;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class MapRenderHelper {
-    private static final double[] shadeCoeffs = { 0.71, 0.86, 1.0, 0.53 };
-
     private static int[][] bingoCardBorder = null;
 
     private static int[][] redSlotArea;
@@ -59,65 +55,47 @@ public class MapRenderHelper {
         return mapColors;
     }
 
-    private static double distance(double[] vectorA, double[] vectorB) {
-        return Math.sqrt(Math.pow(vectorA[0] - vectorB[0], 2) + Math.pow(vectorA[1] - vectorB[1], 2) + Math.pow(vectorA[2] - vectorB[2], 2));
+    private static double distance(double[] a, double[] b) {
+        return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) + Math.pow(a[2] - b[2], 2));
     }
 
     private static double[] applyShade(double[] color, int ind) {
-        double coeff = shadeCoeffs[ind];
-        return new double[] { color[0] * coeff, color[1] * coeff, color[2] * coeff };
+        double brightness = MapColor.Brightness.values()[ind].brightness / 255.0;
+        return new double[] { color[0] * brightness, color[1] * brightness, color[2] * brightness };
     }
 
-    public static int nearestColor(Color imageColor) {
+    public static int nearestColor(int imageColor) {
         var colors = getMapColors();
         double[] imageVec = {
-                (double) imageColor.getRed() / 255.0,
-                (double) imageColor.getGreen() / 255.0,
-                (double) imageColor.getBlue() / 255.0
+                (double) ((imageColor >> 8) & 0xFF) / 255.0,
+                (double) ((imageColor >> 16) & 0xFF) / 255.0,
+                (double) (imageColor & 0xFF) / 255.0
         };
+        var alpha = (double) ((imageColor >> 24) & 0xFF);
+
         int best_color = 0;
         double lowest_distance = 10000;
         for (int k = 0; k < colors.size(); k++) {
-            Color mcColor = new Color(colors.get(k).color);
+            var mcColor = 0xff000000 | colors.get(k).color;
             double[] mcColorVec = {
-                    (double) mcColor.getRed() / 255.0,
-                    (double) mcColor.getGreen() / 255.0,
-                    (double) mcColor.getBlue() / 255.0
+                    (double) ((mcColor >> 8) & 0xFF) / 255.0,
+                    (double) ((mcColor >> 16) & 0xFF) / 255.0,
+                    (double) (mcColor & 0xFF) / 255.0
             };
-            for (int shadeInd = 0; shadeInd < shadeCoeffs.length; shadeInd++) {
+
+            var brightnesses = MapColor.Brightness.values();
+            for (int shadeInd = 0; shadeInd < brightnesses.length; shadeInd++) {
                 double distance = distance(imageVec, applyShade(mcColorVec, shadeInd));
                 if (distance < lowest_distance) {
                     lowest_distance = distance;
-                    if (k == 0 && imageColor.getAlpha() == 255)
+                    if (k == 0 && alpha == 255)
                         best_color = 119;
                     else
-                        best_color = k * shadeCoeffs.length + shadeInd;
+                        best_color = k * brightnesses.length + shadeInd;
                 }
             }
         }
         return best_color;
-    }
-
-    public static int[][] convertPixelArray(BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        int[][] result = new int[height][width];
-
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                result[row][col] = image.getRGB(col, row);
-            }
-        }
-
-        return result;
-    }
-
-    public static BufferedImage convertToBufferedImage(Image image) {
-        var newImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_4BYTE_ABGR);
-        Graphics2D g = newImage.createGraphics();
-        g.drawImage(image, 0, 0, null);
-        g.dispose();
-        return newImage;
     }
 
     public static void loadBingoCardBorder() {
@@ -127,8 +105,7 @@ public class MapRenderHelper {
 
             for (int row = 0; row < pixels.length; row++) {
                 for (int col = 0; col < pixels[row].length; col++) {
-                    var imageColor = new Color(pixels[row][col], true);
-                    var nearest = nearestColor(imageColor);
+                    var nearest = nearestColor(pixels[row][col]);
                     if (nearest == 0)
                         nearest = 33; // gray
                     bingoCardBorder[row][col] = nearest;
@@ -172,9 +149,14 @@ public class MapRenderHelper {
     public static int[][] getPixelArrayOfImage(String path, int height, int width) throws Exception {
         var stream = MapRenderHelper.class.getResourceAsStream(path);
         if (stream == null) throw new Exception("Can't obtain stream for: " + path);
-        var team = ImageIO.read(stream);
-        var image = team.getScaledInstance(width, height, Image.SCALE_FAST);
-        var resized = convertToBufferedImage(image);
-        return convertPixelArray(resized);
+        var image = ImageIO.read(stream);
+
+        int[][] result = new int[height][width];
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                result[row][col] = image.getRGB(col, row);
+            }
+        }
+        return result;
     }
 }

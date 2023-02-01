@@ -11,7 +11,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import static encrypted.dssb.util.MapRenderHelper.nearestColor;
@@ -120,8 +119,7 @@ public class BingoCard {
             var colStart = sideOffset + colIndex * slotOffset;
             for (int row = rowStart; row < rowStart + 22; row++) {
                 for (int col = colStart; col < colStart + 22; col++) {
-                    var imageColor = new Color(pixels[row - rowStart][col - colStart], true);
-                    var nearest = nearestColor(imageColor);
+                    var nearest = nearestColor(pixels[row - rowStart][col - colStart]);
                     if (nearest != 0)
                         bingoPixels[row][col] = nearest;
                 }
