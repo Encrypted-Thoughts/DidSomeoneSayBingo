@@ -67,19 +67,19 @@ public class MapRenderHelper {
     public static int nearestColor(int imageColor) {
         var colors = getMapColors();
         var imageVec = new double[3];
-        imageVec[0] = (double) ((imageColor >> 8) & 0xFF) / 255.0;
-        imageVec[1] = (double) ((imageColor >> 16) & 0xFF) / 255.0;
-        imageVec[2] = (double) (imageColor & 0xFF) / 255.0;
-        var alpha = (double) ((imageColor >> 24) & 0xFF);
+        imageVec[0] = ((imageColor >> 8) & 0xFF) / 255.0;
+        imageVec[1] = ((imageColor >> 16) & 0xFF) / 255.0;
+        imageVec[2] = (imageColor & 0xFF) / 255.0;
+        var alpha = (imageColor >> 24) & 0xFF;
 
         int closestColor = 0;
         double lowestDistance = 10000;
         for (var color : colors) {
             var mcColor = 0xff000000 | color.color;
             var mcColorVec = new double[3];
-            mcColorVec[0] = (double) ((mcColor >> 8) & 0xFF) / 255.0;
-            mcColorVec[1] = (double) ((mcColor >> 16) & 0xFF) / 255.0;
-            mcColorVec[2] = (double) (mcColor & 0xFF) / 255.0;
+            mcColorVec[0] = ((mcColor >> 8) & 0xFF) / 255.0;
+            mcColorVec[1] = ((mcColor >> 16) & 0xFF) / 255.0;
+            mcColorVec[2] = (mcColor & 0xFF) / 255.0;
 
             var brightnesses = MapColor.Brightness.values();
             for (var shade : brightnesses) {
