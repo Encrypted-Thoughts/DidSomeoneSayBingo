@@ -3,16 +3,27 @@ package encrypted.dssb.gamemode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
+import encrypted.dssb.config.replaceblocks.ReplacementBlock;
 import encrypted.dssb.model.BingoCard;
+import encrypted.dssb.model.BingoItem;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TeleportHelper;
 import encrypted.dssb.util.WorldHelper;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.AbstractTeam;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -21,6 +32,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -34,7 +46,7 @@ public abstract class GameMode {
     public boolean DirtyCard = false;
     public MinecraftServer Server;
 
-    public BingoCard Card;
+    protected BingoCard Card;
 
     public HashMap<AbstractTeam, BlockPos> TeamSpawns = new HashMap<>();
 
@@ -190,5 +202,140 @@ public abstract class GameMode {
             return mutable.move(Direction.UP);
         }
         return null;
+    }
+
+    public BingoItem getSlot(int row, int col) {
+        return Card.getSlot(row, col);
+    }
+
+    public ItemStack getMap() {
+        return Card.getMap();
+    }
+
+    public void addNewPlayer(ServerPlayerEntity player, Team team) {
+        var scoreboard = Server.getScoreboard();
+        scoreboard.addPlayerToTeam(player.getName().getString(), team);
+        if (!BingoManager.BingoPlayers.contains(player.getUuid()))
+            BingoManager.BingoPlayers.add(player.getUuid());
+        var text = Text.literal("%s joined team %s!".formatted(player.getDisplayName().getString(), team.getName())).formatted(team.getColor());
+        MessageHelper.broadcastChat(Server.getPlayerManager(), text);
+        if (Status == GameStatus.Playing) {
+            var server = player.getServer();
+            if (server != null) {
+                player.getInventory().clear();
+                player.getInventory().offHand.set(0, getMap());
+                givePlayerStatusEffects(player, true);
+                givePlayerEquipment(player, true);
+                BingoManager.Game.teleportPlayerToTeamSpawn(
+                        WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
+                        player,
+                        BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
+                );
+            }
+        }
+    }
+
+    public void buildBingoBoard(ServerWorld world, BlockPos pos) {
+        var frames = world.getEntitiesByType(EntityType.GLOW_ITEM_FRAME, (glowItemFrame) -> pos.isWithinDistance(glowItemFrame.getBlockPos(), 20));
+        for (var frame : frames)
+            frame.remove(Entity.RemovalReason.DISCARDED);
+
+        for (var i = 0; i < Card.size; i++) {
+            for (var j = 0; j < Card.size; j++) {
+                var slot = Card.slots[i][j];
+                var framePos = pos.offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
+                var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+                frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
+                world.setBlockState(framePos, Blocks.BLACK_CONCRETE.getDefaultState());
+                world.spawnEntity(frame);
+            }
+        }
+    }
+
+    public void runAfterRespawn(ServerPlayerEntity player) {
+        if (Status == GameStatus.Playing && BingoManager.BingoPlayers.contains(player.getUuid())) {
+            player.getInventory().clear();
+            givePlayerEquipment(player, true);
+            givePlayerStatusEffects(player, true);
+            player.getInventory().offHand.set(0, getMap());
+        } else if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnRespawn) {
+            var server = player.getServer();
+            if (server != null) {
+                var world = WorldHelper.getWorldRegistryKeyByName(player.getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
+                player.setSpawnPoint(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true, false);
+                BingoManager.tpToBingoSpawn(player);
+            }
+        }
+    }
+
+    public static void givePlayerEquipment(PlayerEntity player, boolean respawn) {
+        var team = player.getScoreboardTeam();
+        if (team == null) return;
+
+        for (var gear : BingoManager.GameSettings.StartingGear) {
+            if (!gear.OnRespawn && respawn) continue;
+
+            var item = Registries.ITEM.get(new Identifier(gear.Name));
+            var stack = new ItemStack(item, gear.Amount);
+            if (stack.isEnchantable()) {
+                for (var enchantment : gear.Enchantments)
+                    stack.addEnchantment(Registries.ENCHANTMENT.get(new Identifier(enchantment.Type)), enchantment.Level);
+            }
+
+            if (gear.AutoEquip) {
+                var slot = LivingEntity.getPreferredEquipmentSlot(stack);
+                player.equipStack(slot, stack);
+            } else {
+                player.giveItemStack(stack);
+            }
+        }
+    }
+
+    public static void givePlayerStatusEffects(PlayerEntity player, boolean respawn) {
+        var team = player.getScoreboardTeam();
+        if (team == null) return;
+
+        player.clearStatusEffects();
+
+        for (var entry : BingoManager.GameSettings.Effects) {
+            if (!entry.OnRespawn && respawn) continue;
+            var effect = Registries.STATUS_EFFECT.get(new Identifier(entry.Type));
+            if (effect != null)
+                player.addStatusEffect(new StatusEffectInstance(effect, entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon));
+        }
+    }
+
+    protected BlockState getColoredBlock(AbstractTeam team, ReplacementBlock replacement) {
+        var teamBlock = switch (team.getName()) {
+            case "Red" -> replacement.RedBlock;
+            case "Green" -> replacement.GreenBlock;
+            case "Blue" -> replacement.BlueBlock;
+            case "Purple" -> replacement.PurpleBlock;
+            case "Pink" -> replacement.PinkBlock;
+            case "Orange" -> replacement.OrangeBlock;
+            case "Yellow" -> replacement.YellowBlock;
+            case "Cyan" -> replacement.CyanBlock;
+            default -> "";
+        };
+
+        for (var block : Registries.BLOCK) {
+            if (block.asItem().toString().equals(teamBlock))
+                return block.getDefaultState();
+        }
+        return null;
+    }
+
+    protected BlockState getConcrete(AbstractTeam team) {
+        return switch (team.getName()) {
+            case "Red" -> Blocks.RED_CONCRETE.getDefaultState();
+            case "Green" -> Blocks.LIME_CONCRETE.getDefaultState();
+            case "Purple" -> Blocks.PURPLE_CONCRETE.getDefaultState();
+            case "Cyan" -> Blocks.CYAN_CONCRETE.getDefaultState();
+            case "Pink" -> Blocks.PINK_CONCRETE.getDefaultState();
+            case "Orange" -> Blocks.ORANGE_CONCRETE.getDefaultState();
+            case "Blue" -> Blocks.BLUE_CONCRETE.getDefaultState();
+            case "Yellow" -> Blocks.YELLOW_CONCRETE.getDefaultState();
+            default -> null;
+        };
     }
 }

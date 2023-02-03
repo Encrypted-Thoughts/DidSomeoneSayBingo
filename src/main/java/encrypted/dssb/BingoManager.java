@@ -9,13 +9,6 @@ import encrypted.dssb.gamemode.*;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TeleportHelper;
 import encrypted.dssb.util.WorldHelper;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.decoration.GlowItemFrameEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -27,14 +20,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.*;
@@ -54,7 +45,7 @@ public class BingoManager {
     public static ArrayList<UUID> BingoPlayers = new ArrayList<>();
 
     public static int start(ServerPlayerEntity starter, MinecraftServer server) throws CommandSyntaxException {
-        if (Game == null || Game.Card == null) {
+        if (Game == null) {
             MessageHelper.sendSystemMessage(starter, Text.literal("No bingo card has been generated yet since last server restart. Please generate a new card first.").formatted(Formatting.RED));
             return Command.SINGLE_SUCCESS;
         }
@@ -80,23 +71,6 @@ public class BingoManager {
                 validPlayers.add(player);
         }
         return validPlayers;
-    }
-
-    private static void buildBoard(ServerWorld world, BlockPos pos) {
-        var frames = world.getEntitiesByType(EntityType.GLOW_ITEM_FRAME, (glowItemFrame) -> pos.isWithinDistance(glowItemFrame.getBlockPos(), 20));
-        for (var frame : frames)
-            frame.remove(Entity.RemovalReason.DISCARDED);
-
-        for (var i = 0; i < Game.Card.size; i++) {
-            for (var j = 0; j < Game.Card.size; j++) {
-                var slot = Game.Card.slots[i][j];
-                var framePos = pos.offset(Direction.Axis.Y, Game.Card.size - 1 - i).offset(Direction.EAST, j);
-                var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
-                frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
-                world.setBlockState(framePos, Blocks.BLACK_CONCRETE.getDefaultState());
-                world.spawnEntity(frame);
-            }
-        }
     }
 
     public static ArrayList<ItemGroup> generateItemPool() {
@@ -154,7 +128,7 @@ public class BingoManager {
                     default -> new Bingo(server, CurrentItems);
                 };
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
-                if (spawnWorld != null) buildBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
+                if (spawnWorld != null) Game.buildBingoBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
                 if (start) start(player, server);
             } catch (Exception e) {
                 MessageHelper.sendSystemMessage(player, Text.literal("Unable to generate board check system console for more information.").formatted(Formatting.RED));
@@ -247,7 +221,7 @@ public class BingoManager {
         player.playerScreenHandler.onContentChanged(player.getInventory());
 
         if (Game != null)
-            player.getInventory().insertStack(Game.Card.getMap());
+            player.getInventory().insertStack(Game.getMap());
         player.heal(player.getMaxHealth());
         player.getHungerManager().setFoodLevel(20);
         player.changeGameMode(net.minecraft.world.GameMode.byName(BingoMod.CONFIG.SpawnSettings.HubMode.toLowerCase()));
@@ -384,7 +358,7 @@ public class BingoManager {
 
     public static int clarify(ServerCommandSource source, int rowIndex, int columnIndex) {
         if (Game != null) {
-            var item = Game.Card.getSlot(rowIndex, columnIndex);
+            var item = Game.getSlot(rowIndex, columnIndex);
 
             Text text;
             if (item == null)
@@ -398,43 +372,6 @@ public class BingoManager {
         }
 
         return Command.SINGLE_SUCCESS;
-    }
-
-    public static void givePlayerEquipment(PlayerEntity player, boolean respawn) {
-        var team = player.getScoreboardTeam();
-        if (team == null) return;
-
-        for (var gear : GameSettings.StartingGear) {
-            if (!gear.OnRespawn && respawn) continue;
-
-            var item = Registries.ITEM.get(new Identifier(gear.Name));
-            var stack = new ItemStack(item, gear.Amount);
-            if (stack.isEnchantable()) {
-                for (var enchantment : gear.Enchantments)
-                    stack.addEnchantment(Registries.ENCHANTMENT.get(new Identifier(enchantment.Type)), enchantment.Level);
-            }
-
-            if (gear.AutoEquip) {
-                var slot = LivingEntity.getPreferredEquipmentSlot(stack);
-                player.equipStack(slot, stack);
-            } else {
-                player.giveItemStack(stack);
-            }
-        }
-    }
-
-    public static void givePlayerStatusEffects(PlayerEntity player, boolean respawn) {
-        var team = player.getScoreboardTeam();
-        if (team == null) return;
-
-        player.clearStatusEffects();
-
-        for (var entry : GameSettings.Effects) {
-            if (!entry.OnRespawn && respawn) continue;
-            var effect = Registries.STATUS_EFFECT.get(new Identifier(entry.Type));
-            if (effect != null)
-                player.addStatusEffect(new StatusEffectInstance(effect, entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon));
-        }
     }
 
     public static void runOnStartup(MinecraftServer server) {
@@ -591,20 +528,8 @@ public class BingoManager {
         }
     }
 
-    public static void runAfterPlayerRespawnEvent(ServerPlayerEntity player) {
-        if (Game.Status == GameStatus.Playing && BingoPlayers.contains(player.getUuid())) {
-            player.getInventory().clear();
-            givePlayerEquipment(player, true);
-            givePlayerStatusEffects(player, true);
-            player.getInventory().offHand.set(0, Game.Card.getMap());
-        } else if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnRespawn) {
-            var server = player.getServer();
-            if (server != null) {
-                var world = WorldHelper.getWorldRegistryKeyByName(player.getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
-                player.setSpawnPoint(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true, false);
-                tpToBingoSpawn(player);
-            }
-        }
+    public static  void runAfterPlayerRespawnEvent(ServerPlayerEntity player) {
+        Game.runAfterRespawn(player);
     }
 
     public static void runOnPlayerConnectionEvent(ServerPlayerEntity player) {
@@ -623,7 +548,7 @@ public class BingoManager {
                     default -> new Bingo(server, CurrentItems);
                 };
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
-                if (spawnWorld != null) buildBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
+                if (spawnWorld != null) Game.buildBingoBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
             } catch (Exception ex) {
                 BingoMod.LOGGER.error("Failure during server startup for handling initial bingo generation.");
                 ex.printStackTrace();

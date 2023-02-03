@@ -1,13 +1,10 @@
 package encrypted.dssb.gamemode;
 
 import encrypted.dssb.*;
-import encrypted.dssb.config.replaceblocks.ReplacementBlock;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.WorldHelper;
 import encrypted.dssb.BingoManager;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -136,8 +133,8 @@ public class Bingo extends GameMode {
             if (elapsedSeconds >= 30) {
                 for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
                     player.setMovementSpeed(1);
-                    BingoManager.givePlayerEquipment(player, false);
-                    BingoManager.givePlayerStatusEffects(player, false);
+                    givePlayerEquipment(player, false);
+                    givePlayerStatusEffects(player, false);
                 }
 
                 Status = GameStatus.Playing;
@@ -268,61 +265,5 @@ public class Bingo extends GameMode {
             return true;
         }
         return false;
-    }
-
-    private BlockState getColoredBlock(AbstractTeam team, ReplacementBlock replacement) {
-        for (var block : Registries.BLOCK) {
-            var blockName = block.asItem().toString();
-            switch (team.getName()) {
-                case "Red":
-                    if (blockName.equals(replacement.RedBlock))
-                        return block.getDefaultState();
-                    break;
-                case "Green":
-                    if (blockName.equals(replacement.GreenBlock))
-                        return block.getDefaultState();
-                    break;
-                case "Blue":
-                    if (blockName.equals(replacement.BlueBlock))
-                        return block.getDefaultState();
-                    break;
-                case "Purple":
-                    if (blockName.equals(replacement.PurpleBlock))
-                        return block.getDefaultState();
-                    break;
-                case "Pink":
-                    if (blockName.equals(replacement.PinkBlock))
-                        return block.getDefaultState();
-                    break;
-                case "Orange":
-                    if (blockName.equals(replacement.OrangeBlock))
-                        return block.getDefaultState();
-                    break;
-                case "Yellow":
-                    if (blockName.equals(replacement.YellowBlock))
-                        return block.getDefaultState();
-                    break;
-                case "Cyan":
-                    if (blockName.equals(replacement.CyanBlock))
-                        return block.getDefaultState();
-                    break;
-            }
-        }
-
-        return null;
-    }
-
-    private BlockState getConcrete(AbstractTeam team) {
-        return switch (team.getName()) {
-            case "Red" -> Blocks.RED_CONCRETE.getDefaultState();
-            case "Green" -> Blocks.LIME_CONCRETE.getDefaultState();
-            case "Purple" -> Blocks.PURPLE_CONCRETE.getDefaultState();
-            case "Cyan" -> Blocks.CYAN_CONCRETE.getDefaultState();
-            case "Pink" -> Blocks.PINK_CONCRETE.getDefaultState();
-            case "Orange" -> Blocks.ORANGE_CONCRETE.getDefaultState();
-            case "Blue" -> Blocks.BLUE_CONCRETE.getDefaultState();
-            case "Yellow" -> Blocks.YELLOW_CONCRETE.getDefaultState();
-            default -> null;
-        };
     }
 }
