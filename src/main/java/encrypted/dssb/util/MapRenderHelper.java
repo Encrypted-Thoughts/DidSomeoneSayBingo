@@ -2,7 +2,13 @@ package encrypted.dssb.util;
 
 import encrypted.dssb.BingoMod;
 import net.minecraft.block.MapColor;
+import net.minecraft.item.FilledMapItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.map.MapState;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.scoreboard.AbstractTeam;
+import net.minecraft.server.world.ServerWorld;
 
 import javax.imageio.ImageIO;
 import java.util.ArrayList;
@@ -152,5 +158,52 @@ public class MapRenderHelper {
                 result[row][col] = image.getRGB(col, row);
         }
         return result;
+    }
+
+    public static int[][] getUnknownItemIcon() throws Exception {
+        var stream = MapRenderHelper.class.getResourceAsStream("/assets/dssb/unknown.png");
+        if (stream == null) throw new Exception("Can't obtain stream for: /assets/dssb/unknown.png");
+        var image = ImageIO.read(stream);
+
+        int[][] result = new int[16][16];
+        for (int row = 0; row < 16; row++) {
+            for (int col = 0; col < 16; col++)
+                result[row][col] = nearestColor(image.getRGB(col, row));
+        }
+        return result;
+    }
+
+    public static ItemStack getUnknownItemMap(ServerWorld world) {
+        var map = new ItemStack(Items.FILLED_MAP);
+        var id = 2;
+        var nbt = new NbtCompound();
+
+        nbt.putString("dimension", world.getRegistryKey().getValue().toString());
+        nbt.putInt("xCenter", 0);
+        nbt.putInt("zCenter", 0);
+        nbt.putBoolean("locked", true);
+        nbt.putBoolean("unlimitedTracking", false);
+        nbt.putBoolean("trackingPosition", false);
+        nbt.putByte("scale", (byte) 3);
+        var mapState = MapState.fromNbt(nbt);
+        world.putMapState(FilledMapItem.getMapName(id), mapState);
+        map.getOrCreateNbt().putInt("map", id);
+
+        try {
+            var pixels = getPixelArrayOfImage("/assets/dssb/large_unknown.png", 128, 128);
+            var count = 0;
+            for (var row : pixels) {
+                for (var pixel : row) {
+                    var nearest = nearestColor(pixel);
+                    mapState.colors[count] = (byte) nearest;
+                    count++;
+                }
+            }
+        } catch (Exception ex) {
+            BingoMod.LOGGER.warn("Unable to load unknown item resource.");
+            ex.printStackTrace();
+        }
+
+        return map;
     }
 }

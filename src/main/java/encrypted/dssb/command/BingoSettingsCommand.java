@@ -84,6 +84,13 @@ public class BingoSettingsCommand {
                                                         setGameMode(player, ctx.getSource().getServer(), "lockout");
                                                     return Command.SINGLE_SUCCESS;
                                                 }))
+                                        .then(literal("hidden")
+                                                .executes(ctx -> {
+                                                    var player = ctx.getSource().getPlayer();
+                                                    if (player != null)
+                                                        setGameMode(player, ctx.getSource().getServer(), "hidden");
+                                                    return Command.SINGLE_SUCCESS;
+                                                }))
                                         .then(literal("blackout")
                                                 .executes(ctx -> {
                                                     var player = ctx.getSource().getPlayer();

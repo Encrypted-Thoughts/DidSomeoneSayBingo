@@ -21,11 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Blackout extends GameMode {
-
     public Blackout(MinecraftServer server, ArrayList<Item> items) throws Exception {
         super(server);
         var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
         Card = new BingoCard(world, items);
+        Name = "Blackout";
     }
 
     @Override

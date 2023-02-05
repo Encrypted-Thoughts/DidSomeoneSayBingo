@@ -20,7 +20,7 @@ public class BingoItem {
         initializeSlotPixels(newItem);
     }
 
-    private void initializeSlotPixels(Item item) {
+    public void initializeSlotPixels(Item item) {
         var rowSize = slotPixels.length;
         var colSize = slotPixels[0].length;
 

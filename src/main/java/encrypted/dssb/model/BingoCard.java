@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
@@ -44,11 +45,7 @@ public class BingoCard {
         resetCard(world);
     }
 
-    public void resetCard(World world) {
-        bingoPixels = new int[128][128];
-        for (int i = 0; i < MapRenderHelper.getBingoCardBorder().length; i++)
-            bingoPixels[i] = MapRenderHelper.getBingoCardBorder()[i].clone();
-
+    public void redrawCard(World world) {
         var sideOffset = 4;
         var slotOffset = 24;
 
@@ -56,8 +53,6 @@ public class BingoCard {
         for (var slotRow : slots) {
             var colCount = 0;
             for (var slot : slotRow) {
-                slot.teams = new ArrayList<>();
-
                 var rowLength = slot.slotPixels.length;
                 var colLength = slot.slotPixels[0].length;
 
@@ -72,6 +67,14 @@ public class BingoCard {
         }
 
         createMap(world);
+    }
+
+    public void resetCard(World world) {
+        bingoPixels = new int[128][128];
+        for (int i = 0; i < MapRenderHelper.getBingoCardBorder().length; i++)
+            bingoPixels[i] = MapRenderHelper.getBingoCardBorder()[i].clone();
+
+        redrawCard(world);
     }
 
     public BingoItem getSlot(int rowIndex, int columnIndex) {
@@ -125,22 +128,25 @@ public class BingoCard {
                 }
             }
 
-            var server = player.getServer();
-            if (server != null) {
-                var mapId = FilledMapItem.getMapId(map);
-                createMap(player.getWorld());
-                for (var p : server.getPlayerManager().getPlayerList()) {
-                    var inventory = p.getInventory();
-                    for (int i = 0; i < inventory.main.size(); ++i) {
-                        var id = FilledMapItem.getMapId(inventory.main.get(i));
-                        if (id != null && id.equals(mapId)) {
-                            inventory.main.set(i, map.copy());
-                        }
+            updateMaps(player.getServer());
+        }
+    }
+
+    public void updateMaps(MinecraftServer server) {
+        if (server != null && map != null) {
+            var mapId = FilledMapItem.getMapId(map);
+            createMap(server.getOverworld());
+            for (var p : server.getPlayerManager().getPlayerList()) {
+                var inventory = p.getInventory();
+                for (int i = 0; i < inventory.main.size(); ++i) {
+                    var id = FilledMapItem.getMapId(inventory.main.get(i));
+                    if (id != null && id.equals(mapId)) {
+                        inventory.main.set(i, map.copy());
                     }
-                    var id = FilledMapItem.getMapId(inventory.offHand.get(0));
-                    if (id != null && id.equals(mapId))
-                        inventory.offHand.set(0, map.copy());
                 }
+                var id = FilledMapItem.getMapId(inventory.offHand.get(0));
+                if (id != null && id.equals(mapId))
+                    inventory.offHand.set(0, map.copy());
             }
         }
     }

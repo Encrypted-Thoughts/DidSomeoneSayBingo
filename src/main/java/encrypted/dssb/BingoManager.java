@@ -125,6 +125,7 @@ public class BingoManager {
                 Game = switch (GameSettings.GameMode.toLowerCase()) {
                     case "lockout" -> new Lockout(server, CurrentItems);
                     case "blackout" -> new Blackout(server, CurrentItems);
+                    case "hidden" -> new HiddenBingo(server, CurrentItems, HiddenBingo.HiddenType.DoubleDiagonal, 120);
                     default -> new Bingo(server, CurrentItems);
                 };
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
@@ -168,6 +169,11 @@ public class BingoManager {
                         text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Lockout Bingo").formatted(Formatting.GREEN));
                         GameSettings.GameMode = "Lockout";
                         Game = new Lockout(server, CurrentItems);
+                    }
+                    case "hidden" -> {
+                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Hidden Bingo").formatted(Formatting.GREEN));
+                        GameSettings.GameMode = "Hidden";
+                        Game = new HiddenBingo(server, CurrentItems, HiddenBingo.HiddenType.DoubleDiagonal, 120);
                     }
                     case "blackout" -> {
                         text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Blackout Bingo").formatted(Formatting.GREEN));
@@ -357,19 +363,8 @@ public class BingoManager {
     }
 
     public static int clarify(ServerCommandSource source, int rowIndex, int columnIndex) {
-        if (Game != null) {
-            var item = Game.getSlot(rowIndex, columnIndex);
-
-            Text text;
-            if (item == null)
-                text = Text.literal("Unable to locate item at position %s, %s".formatted(rowIndex + 1, columnIndex + 1)).formatted(Formatting.RED);
-            else
-                text = Text.literal("Item at position %s, %s: %s".formatted(rowIndex + 1, columnIndex + 1, item.item.getName().getString())).formatted(Formatting.GOLD);
-
-            var player = source.getPlayer();
-            if (player != null)
-                player.sendMessage(text);
-        }
+        if (Game != null)
+            Game.clarify(source.getPlayer(), rowIndex, columnIndex);
 
         return Command.SINGLE_SUCCESS;
     }
@@ -545,6 +540,7 @@ public class BingoManager {
                 Game = switch (GameSettings.GameMode.toLowerCase()) {
                     case "lockout" -> new Lockout(server, CurrentItems);
                     case "blackout" -> new Blackout(server, CurrentItems);
+                    case "hidden" -> new HiddenBingo(server, CurrentItems, HiddenBingo.HiddenType.DoubleDiagonal, 120);
                     default -> new Bingo(server, CurrentItems);
                 };
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);

@@ -1,38 +1,87 @@
 package encrypted.dssb.gamemode;
 
-import encrypted.dssb.*;
+import encrypted.dssb.BingoManager;
+import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
+import encrypted.dssb.util.MapRenderHelper;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.WorldHelper;
-import encrypted.dssb.BingoManager;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class Bingo extends GameMode {
+public class HiddenBingo extends GameMode {
 
-    public Bingo(MinecraftServer server, ArrayList<Item> items) throws Exception {
+    public enum HiddenType {Diagonal, DoubleDiagonal, All}
+
+    private ItemStack unknownItemMap;
+    private long unlocked = 0;
+    private ArrayList<int[]> lockedSlots;
+    private final int unlockInterval;
+    private final HiddenType hiddenType;
+
+    public HiddenBingo(MinecraftServer server, ArrayList<Item> items, HiddenType type, int interval) throws Exception {
         super(server);
         var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
         Card = new BingoCard(world, items);
-        Name = "Bingo";
+        Name = "Hidden";
+
+        unlockInterval = interval;
+        hiddenType = type;
+
+        hideSlots(world, type);
+    }
+
+    private void hideSlots(ServerWorld world, HiddenType type) throws Exception {
+        unknownItemMap = MapRenderHelper.getUnknownItemMap(world);
+
+        lockedSlots = new ArrayList<>();
+        for (var row = 0; row < Card.slots.length; row++) {
+            for (var col = 0; col < Card.slots.length; col++) {
+                switch (type) {
+                    case Diagonal -> {
+                        if (row + col == 4) {
+                            lockedSlots.add(new int[] {row, col});
+                            Card.slots[row][col].slotPixels = MapRenderHelper.getUnknownItemIcon();
+                        }
+                    }
+                    case DoubleDiagonal -> {
+                        if (row == col || row + col == 4) {
+                            lockedSlots.add(new int[] {row, col});
+                            Card.slots[row][col].slotPixels = MapRenderHelper.getUnknownItemIcon();
+                        }
+                    }
+                    case All -> {
+                        lockedSlots.add(new int[] {row, col});
+                        Card.slots[row][col].slotPixels = MapRenderHelper.getUnknownItemIcon();
+                    }
+                }
+            }
+        }
+        Card.redrawCard(world);
     }
 
     @Override
     public void start() {
         Status = GameStatus.Loading;
-        var text = Text.literal("Game of Normal Bingo starting!").formatted(Formatting.GREEN);
+        var text = Text.literal("Game of Hidden Bingo starting!").formatted(Formatting.GREEN);
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), text);
 
         initialize();
@@ -99,6 +148,9 @@ public class Bingo extends GameMode {
                         world.setBlockState(framePos, getConcrete(team));
                 }
             }
+
+            unHideBoard(world);
+            unHideMap();
         }
 
         Status = GameStatus.Idle;
@@ -116,10 +168,37 @@ public class Bingo extends GameMode {
                     }
                 }
             }
+
+            unHideBoard(world);
+            unHideMap();
         }
 
         Status = GameStatus.Idle;
         TimerRunning = false;
+    }
+
+    private void unHideBoard(ServerWorld world) {
+        var frames = world.getEntitiesByType(EntityType.GLOW_ITEM_FRAME, (glowItemFrame) -> BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().isWithinDistance(glowItemFrame.getBlockPos(), 20));
+        for (var frame : frames)
+            frame.remove(Entity.RemovalReason.DISCARDED);
+        for (var i = 0; i < Card.size; i++) {
+            for (var j = 0; j < Card.size; j++) {
+                var slot = Card.slots[i][j];
+                var framePos = BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
+                var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+                frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
+                world.spawnEntity(frame);
+            }
+        }
+    }
+
+    private void unHideMap() {
+        for (var lockedSlot : lockedSlots) {
+            var slot = Card.getSlot(lockedSlot[0], lockedSlot[1]);
+            slot.initializeSlotPixels(slot.item);
+        }
+        Card.redrawCard(Server.getOverworld());
+        lockedSlots = new ArrayList<>();
     }
 
     @Override
@@ -168,11 +247,26 @@ public class Bingo extends GameMode {
             var text = Text.literal("%s%s%s".formatted(hourText, minuteText, secondText)).formatted(Formatting.GOLD);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
+            if (elapsedSeconds / unlockInterval > unlocked && lockedSlots.size() > 0) {
+                var index = new Random().nextInt(lockedSlots.size());
+                var lockedSlot = lockedSlots.remove(index);
+                var slot = Card.getSlot(lockedSlot[0], lockedSlot[1]);
+                slot.initializeSlotPixels(slot.item);
+                Card.redrawCard(Server.getOverworld());
+                playUnlockSound(Server);
+                unlocked++;
+            }
+
             if (remaining <= 0) {
                 TimerRunning = false;
                 handleGameTimeout();
             }
         }
+    }
+
+    public void playUnlockSound(MinecraftServer server) {
+        for (var player : BingoManager.getValidPlayers(server.getPlayerManager()))
+            player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.MASTER, 1, 0.5F);
     }
 
     @Override
@@ -182,29 +276,58 @@ public class Bingo extends GameMode {
         if (foundByTeam == null || server == null)
             return false;
 
-        var rowIndex = 0;
-        for (var row : Card.slots) {
-            var colIndex = 0;
-            for (var bingoItem : row) {
+        for (var row = 0; row < Card.slots.length; row++) {
+            for (var col = 0; col < Card.slots.length; col++) {
+                var bingoItem = Card.slots[row][col];
                 if (bingoItem.item == item) {
-                    for (var team : bingoItem.teams) {
-                        if (team == foundByTeam)
-                            return false;
-                    }
+                    for (var team : bingoItem.teams)
+                        if (team == foundByTeam) return false;
 
                     bingoItem.teams.add(foundByTeam);
-                    Card.updateMap(player, rowIndex, colIndex, false);
+                    Card.updateMap(player, row, col, false);
 
-                    final Text itemFound = Text.literal("%s found item: %s".formatted(player.getDisplayName().getString(), item.getName().getString())).formatted(foundByTeam.getColor());
+                    var itemFound = Text.literal("%s found item: %s".formatted(player.getDisplayName().getString(), item.getName().getString())).formatted(foundByTeam.getColor());
+
+                    int finalRow = row;
+                    int finalCol = col;
+                    if (lockedSlots.stream().anyMatch(l -> l[0] == finalRow && l[1] == finalCol))
+                        itemFound = Text.literal(("%s found hidden item at %s, %s!".formatted(player.getDisplayName().getString(), row+1, col+1))).formatted(foundByTeam.getColor());
+
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
                     playNotificationSound(player.getWorld());
                     return true;
                 }
-                colIndex++;
             }
-            rowIndex++;
         }
         return false;
+    }
+
+    public void buildBingoBoard(ServerWorld world, BlockPos pos) {
+        var frames = world.getEntitiesByType(EntityType.GLOW_ITEM_FRAME, (glowItemFrame) -> pos.isWithinDistance(glowItemFrame.getBlockPos(), 20));
+        for (var frame : frames)
+            frame.remove(Entity.RemovalReason.DISCARDED);
+
+        for (var i = 0; i < Card.size; i++) {
+            for (var j = 0; j < Card.size; j++) {
+                var slot = Card.slots[i][j];
+                var framePos = pos.offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
+                var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+
+                switch (hiddenType) {
+                    case Diagonal -> {
+                        if (i + j == 4) frame.setHeldItemStack(unknownItemMap, true);
+                        else frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
+                    }
+                    case DoubleDiagonal -> {
+                        if (i == j || i + j == 4) frame.setHeldItemStack(unknownItemMap, true);
+                        else frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
+                    }
+                    case All -> frame.setHeldItemStack(unknownItemMap, true);
+                }
+                world.setBlockState(framePos, Blocks.BLACK_CONCRETE.getDefaultState());
+                world.spawnEntity(frame);
+            }
+        }
     }
 
     private boolean parseCardForBingo(AbstractTeam team) {
@@ -266,5 +389,17 @@ public class Bingo extends GameMode {
             return true;
         }
         return false;
+    }
+
+    public void clarify(ServerPlayerEntity player, int rowIndex, int columnIndex) {
+        Text text;
+        if (lockedSlots.stream().anyMatch(l -> l[0] == rowIndex && l[1] == columnIndex))
+            text = Text.literal("Item at position %s, %s is currently hidden".formatted(rowIndex + 1, columnIndex + 1)).formatted(Formatting.RED);
+        else {
+            var item = getSlot(rowIndex, columnIndex);
+            if (item == null) text = Text.literal("Unable to locate item at position %s, %s".formatted(rowIndex + 1, columnIndex + 1)).formatted(Formatting.RED);
+            else text = Text.literal("Item at position %s, %s: %s".formatted(rowIndex + 1, columnIndex + 1, item.item.getName().getString())).formatted(Formatting.GOLD);
+        }
+        if (player != null) player.sendMessage(text);
     }
 }

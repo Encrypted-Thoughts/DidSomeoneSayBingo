@@ -57,6 +57,7 @@ public abstract class GameMode {
     public boolean TimerRunning = false;
     public long TimerStart;
     public long CurrentTimerSecond;
+    public String Name = "Base";
 
     public GameMode(MinecraftServer server) {
         Server = server;
@@ -268,7 +269,7 @@ public abstract class GameMode {
         }
     }
 
-    public static void givePlayerEquipment(PlayerEntity player, boolean respawn) {
+    public void givePlayerEquipment(PlayerEntity player, boolean respawn) {
         var team = player.getScoreboardTeam();
         if (team == null) return;
 
@@ -291,7 +292,7 @@ public abstract class GameMode {
         }
     }
 
-    public static void givePlayerStatusEffects(PlayerEntity player, boolean respawn) {
+    public void givePlayerStatusEffects(PlayerEntity player, boolean respawn) {
         var team = player.getScoreboardTeam();
         if (team == null) return;
 
@@ -303,6 +304,19 @@ public abstract class GameMode {
             if (effect != null)
                 player.addStatusEffect(new StatusEffectInstance(effect, entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon));
         }
+    }
+
+    public void clarify(ServerPlayerEntity player, int rowIndex, int columnIndex) {
+        var item = getSlot(rowIndex, columnIndex);
+
+        Text text;
+        if (item == null)
+            text = Text.literal("Unable to locate item at position %s, %s".formatted(rowIndex + 1, columnIndex + 1)).formatted(Formatting.RED);
+        else
+            text = Text.literal("Item at position %s, %s: %s".formatted(rowIndex + 1, columnIndex + 1, item.item.getName().getString())).formatted(Formatting.GOLD);
+
+        if (player != null)
+            player.sendMessage(text);
     }
 
     protected BlockState getColoredBlock(AbstractTeam team, ReplacementBlock replacement) {

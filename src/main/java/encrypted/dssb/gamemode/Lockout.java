@@ -28,6 +28,7 @@ public class Lockout extends GameMode {
         super(server);
         var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
         Card = new BingoCard(world, items);
+        Name = "Lockout";
     }
 
     @Override
