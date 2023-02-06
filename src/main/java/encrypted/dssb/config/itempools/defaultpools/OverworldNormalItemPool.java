@@ -21,6 +21,7 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:mossy_stone_brick_wall"
                 }),
                 new ItemGroup(new String[]{"minecraft:saddle"}),
+                new ItemGroup(new String[]{"minecraft:lectern"}),
                 new ItemGroup(new String[]{
                         "minecraft:gold_block",
                         "minecraft:gold_ingot",
