@@ -95,7 +95,7 @@ public class BingoManager {
             var possible = group.Items[random];
             var item = Registries.ITEM.get(new Identifier(possible));
 
-            if (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(item.toString())) || attempts > 100) {
+            if (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(possible)) || attempts > 100) {
                 items.add(item);
                 possibleItems.remove(group);
                 count++;
