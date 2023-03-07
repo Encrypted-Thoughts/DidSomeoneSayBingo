@@ -150,6 +150,7 @@ public abstract class GameMode {
         if (player != null && BingoManager.BingoPlayers.contains(player.getUuid())) {
             try {
                 player.setMovementSpeed(0);
+                player.getHungerManager().setFoodLevel(20);
                 player.changeGameMode(net.minecraft.world.GameMode.SURVIVAL);
                 TeleportHelper.teleport(player, world, spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5, 0, 0);
                 player.setSpawnPoint(player.getWorld().getRegistryKey(), spawn, 0, true, false);
