@@ -148,25 +148,25 @@ public class MapRenderHelper {
 
         int[][] result = new int[height][width];
         for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                var nearest = nearestColor(image.getRGB(col, row));
-                if (nearest == 0)
-                    nearest = 37; // gray
-                result[row][col]  = nearest;
-            }
+            for (int col = 0; col < width; col++)
+                result[row][col] = image.getRGB(col, row);
         }
         return result;
     }
 
     public static int[][] getUnknownItemIcon() throws Exception {
         var stream = MapRenderHelper.class.getResourceAsStream("/assets/dssb/items/structure_void.png");
-        if (stream == null) throw new Exception("Can't obtain stream for: /assets/dssb/structure_void.png");
+        if (stream == null) throw new Exception("Can't obtain stream for: /assets/dssb/items/structure_void.png");
         var image = ImageIO.read(stream);
 
         int[][] result = new int[16][16];
         for (int row = 0; row < 16; row++) {
-            for (int col = 0; col < 16; col++)
-                result[row][col] = nearestColor(image.getRGB(col, row));
+            for (int col = 0; col < 16; col++) {
+                var nearest = nearestColor(image.getRGB(col, row));
+                if (nearest == 0)
+                    nearest = 37; // gray
+                result[row][col]  = nearest;
+            }
         }
         return result;
     }
