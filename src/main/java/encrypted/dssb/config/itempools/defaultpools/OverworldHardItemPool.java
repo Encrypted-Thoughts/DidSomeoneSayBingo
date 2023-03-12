@@ -314,7 +314,28 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:jungle_hanging_sign",
                         "minecraft:dark_oak_hanging_sign",
                         "minecraft:mangrove_hanging_sign",
-                        "minecraft:bamboo_hanging_sign"
+                        "minecraft:bamboo_hanging_sign",
+                        "minecraft:cherry_hanging_sign"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:pottery_shard_archer",
+                        "minecraft:pottery_shard_arms_up",
+                        "minecraft:pottery_shard_prize",
+                        "minecraft:pottery_shard_skull"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:coast_armor_trim_smithing_template",
+                        "minecraft:dune_armor_trim_smithing_template",
+                        "minecraft:eye_armor_trim_smithing_template",
+                        "minecraft:netherite_upgrade_smithing_template",
+                        "minecraft:rib_armor_trim_smithing_template",
+                        "minecraft:sentry_armor_trim_smithing_template",
+                        "minecraft:snout_armor_trim_smithing_template",
+                        "minecraft:spire_armor_trim_smithing_template",
+                        "minecraft:tide_armor_trim_smithing_template",
+                        "minecraft:vex_armor_trim_smithing_template",
+                        "minecraft:ward_armor_trim_smithing_template",
+                        "minecraft:wild_armor_trim_smithing_template"
                 }),
                 new ItemGroup(new String[]{"minecraft:dropper"}),
                 new ItemGroup(new String[]{"minecraft:trident"}),
@@ -586,6 +607,27 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:acacia_sapling",
                         "minecraft:acacia_sign",
                         "minecraft:acacia_trapdoor"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:cherry_boat",
+                        "minecraft:cherry_stairs",
+                        "minecraft:cherry_slab",
+                        "minecraft:cherry_fence",
+                        "minecraft:cherry_fence_gate",
+                        "minecraft:cherry_pressure_plate",
+                        "minecraft:cherry_button",
+                        "minecraft:cherry_chest_boat",
+                        "minecraft:cherry_door",
+                        "minecraft:cherry_log",
+                        "minecraft:cherry_wood",
+                        "minecraft:cherry_planks",
+                        "minecraft:cherry_sapling",
+                        "minecraft:cherry_leaves",
+                        "minecraft:cherry_sign",
+                        "minecraft:cherry_trapdoor",
+                        "minecraft:cherry_spruce_log",
+                        "minecraft:stripped_cherry_wood",
+                        "minecraft:pink_petals"
                 }),
                 new ItemGroup(new String[]{"minecraft:hay_block"}),
                 new ItemGroup(new String[]{"minecraft:scaffolding"}),

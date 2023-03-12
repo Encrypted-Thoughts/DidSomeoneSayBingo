@@ -153,6 +153,8 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:campfire"}),
                 new ItemGroup(new String[]{"minecraft:wooden_pickaxe"}),
                 new ItemGroup(new String[]{"minecraft:lead"}),
+                new ItemGroup(new String[]{"minecraft:decorated_pot"}),
+                new ItemGroup(new String[]{"minecraft:brush"}),
                 new ItemGroup(new String[]{"minecraft:grindstone"}),
                 new ItemGroup(new String[]{
                         "minecraft:oak_boat",

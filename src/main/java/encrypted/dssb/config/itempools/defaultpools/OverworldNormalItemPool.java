@@ -265,6 +265,29 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:stripped_spruce_log",
                         "minecraft:stripped_spruce_wood"
                 }),
+                new ItemGroup(new String[]{
+                        "minecraft:cherry_boat",
+                        "minecraft:cherry_stairs",
+                        "minecraft:cherry_slab",
+                        "minecraft:cherry_fence",
+                        "minecraft:cherry_fence_gate",
+                        "minecraft:cherry_pressure_plate",
+                        "minecraft:cherry_button",
+                        "minecraft:cherry_chest_boat",
+                        "minecraft:cherry_door",
+                        "minecraft:cherry_log",
+                        "minecraft:cherry_wood",
+                        "minecraft:cherry_planks",
+                        "minecraft:cherry_sapling",
+                        "minecraft:cherry_leaves",
+                        "minecraft:cherry_sign",
+                        "minecraft:cherry_trapdoor",
+                        "minecraft:cherry_spruce_log",
+                        "minecraft:stripped_cherry_wood",
+                        "minecraft:pink_petals"
+                }),
+                new ItemGroup(new String[]{"minecraft:brush"}),
+                new ItemGroup(new String[]{"minecraft:decorated_pot"}),
                 new ItemGroup(new String[]{"minecraft:brown_mushroom"}),
                 new ItemGroup(new String[]{"minecraft:lead"}),
                 new ItemGroup(new String[]{
@@ -499,7 +522,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:jungle_hanging_sign",
                         "minecraft:dark_oak_hanging_sign",
                         "minecraft:mangrove_hanging_sign",
-                        "minecraft:bamboo_hanging_sign"
+                        "minecraft:bamboo_hanging_sign",
+                        "minecraft:cherry_hanging_sign"
                 }),
                 new ItemGroup(new String[]{"minecraft:cauldron"}),
                 new ItemGroup(new String[]{"minecraft:observer"}),

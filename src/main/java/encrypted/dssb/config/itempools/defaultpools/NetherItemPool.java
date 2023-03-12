@@ -27,6 +27,7 @@ public class NetherItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:spectral_arrow"}),
                 new ItemGroup(new String[]{"minecraft:soul_lantern"}),
+                new ItemGroup(new String[]{"minecraft:netherite_upgrade_smithing_template"}),
                 new ItemGroup(new String[]{
                         "minecraft:crimson_roots",
                         "minecraft:warped_roots"
