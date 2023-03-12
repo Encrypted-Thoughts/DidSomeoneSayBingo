@@ -13,6 +13,7 @@ import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
@@ -31,7 +32,6 @@ public class HiddenBingo extends GameMode {
 
     public enum HiddenType {Diagonal, DoubleDiagonal, All}
 
-    private ItemStack unknownItemMap;
     private long unlocked = 0;
     private ArrayList<int[]> lockedSlots;
     private final int unlockInterval;
@@ -50,8 +50,6 @@ public class HiddenBingo extends GameMode {
     }
 
     private void hideSlots(ServerWorld world, HiddenType type) throws Exception {
-        unknownItemMap = MapRenderHelper.getUnknownItemMap(world);
-
         lockedSlots = new ArrayList<>();
         for (var row = 0; row < Card.slots.length; row++) {
             for (var col = 0; col < Card.slots.length; col++) {
@@ -186,6 +184,7 @@ public class HiddenBingo extends GameMode {
                 var slot = Card.slots[i][j];
                 var framePos = BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
                 var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+                frame.setInvulnerable(true);
                 frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
                 world.spawnEntity(frame);
             }
@@ -312,17 +311,18 @@ public class HiddenBingo extends GameMode {
                 var slot = Card.slots[i][j];
                 var framePos = pos.offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
                 var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+                frame.setInvulnerable(true);
 
                 switch (hiddenType) {
                     case Diagonal -> {
-                        if (i + j == 4) frame.setHeldItemStack(unknownItemMap, true);
+                        if (i + j == 4) frame.setHeldItemStack(Items.STRUCTURE_VOID.getDefaultStack(), true);
                         else frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
                     }
                     case DoubleDiagonal -> {
-                        if (i == j || i + j == 4) frame.setHeldItemStack(unknownItemMap, true);
+                        if (i == j || i + j == 4) frame.setHeldItemStack(Items.STRUCTURE_VOID.getDefaultStack(), true);
                         else frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
                     }
-                    case All -> frame.setHeldItemStack(unknownItemMap, true);
+                    case All -> frame.setHeldItemStack(Items.STRUCTURE_VOID.getDefaultStack(), true);
                 }
                 world.setBlockState(framePos, Blocks.BLACK_CONCRETE.getDefaultState());
                 world.spawnEntity(frame);

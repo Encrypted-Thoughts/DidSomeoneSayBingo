@@ -164,7 +164,7 @@ public abstract class GameMode {
         while (true) {
             var x = ThreadLocalRandom.current().nextInt(xMin, xMax + 1);
             var z = ThreadLocalRandom.current().nextInt(zMin, zMax + 1);
-            var pos = new BlockPos(x - 0.5, 200, z - 0.5);
+            var pos = new BlockPos(x, 200, z);
             var biome = world.getBiome(pos);
 
             if (biome.getKey().isPresent() && biome.getKey().get() != BiomeKeys.OCEAN && biome.getKey().get() != BiomeKeys.BEACH)
@@ -247,6 +247,7 @@ public abstract class GameMode {
                 var slot = Card.slots[i][j];
                 var framePos = pos.offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
                 var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+                frame.setInvulnerable(true);
                 frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
                 world.setBlockState(framePos, Blocks.BLACK_CONCRETE.getDefaultState());
                 world.spawnEntity(frame);
