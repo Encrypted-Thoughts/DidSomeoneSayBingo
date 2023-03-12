@@ -247,6 +247,7 @@ public abstract class GameMode {
                 var slot = Card.slots[i][j];
                 var framePos = pos.offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
                 var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+                frame.setInvulnerable(true);
                 frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
                 world.setBlockState(framePos, Blocks.BLACK_CONCRETE.getDefaultState());
                 world.spawnEntity(frame);
