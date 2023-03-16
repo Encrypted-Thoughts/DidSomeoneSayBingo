@@ -193,7 +193,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:cherry_leaves",
                         "minecraft:cherry_sign",
                         "minecraft:cherry_trapdoor",
-                        "minecraft:cherry_spruce_log",
+                        "minecraft:cherry_log",
                         "minecraft:stripped_cherry_wood",
                         "minecraft:pink_petals"
                 }),
