@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.config.gameprofiles.TPRandomizationSize;
-import encrypted.dssb.config.replaceblocks.Coordinates;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.FileNotFoundException;

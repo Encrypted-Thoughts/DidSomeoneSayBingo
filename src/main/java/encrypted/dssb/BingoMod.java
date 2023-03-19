@@ -6,7 +6,6 @@ import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.defaultconfigs.*;
 import encrypted.dssb.config.itempools.ItemPool;
 import encrypted.dssb.config.itempools.defaultpools.*;
-import encrypted.dssb.config.replaceblocks.ReplacementBlocksConfig;
 import encrypted.dssb.util.MapRenderHelper;
 import net.fabricmc.api.ModInitializer;
 
@@ -27,7 +26,6 @@ public class BingoMod implements ModInitializer {
 	public static final String MOD_ID = "dssbingo";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static BingoConfig CONFIG = new BingoConfig();
-	public static ReplacementBlocksConfig REPLACEMENT_BLOCKS = new ReplacementBlocksConfig();
 	public static ArrayList<GamePreset> GamePresets = new ArrayList<>();
 	public static ArrayList<ItemPool> ItemPools = new ArrayList<>();
 
@@ -57,8 +55,6 @@ public class BingoMod implements ModInitializer {
 
 	private void loadConfigs() {
 		CONFIG.ReadFromFile();
-
-		REPLACEMENT_BLOCKS.ReadFromFile();
 
 		ItemPools = new ArrayList<>();
 		var poolDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/itempools").toFile();

@@ -7,7 +7,6 @@ import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
@@ -39,18 +38,7 @@ public class Blackout extends GameMode {
 
     @Override
     public void end() {
-        var world = WorldHelper.getWorldByName(Server, BingoManager.GameSettings.Dimension);
-        if (world != null) {
-            for (var replacement : BingoMod.REPLACEMENT_BLOCKS.Blocks) {
-                for (var block : Registries.BLOCK) {
-                    if (block.asItem().toString().equals(replacement.DefaultBlock)) {
-                        world.setBlockState(replacement.Pos.getBlockPos(), block.getDefaultState());
-                        break;
-                    }
-                }
-            }
-        }
-
+        setScoreboardStats(0);
         Status = GameStatus.Idle;
         TimerRunning = false;
     }
@@ -154,12 +142,6 @@ public class Blackout extends GameMode {
 
         var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
         if (world != null) {
-            for (var replacement : BingoMod.REPLACEMENT_BLOCKS.Blocks) {
-                var coloredBlock = getColoredBlock(team, replacement);
-                if (coloredBlock != null)
-                    world.setBlockState(replacement.Pos.getBlockPos(), coloredBlock);
-            }
-
             for (var i = 0; i < Card.size; i++) {
                 for (var j = 0; j < Card.size; j++) {
                     var slot = Card.slots[i][j];
@@ -169,6 +151,7 @@ public class Blackout extends GameMode {
                 }
             }
         }
+        setScoreboardStats(getTeamNumber(team));
 
         Status = GameStatus.Idle;
     }

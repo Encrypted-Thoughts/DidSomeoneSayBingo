@@ -3,7 +3,6 @@ package encrypted.dssb.gamemode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
-import encrypted.dssb.config.replaceblocks.ReplacementBlock;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.model.BingoItem;
 import encrypted.dssb.util.MessageHelper;
@@ -321,24 +320,20 @@ public abstract class GameMode {
             player.sendMessage(text);
     }
 
-    protected BlockState getColoredBlock(AbstractTeam team, ReplacementBlock replacement) {
-        var teamBlock = switch (team.getName()) {
-            case "Red" -> replacement.RedBlock;
-            case "Green" -> replacement.GreenBlock;
-            case "Blue" -> replacement.BlueBlock;
-            case "Purple" -> replacement.PurpleBlock;
-            case "Pink" -> replacement.PinkBlock;
-            case "Orange" -> replacement.OrangeBlock;
-            case "Yellow" -> replacement.YellowBlock;
-            case "Cyan" -> replacement.CyanBlock;
-            default -> "";
-        };
+    public void setScoreboardStats(int teamNumber){
+        var scoreboard = Server.getScoreboard();
+        var updatePending = scoreboard.getObjective("bingo_update_pending");
+        var winningTeam = scoreboard.getObjective("bingo_winning_team");
 
-        for (var block : Registries.BLOCK) {
-            if (block.asItem().toString().equals(teamBlock))
-                return block.getDefaultState();
+        if (updatePending != null && winningTeam != null) {
+            var updateScore = scoreboard.getPlayerScore("#bingo", updatePending);
+            var winningScore = scoreboard.getPlayerScore("#bingo", winningTeam);
+
+            if (updateScore != null && winningScore != null) {
+                winningScore.setScore(teamNumber);
+                updateScore.setScore(1);
+            }
         }
-        return null;
     }
 
     protected BlockState getConcrete(AbstractTeam team) {
@@ -352,6 +347,20 @@ public abstract class GameMode {
             case "Blue" -> Blocks.BLUE_CONCRETE.getDefaultState();
             case "Yellow" -> Blocks.YELLOW_CONCRETE.getDefaultState();
             default -> null;
+        };
+    }
+
+    protected int getTeamNumber(AbstractTeam team) {
+        return switch (team.getName()) {
+            case "Red" -> 1;
+            case "Orange" -> 2;
+            case "Yellow" -> 3;
+            case "Green" -> 4;
+            case "Cyan" -> 5;
+            case "Blue" -> 6;
+            case "Purple" -> 7;
+            case "Pink" -> 8;
+            default -> 0;
         };
     }
 }
