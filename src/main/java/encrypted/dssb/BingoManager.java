@@ -527,8 +527,7 @@ public class BingoManager {
         Game.runAfterRespawn(player);
     }
 
-    public static void runOnPlayerConnectionEvent(ServerPlayerEntity player) {
-        var server = player.getServer();
+    public static void runOnPlayerConnectionEvent(ServerPlayerEntity player, MinecraftServer server) {
         if (Game == null && server != null) {
             try {
                 var possibleItems = generateItemPool();

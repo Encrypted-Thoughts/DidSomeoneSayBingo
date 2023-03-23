@@ -50,7 +50,7 @@ public class BingoMod implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(BingoManager::runOnStartup);
 		ServerTickEvents.START_SERVER_TICK.register(BingoManager::runOnServerTickEvent);
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> runAfterPlayerRespawnEvent(newPlayer));
-		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> runOnPlayerConnectionEvent(handler.player));
+		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> runOnPlayerConnectionEvent(handler.player, server));
 	}
 
 	private void loadConfigs() {

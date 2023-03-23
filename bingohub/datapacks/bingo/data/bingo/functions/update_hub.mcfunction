@@ -10,4 +10,6 @@ execute if score #bingo bingo_winning_team matches 6 run function bingo:update_h
 execute if score #bingo bingo_winning_team matches 7 run function bingo:update_hub_purple
 execute if score #bingo bingo_winning_team matches 8 run function bingo:update_hub_pink
 
+
+
 scoreboard players set #bingo bingo_update_pending 0

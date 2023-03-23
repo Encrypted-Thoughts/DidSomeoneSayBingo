@@ -324,14 +324,43 @@ public abstract class GameMode {
         var scoreboard = Server.getScoreboard();
         var updatePending = scoreboard.getObjective("bingo_update_pending");
         var winningTeam = scoreboard.getObjective("bingo_winning_team");
+        var gamesPlayed = scoreboard.getObjective("bingo_games_played");
+        var win = scoreboard.getObjective("bingo_win");
+        var loss = scoreboard.getObjective("bingo_loss");
+        var percentage = scoreboard.getObjective("bingo_percentage");
 
-        if (updatePending != null && winningTeam != null) {
-            var updateScore = scoreboard.getPlayerScore("#bingo", updatePending);
-            var winningScore = scoreboard.getPlayerScore("#bingo", winningTeam);
+        if (updatePending == null || winningTeam == null || gamesPlayed == null || win == null || loss == null || percentage == null )
+            return;
 
-            if (updateScore != null && winningScore != null) {
-                winningScore.setScore(teamNumber);
-                updateScore.setScore(1);
+        // Set overall #bingo statistics
+        var updateScore = scoreboard.getPlayerScore("#bingo", updatePending);
+        var winningScore = scoreboard.getPlayerScore("#bingo", winningTeam);
+        var totalPlayedScore = scoreboard.getPlayerScore("#bingo", gamesPlayed);
+        if (updateScore != null && winningScore != null && totalPlayedScore != null) {
+            winningScore.setScore(teamNumber);
+            updateScore.setScore(1);
+            totalPlayedScore.incrementScore();
+        }
+
+        // Set player specific statistics
+        for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
+            var playerTeam = player.getScoreboardTeam();
+            if (playerTeam != null) {
+                var playedScore = scoreboard.getPlayerScore(player.getName().getString(), gamesPlayed);
+                var winScore = scoreboard.getPlayerScore(player.getName().getString(), win);
+                var lossScore = scoreboard.getPlayerScore(player.getName().getString(), loss);
+                var percentageScore = scoreboard.getPlayerScore(player.getName().getString(), percentage);
+
+                if (playedScore == null || winScore == null || lossScore == null || percentageScore == null)
+                    continue;
+
+                playedScore.incrementScore();
+                if (getTeamNumber(playerTeam) == teamNumber)
+                    winScore.incrementScore();
+                else
+                    lossScore.incrementScore();
+                if (playedScore.getScore() > 0)
+                    percentageScore.setScore((int)(((double)winScore.getScore()) / playedScore.getScore() * 100));
             }
         }
     }
