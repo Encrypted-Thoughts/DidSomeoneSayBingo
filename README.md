@@ -19,6 +19,8 @@ The below steps assume you have already setup a fabric 1.19.4 server. See [fabri
   * [Spark](https://www.curseforge.com/minecraft/mc-mods/spark) - Allows running profiles to be able to troubleshoot server performance issues or share with someone who might be able to.
   * [Starlight](https://www.curseforge.com/minecraft/mc-mods/starlight) - Minecraft lighting engine rewrite for better performance.
 
+For more advanced configuration like editing/creating your own item pools and game presets see the [wiki](https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo/wiki). 
+
 ## Commands
 Everything that happens in the mod can be controlled through the commands. For a [list of all of the commands see the wiki page](https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo/wiki/Commands).
 
