@@ -242,6 +242,26 @@ public class BingoSettingsCommand {
 
                                 // Set the item pools to play with
                                 .then(literal("items")
+                                        .then(literal("set")
+                                                .then(argument("pool", StringArgumentType.greedyString())
+                                                        .suggests(BingoSettingsCommand::GetItemPoolSuggestions)
+                                                        .executes(ctx -> {
+                                                            var player = ctx.getSource().getPlayer();
+                                                            if (Game != null && Game.Status != GameStatus.Idle) {
+                                                                if (player != null)
+                                                                    MessageHelper.sendSystemMessage(player, Text.literal("Can't change item pools while game in process.").formatted(Formatting.RED));
+                                                                return Command.SINGLE_SUCCESS;
+                                                            }
+
+                                                            var poolName = StringArgumentType.getString(ctx, "pool");
+                                                            GameSettings.ItemPools.clear();
+                                                            GameSettings.ItemPools.add(poolName);
+
+                                                            var text = Text.literal(poolName + " item pool set").formatted(Formatting.GOLD);
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                            return Command.SINGLE_SUCCESS;
+                                                        })))
+
                                         .then(literal("add")
                                                 .then(argument("pool", StringArgumentType.greedyString())
                                                         .suggests(BingoSettingsCommand::GetItemPoolSuggestions)

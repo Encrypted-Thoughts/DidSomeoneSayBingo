@@ -55,12 +55,11 @@
         '[
             "",
             {"text":"Item Pools:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"Clear","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items clear"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Easy","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items add Overworld - Easy"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Normal","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items add Overworld - Normal"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Hard","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items add Overworld - Hard"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Nether","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items add Nether"}},{"text":"\\n","color":"dark_green"},
-            {"text":"All","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items add All"}}
+            {"text":"Overworld - Easy","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Easy"}},{"text":"\\n","color":"dark_green"},
+            {"text":"Overworld - Normal","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Normal"}},{"text":"\\n","color":"dark_green"},
+            {"text":"Overworld - Hard","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Hard"}},{"text":"\\n","color":"dark_green"},
+            {"text":"Nether","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Nether"}},{"text":"\\n","color":"dark_green"},
+            {"text":"All","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set All"}}
         ]',
         '[
             "",
