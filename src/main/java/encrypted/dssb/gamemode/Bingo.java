@@ -147,7 +147,7 @@ public class Bingo extends GameMode {
             var hourText = hours == 0 ? "" : hours + ":";
             var minuteText = minutes < 10 && hours > 0 ? "0" + minutes + ":" : minutes + ":";
             minuteText = minutes == 0 ? "" : minuteText;
-            var secondText = seconds < 10 ? "0" + seconds : "" + seconds;
+            var secondText = seconds < 10 ? "0" + seconds : seconds;
             var text = Text.literal("%s%s%s".formatted(hourText, minuteText, secondText)).formatted(Formatting.GOLD);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 

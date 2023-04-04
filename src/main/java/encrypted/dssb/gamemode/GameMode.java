@@ -150,8 +150,8 @@ public abstract class GameMode {
             try {
                 player.setMovementSpeed(0);
                 player.getHungerManager().setFoodLevel(20);
-                player.changeGameMode(net.minecraft.world.GameMode.SURVIVAL);
                 TeleportHelper.teleport(player, world, spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5, 0, 0);
+                player.changeGameMode(net.minecraft.world.GameMode.SURVIVAL);
                 player.setSpawnPoint(player.getWorld().getRegistryKey(), spawn, 0, true, false);
             } catch (CommandSyntaxException e) {
                 e.printStackTrace();
@@ -227,6 +227,21 @@ public abstract class GameMode {
                 player.getInventory().offHand.set(0, getMap());
                 givePlayerStatusEffects(player, true);
                 givePlayerEquipment(player, true);
+                BingoManager.Game.teleportPlayerToTeamSpawn(
+                        WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
+                        player,
+                        BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
+                );
+            }
+        }
+        else if (Status == GameStatus.Starting) {
+            var server = player.getServer();
+            if (server != null) {
+                player.getInventory().clear();
+                player.getInventory().offHand.set(0, getMap());
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 300 * 20, 255, false, false, false));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 300 * 20, 250, false, false, false));
                 BingoManager.Game.teleportPlayerToTeamSpawn(
                         WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
                         player,
