@@ -46,24 +46,25 @@ public class BingoCard {
     }
 
     public void redrawCard(World world) {
-        var sideOffset = 4;
+        var sideOffset = 2;
+        var offsetBetweenSlots = 1;
         var slotOffset = 24;
 
-        var rowCount = 0;
+        var rowIndex = 0;
         for (var slotRow : slots) {
-            var colCount = 0;
+            var colIndex = 0;
             for (var slot : slotRow) {
                 var rowLength = slot.slotPixels.length;
                 var colLength = slot.slotPixels[0].length;
 
-                var rowStart = sideOffset + 4 + rowCount * slotOffset;
-                var colStart = sideOffset + 4 + colCount * slotOffset;
+                var rowStart = sideOffset + 4 + rowIndex * slotOffset + rowIndex * offsetBetweenSlots;
+                var colStart = sideOffset + 4 + colIndex * slotOffset + colIndex * offsetBetweenSlots;
                 for (int row = rowStart; row < rowStart + rowLength; row++)
                     System.arraycopy(slot.slotPixels[row - rowStart], 0, bingoPixels[row], colStart, colLength);
 
-                colCount++;
+                colIndex++;
             }
-            rowCount++;
+            rowIndex++;
         }
 
         createMap(world);
@@ -108,7 +109,8 @@ public class BingoCard {
     }
 
     public void updateMap(PlayerEntity player, int rowIndex, int colIndex, boolean lockout) {
-        var sideOffset = 5;
+        var sideOffset = 2;
+        var offsetBetweenSlots = 1;
         var slotOffset = 24;
 
         var team = player.getScoreboardTeam();
@@ -118,10 +120,10 @@ public class BingoCard {
         int[][] pixels = MapRenderHelper.getColorSlotArea(team, lockout);
 
         if (pixels != null) {
-            var rowStart = sideOffset + rowIndex * slotOffset;
-            var colStart = sideOffset + colIndex * slotOffset;
-            for (int row = rowStart; row < rowStart + 22; row++) {
-                for (int col = colStart; col < colStart + 22; col++) {
+            var rowStart = sideOffset + rowIndex * slotOffset + rowIndex * offsetBetweenSlots;
+            var colStart = sideOffset + colIndex * slotOffset + colIndex * offsetBetweenSlots;
+            for (int row = rowStart; row < rowStart + slotOffset; row++) {
+                for (int col = colStart; col < colStart + slotOffset; col++) {
                     var nearest = nearestColor(pixels[row - rowStart][col - colStart]);
                     if (nearest != 0)
                         bingoPixels[row][col] = nearest;

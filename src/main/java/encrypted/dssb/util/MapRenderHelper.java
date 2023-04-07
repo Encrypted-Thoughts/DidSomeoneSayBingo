@@ -114,8 +114,8 @@ public class MapRenderHelper {
 
     public static void loadTeamSlotAreas() {
         try {
-            var height = 22;
-            var width = 22;
+            var height = 24;
+            var width = 24;
 
             redSlotArea = getPixelArrayOfImage("/assets/dssb/red_overlay.png", height, width);
             greenSlotArea = getPixelArrayOfImage("/assets/dssb/green_overlay.png", height, width);
