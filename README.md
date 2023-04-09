@@ -1,6 +1,5 @@
-![Did Someone Say Bingo?](https://user-images.githubusercontent.com/50642352/229986719-d35a4c40-97c4-4bd3-ad13-e63c304e2544.png)
+![Did Someone Say Bingo?](https://user-images.githubusercontent.com/50642352/230751754-c05adbe9-179f-453b-95c0-786b60ef2479.png)
 ---
-
 ![License](https://img.shields.io/github/license/Encrypted-Thoughts/DidSomeoneSayBingo)
 ![Issues](https://img.shields.io/github/issues/Encrypted-Thoughts/DidSomeoneSayBingo?label=Issues)
 ![Version](https://img.shields.io/github/v/tag/Encrypted-Thoughts/DidSomeoneSayBingo)
@@ -24,4 +23,4 @@ For more advanced configuration like editing/creating your own item pools and ga
 ## Commands
 Everything that happens in the mod can be controlled through the commands. For a [list of all of the commands see the wiki page](https://github.com/Encrypted-Thoughts/DidSomeoneSayBingo/wiki/Commands).
 
-![bingo card full](https://user-images.githubusercontent.com/50642352/229987111-603337b8-52f3-4116-8424-0960a6594dbc.png)
+![bingo card full](https://user-images.githubusercontent.com/50642352/230751781-207d565f-6351-4c3c-95b5-e2278c533daf.png)
