@@ -1,5 +1,6 @@
 package encrypted.dssb.command;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -11,6 +12,9 @@ public class BingoStartCommand {
         dispatcher.register(
                 literal(BingoCommands.bingoCommand)
                         .then(literal("start")
-                                .executes(ctx -> start(ctx.getSource().getPlayer(), ctx.getSource().getServer()))));
+                                .executes(ctx -> {
+                                    start(ctx.getSource().getPlayer(), ctx.getSource().getServer());
+                                    return Command.SINGLE_SUCCESS;
+                                })));
     }
 }

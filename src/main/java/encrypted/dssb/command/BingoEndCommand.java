@@ -1,5 +1,6 @@
 package encrypted.dssb.command;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -11,6 +12,9 @@ public class BingoEndCommand {
         dispatcher.register(literal(BingoCommands.bingoCommand)
                 .then(literal("end")
                         .requires(source -> source.hasPermissionLevel(2))
-                        .executes(ctx -> end(ctx.getSource().getServer()))));
+                        .executes(ctx -> {
+                            end(ctx.getSource().getServer());
+                            return Command.SINGLE_SUCCESS;
+                        })));
     }
 }

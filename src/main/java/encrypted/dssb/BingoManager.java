@@ -1,6 +1,5 @@
 package encrypted.dssb;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.command.BingoSettingsCommand;
 import encrypted.dssb.config.gameprofiles.GamePreset;
@@ -44,24 +43,23 @@ public class BingoManager {
     public static long VoteStart;
     public static ArrayList<UUID> BingoPlayers = new ArrayList<>();
 
-    public static int start(ServerPlayerEntity starter, MinecraftServer server) throws CommandSyntaxException {
+    public static void start(ServerPlayerEntity starter, MinecraftServer server) throws CommandSyntaxException {
         if (Game == null) {
             MessageHelper.sendSystemMessage(starter, Text.literal("No bingo card has been generated yet since last server restart. Please generate a new card first.").formatted(Formatting.RED));
-            return Command.SINGLE_SUCCESS;
+            return;
         }
 
         if (Game.Status != GameStatus.Idle) {
             MessageHelper.sendSystemMessage(starter, Text.literal("Game of Bingo already in progress.").formatted(Formatting.RED));
-            return Command.SINGLE_SUCCESS;
+            return;
         }
 
         if (BingoManager.getValidPlayers(server.getPlayerManager()).size() == 0) {
             MessageHelper.sendSystemMessage(starter, Text.literal("No players on any teams to play the game.").formatted(Formatting.RED));
-            return Command.SINGLE_SUCCESS;
+            return;
         }
 
         Game.start();
-        return Command.SINGLE_SUCCESS;
     }
 
     public static ArrayList<ServerPlayerEntity> getValidPlayers(PlayerManager playerManager) {
@@ -104,7 +102,7 @@ public class BingoManager {
         return items;
     }
 
-    public static int generate(ServerPlayerEntity player, MinecraftServer server, boolean start) throws CommandSyntaxException {
+    public static void generate(ServerPlayerEntity player, MinecraftServer server, boolean start) throws CommandSyntaxException {
         if (GenerateInProgress)
             MessageHelper.sendSystemMessage(player, Text.literal("Still generating previous board.").formatted(Formatting.RED));
         else if (Game != null && Game.Status != GameStatus.Idle)
@@ -117,7 +115,7 @@ public class BingoManager {
                 if (possibleItems.size() < 25) {
                     MessageHelper.sendSystemMessage(player, Text.literal("Not enough enough possible items in item pools to generate a bingo card.").formatted(Formatting.RED));
                     GenerateInProgress = false;
-                    return Command.SINGLE_SUCCESS;
+                    return;
                 }
 
                 CurrentItems = randomlySelectItems(possibleItems, 25);
@@ -137,15 +135,11 @@ public class BingoManager {
             }
             GenerateInProgress = false;
         }
-
-        return Command.SINGLE_SUCCESS;
     }
 
-    public static int end(MinecraftServer server) {
+    public static void end(MinecraftServer server) {
         if (Game != null) Game.end();
         tpAllToBingoSpawn(server);
-
-        return Command.SINGLE_SUCCESS;
     }
 
     public static void setGameMode(ServerPlayerEntity player, MinecraftServer server, String mode) {
@@ -335,7 +329,7 @@ public class BingoManager {
         }
     }
 
-    public static int teamTP(ServerPlayerEntity player, MinecraftServer server) throws CommandSyntaxException {
+    public static void teamTP(ServerPlayerEntity player, MinecraftServer server) throws CommandSyntaxException {
         if (Game.Status == GameStatus.Playing) {
             var players = getValidPlayers(server.getPlayerManager());
             var teammates = new ArrayList<ServerPlayerEntity>();
@@ -347,7 +341,7 @@ public class BingoManager {
 
             if (teammates.size() == 0) {
                 MessageHelper.sendSystemMessage(player, Text.literal("No teammate more than 50 blocks away to tp to.").formatted(Formatting.RED));
-                return Command.SINGLE_SUCCESS;
+                return;
             }
 
             int randomNum = ThreadLocalRandom.current().nextInt(0, teammates.size());
@@ -358,15 +352,11 @@ public class BingoManager {
             MessageHelper.sendSystemMessage(teammates.get(randomNum), Text.literal("%s teleported to you.".formatted(player.getDisplayName().getString())).formatted(Formatting.GOLD));
             MessageHelper.sendSystemMessage(player, Text.literal("Teleported to %s.".formatted(teammates.get(randomNum).getDisplayName().getString())).formatted(Formatting.GOLD));
         }
-
-        return Command.SINGLE_SUCCESS;
     }
 
-    public static int clarify(ServerCommandSource source, int rowIndex, int columnIndex) {
+    public static void clarify(ServerCommandSource source, int rowIndex, int columnIndex) {
         if (Game != null)
             Game.clarify(source.getPlayer(), rowIndex, columnIndex);
-
-        return Command.SINGLE_SUCCESS;
     }
 
     public static void runOnStartup(MinecraftServer server) {
