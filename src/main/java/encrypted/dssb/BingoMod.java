@@ -89,7 +89,6 @@ public class BingoMod implements ModInitializer {
 				BingoMod.LOGGER.error("Unable to create directory to store item pool files.");
 		}
 
-
 		GamePresets = new ArrayList<>();
 		var presetDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/presets").toFile();
 		if (presetDirectory.exists()) {

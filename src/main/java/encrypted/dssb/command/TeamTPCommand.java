@@ -1,5 +1,6 @@
 package encrypted.dssb.command;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -10,6 +11,9 @@ public class TeamTPCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
                 literal("teamtp")
-                        .executes(ctx -> teamTP(ctx.getSource().getPlayer(), ctx.getSource().getServer())));
+                        .executes(ctx -> {
+                            teamTP(ctx.getSource().getPlayer(), ctx.getSource().getServer());
+                            return Command.SINGLE_SUCCESS;
+                        }));
     }
 }
