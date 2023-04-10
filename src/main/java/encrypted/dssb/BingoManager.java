@@ -447,13 +447,13 @@ public class BingoManager {
                 Game.CurrentCountdownSecond = 0;
 
                 var text = Text.literal("Use /clarify <row> <col> if unsure of what an item on the board is.").formatted(Formatting.WHITE);
-                MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
                 text = Text.literal("Use /teamtp to teleport to a random teammate that's more than 50 blocks away.").formatted(Formatting.GOLD);
-                MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
                 text = Text.literal("Use /bingo getmap if you lose your bingo map to get another one.").formatted(Formatting.WHITE);
-                MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
                 text = Text.literal("Use /bingo voteend if you want to start a vote to end the current game in a tie.").formatted(Formatting.GOLD);
-                MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
 
                 Game.Status = GameStatus.Starting;
             }
