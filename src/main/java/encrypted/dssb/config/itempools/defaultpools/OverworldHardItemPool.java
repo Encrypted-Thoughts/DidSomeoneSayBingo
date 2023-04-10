@@ -561,7 +561,6 @@ public class OverworldHardItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:phantom_membrane"}),
                 new ItemGroup(new String[]{"minecraft:golden_apple"}),
-                new ItemGroup(new String[]{"minecraft:slime_block"}),
                 new ItemGroup(new String[]{
                         "minecraft:obsidian",
                         "minecraft:crying_obsidian"
