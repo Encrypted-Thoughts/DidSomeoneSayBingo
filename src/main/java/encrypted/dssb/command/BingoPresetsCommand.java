@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.gamemode.GameStatus;
@@ -37,6 +38,7 @@ public class BingoPresetsCommand {
                                                         GameSettings = new GamePreset(preset);
                                                         MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
                                                                 Text.literal("Game preset set to ").formatted(Formatting.WHITE).append(Text.literal(profileName).formatted(Formatting.GREEN)));
+                                                        BingoManager.generate(player, ctx.getSource().getServer(), false);
                                                         return Command.SINGLE_SUCCESS;
                                                     }
                                                 }

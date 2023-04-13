@@ -176,6 +176,7 @@ public class BingoManager {
                     }
                 }
                 MessageHelper.broadcastChat(server.getPlayerManager(), text);
+                generate(player, server, false);
             } catch (Exception e) {
                 BingoMod.LOGGER.error("Failed to broadcast message to players on gamemode change.");
                 e.printStackTrace();
