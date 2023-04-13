@@ -29,6 +29,7 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:light_weighted_pressure_plate"
                 }),
                 new ItemGroup(new String[]{"minecraft:flint_and_steel"}),
+                new ItemGroup(new String[]{"minecraft:bundle"}),
                 new ItemGroup(new String[]{"minecraft:blast_furnace"}),
                 new ItemGroup(new String[]{"minecraft:dead_bush"}),
                 new ItemGroup(new String[]{"minecraft:coarse_dirt"}),
