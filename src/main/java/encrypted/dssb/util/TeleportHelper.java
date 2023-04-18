@@ -8,12 +8,12 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.TeleportTarget;
 
 public class TeleportHelper {
-    public static void teleport(ServerPlayerEntity player, ServerWorld world, double x, double y, double z, float yaw, float pitch) throws CommandSyntaxException {
+    public static ServerPlayerEntity teleport(ServerPlayerEntity player, ServerWorld world, double x, double y, double z, float yaw, float pitch) throws CommandSyntaxException {
         player.stopRiding();
         if (player.isSleeping())
             player.wakeUp(true, true);
         var pos = new Vec3d(x, y, z);
         var velocity = new Vec3d(0, 0, 0);
-        FabricDimensions.teleport(player, world, new TeleportTarget(pos, velocity, yaw, pitch));
+        return FabricDimensions.teleport(player, world, new TeleportTarget(pos, velocity, yaw, pitch));
     }
 }

@@ -213,6 +213,7 @@ public class BingoManager {
 
     public static void resetPlayer(ServerPlayerEntity player) {
         player.setMovementSpeed(1);
+        player.setVelocity(0, 0, 0);
         player.clearStatusEffects();
 
         player.playerScreenHandler.clearCraftingSlots();
@@ -257,7 +258,7 @@ public class BingoManager {
             var server = player.getServer();
             if (server != null) {
                 var world = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
-                TeleportHelper.teleport(
+                var tpPlayer = TeleportHelper.teleport(
                         player,
                         world,
                         BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getX() + 0.5,
@@ -265,7 +266,7 @@ public class BingoManager {
                         BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getZ() + 0.5,
                         180,
                         0);
-                resetPlayer(player);
+                resetPlayer(tpPlayer);
             } else
                 BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
         } catch (CommandSyntaxException e) {
