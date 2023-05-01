@@ -318,7 +318,7 @@ public abstract class GameMode {
             if (!entry.OnRespawn && respawn) continue;
             var effect = Registries.STATUS_EFFECT.get(new Identifier(entry.Type));
             if (effect != null)
-                player.addStatusEffect(new StatusEffectInstance(effect, entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon));
+                player.addStatusEffect(new StatusEffectInstance(effect, entry.Duration < 0 ? -1 : entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon));
         }
     }
 
