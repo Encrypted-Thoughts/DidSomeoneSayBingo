@@ -16,8 +16,8 @@ public class CursedPreset extends GamePreset {
         Effects = new ArrayList<>(List.of(
             new StatusEffect("minecraft:slow_falling", 20, 6, true),
             new StatusEffect("minecraft:regeneration", 20, 100, true),
-            new StatusEffect("minecraft:speed", 99999, 255, false, false, false, true),
-            new StatusEffect("minecraft:blindness", 99999, 100, false, false, false, true)
+            new StatusEffect("minecraft:speed", -1, 255, false, false, false, true),
+            new StatusEffect("minecraft:blindness", -1, 100, false, false, false, true)
         ));
         StartingGear = new ArrayList<>(List.of(
             new StartingItem("minecraft:iron_pickaxe", 1, true, false),

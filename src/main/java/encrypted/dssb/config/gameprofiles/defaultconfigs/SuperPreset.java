@@ -16,13 +16,13 @@ public class SuperPreset extends GamePreset {
         GameMode = "blackout";
         Effects = new ArrayList<>(List.of(
             new StatusEffect("minecraft:slow_falling", 20, 6, true),
-                new StatusEffect("minecraft:regeneration", 99999, 100, false, false, false, true),
-                new StatusEffect("minecraft:fire_resistance", 99999, 100, false, false, false, true),
-                new StatusEffect("minecraft:conduit_power", 99999, 20, false, false, false, true),
-                new StatusEffect("minecraft:night_vision", 99999, 100, false, false, false, true),
-                new StatusEffect("minecraft:speed", 99999, 6, false, false, false, true),
-                new StatusEffect("minecraft:jump_boost", 99999, 2, false, false, false, true),
-                new StatusEffect("minecraft:strength", 99999, 3, false, false, false, true)
+                new StatusEffect("minecraft:regeneration", -1, 100, false, false, false, true),
+                new StatusEffect("minecraft:fire_resistance", -1, 100, false, false, false, true),
+                new StatusEffect("minecraft:conduit_power", -1, 20, false, false, false, true),
+                new StatusEffect("minecraft:night_vision", -1, 100, false, false, false, true),
+                new StatusEffect("minecraft:speed", -1, 6, false, false, false, true),
+                new StatusEffect("minecraft:jump_boost", -1, 2, false, false, false, true),
+                new StatusEffect("minecraft:strength", -1, 3, false, false, false, true)
         ));
         StartingGear = new ArrayList<>(List.of(
             new StartingItem("minecraft:netherite_pickaxe", 1, true, false),
