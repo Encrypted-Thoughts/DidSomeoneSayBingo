@@ -56,6 +56,7 @@ public abstract class GameMode {
     public boolean TimerRunning = false;
     public long TimerStart;
     public long CurrentTimerSecond;
+
     public String Name = "Base";
 
     public GameMode(MinecraftServer server) {

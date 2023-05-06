@@ -87,7 +87,7 @@ public class Lockout extends GameMode {
             var hourText = hours == 0 ? "" : hours + ":";
             var minuteText = minutes < 10 && hours > 0 ? "0" + minutes + ":" : minutes + ":";
             minuteText = minutes == 0 ? "" : minuteText;
-            var secondText = seconds < 10 ? "0" + seconds : "" + seconds;
+            var secondText = seconds < 10 ? "0" + seconds : String.valueOf(seconds);
 
             var text = Text.literal("Majority Win: ").formatted(Formatting.DARK_AQUA)
                     .append(Text.literal("%s".formatted(MajorityWinCount)).formatted(Formatting.GOLD))
@@ -200,7 +200,16 @@ public class Lockout extends GameMode {
     private void handleWin(AbstractTeam team) {
         TimerRunning = false;
 
-        final Text bingoFinished = Text.literal("%s team wins!".formatted(team.getName())).formatted(team.getColor());
+        var timeDif = System.currentTimeMillis() - TimerStart;
+        var millis = timeDif % 1000;
+        var second = (timeDif / 1000) % 60;
+        var minute = (timeDif / (1000 * 60)) % 60;
+        var hour = (timeDif / (1000 * 60 * 60)) % 24;
+        var readableTime = "";
+        if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
+        else readableTime = String.format("%d:%02d.%d", minute, second, millis);
+
+        final Text bingoFinished = Text.literal("%s team wins in %s!".formatted(team.getName(), readableTime)).formatted(team.getColor());
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
 
         var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);

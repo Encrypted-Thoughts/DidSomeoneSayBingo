@@ -79,7 +79,16 @@ public class Bingo extends GameMode {
     private void handleWin(AbstractTeam team) {
         TimerRunning = false;
 
-        final Text bingoFinished = Text.literal("%s team wins!".formatted(team.getName())).formatted(team.getColor());
+        var timeDif = System.currentTimeMillis() - TimerStart;
+        var millis = timeDif % 1000;
+        var second = (timeDif / 1000) % 60;
+        var minute = (timeDif / (1000 * 60)) % 60;
+        var hour = (timeDif / (1000 * 60 * 60)) % 24;
+        var readableTime = "";
+        if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
+        else readableTime = String.format("%d:%02d.%d", minute, second, millis);
+
+        final Text bingoFinished = Text.literal("%s team wins! Time: %s".formatted(team.getName(), readableTime)).formatted(team.getColor());
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
 
         var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
