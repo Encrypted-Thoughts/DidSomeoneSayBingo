@@ -10,7 +10,6 @@ import encrypted.dssb.util.TeleportHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -21,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class GameMode {
+public abstract class GameModeBase {
     public boolean DirtyCard = false;
     public MinecraftServer Server;
 
@@ -59,7 +59,7 @@ public abstract class GameMode {
 
     public String Name = "Base";
 
-    public GameMode(MinecraftServer server) {
+    public GameModeBase(MinecraftServer server) {
         Server = server;
     }
 
@@ -70,8 +70,6 @@ public abstract class GameMode {
     public abstract void handleCountdown();
 
     public abstract void handleTimer();
-
-    public abstract boolean checkItem(Item item, PlayerEntity player);
 
     public abstract boolean checkBingo(AbstractTeam team);
 
@@ -122,6 +120,68 @@ public abstract class GameMode {
             ex.printStackTrace();
             return null;
         });
+    }
+
+    public boolean checkItem(Item item, PlayerEntity player) {
+        var foundByTeam = player.getScoreboardTeam();
+        var server = player.getServer();
+        if (foundByTeam == null || server == null)
+            return false;
+
+        var rowIndex = 0;
+        for (var row : Card.slots) {
+            var colIndex = 0;
+            for (var bingoItem : row) {
+                if (bingoItem.item == item) {
+                    for (var team : bingoItem.teams) {
+                        if (team == foundByTeam)
+                            return false;
+                    }
+
+                    bingoItem.teams.add(foundByTeam);
+                    Card.updateMap(player, rowIndex, colIndex, false);
+
+                    final Text itemFound = Text.literal("%s found item: %s".formatted(player.getDisplayName().getString(), item.getName().getString())).formatted(foundByTeam.getColor());
+                    MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
+                    playNotificationSound(player.getWorld());
+                    return true;
+                }
+                colIndex++;
+            }
+            rowIndex++;
+        }
+        return false;
+    }
+
+    public void handleWin(AbstractTeam team) {
+        TimerRunning = false;
+
+        var timeDif = System.currentTimeMillis() - TimerStart;
+        var millis = timeDif % 1000;
+        var second = (timeDif / 1000) % 60;
+        var minute = (timeDif / (1000 * 60)) % 60;
+        var hour = (timeDif / (1000 * 60 * 60)) % 24;
+        var readableTime = "";
+        if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
+        else readableTime = String.format("%d:%02d.%d", minute, second, millis);
+
+        final Text bingoFinished = Text.literal("%s team wins! Time: %s".formatted(team.getName(), readableTime)).formatted(team.getColor());
+        MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
+
+        var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
+        if (world != null) {
+            for (var i = 0; i < Card.size; i++) {
+                for (var j = 0; j < Card.size; j++) {
+                    var slot = Card.slots[i][j];
+                    var framePos = BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
+                    if (slot.teams.contains(team))
+                        world.setBlockState(framePos, getConcrete(team));
+                }
+            }
+        }
+        setScoreboardStats(getTeamNumber(team));
+
+        Status = GameStatus.Idle;
     }
 
     public void playNotificationSound(World world) {
@@ -198,8 +258,8 @@ public abstract class GameMode {
                 mutable.move(Direction.DOWN);
 
             // check if top block is valid
-            var material = world.getBlockState(mutable).getMaterial();
-            if (material.isLiquid() || material == Material.FIRE) continue;
+            var state = world.getBlockState(mutable);
+            if (state.isLiquid() || state.isIn(BlockTags.FIRE)) continue;
 
             return mutable.move(Direction.UP);
         }

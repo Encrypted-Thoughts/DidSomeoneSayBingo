@@ -34,7 +34,7 @@ import java.util.stream.IntStream;
 
 public class BingoManager {
 
-    public static GameMode Game;
+    public static GameModeBase Game;
     public static GamePreset GameSettings;
     public static ArrayList<Item> CurrentItems = new ArrayList<>();
     public static boolean GenerateInProgress = false;
@@ -186,9 +186,9 @@ public class BingoManager {
         }
     }
 
-    public static void checkItem(ServerPlayerEntity player, Item item) {
+    public static void checkItem(ServerPlayerEntity player, ItemStack itemStack) {
         if (Game.Status == GameStatus.Playing) {
-            if (Game.checkItem(item, player) && Game.checkBingo(player.getScoreboardTeam())) {
+            if (Game.checkItem(itemStack.getItem(), player) && Game.checkBingo(player.getScoreboardTeam())) {
                 var server = player.getServer();
                 if (server != null) {
                     tpAllToBingoSpawn(server);
@@ -349,7 +349,7 @@ public class BingoManager {
             int randomNum = ThreadLocalRandom.current().nextInt(0, teammates.size());
             var tpTarget = teammates.get(randomNum);
 
-            TeleportHelper.teleport(player, tpTarget.getWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
+            TeleportHelper.teleport(player, tpTarget.getServerWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
 
             MessageHelper.sendSystemMessage(teammates.get(randomNum), Text.literal("%s teleported to you.".formatted(player.getDisplayName().getString())).formatted(Formatting.GOLD));
             MessageHelper.sendSystemMessage(player, Text.literal("Teleported to %s.".formatted(teammates.get(randomNum).getDisplayName().getString())).formatted(Formatting.GOLD));

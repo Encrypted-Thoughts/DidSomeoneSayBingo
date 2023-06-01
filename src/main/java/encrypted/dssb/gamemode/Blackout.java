@@ -1,11 +1,9 @@
 package encrypted.dssb.gamemode;
 
 import encrypted.dssb.BingoManager;
-import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.WorldHelper;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
@@ -13,13 +11,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Blackout extends GameMode {
+public class Blackout extends GameModeBase {
     public Blackout(MinecraftServer server, ArrayList<Item> items) throws Exception {
         super(server);
         var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
@@ -132,69 +129,6 @@ public class Blackout extends GameMode {
 
         for (var player : BingoManager.getValidPlayers(Server.getPlayerManager()))
             player.playSound(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
-    }
-
-    private void handleWin(AbstractTeam team) {
-        TimerRunning = false;
-
-        var timeDif = System.currentTimeMillis() - TimerStart;
-        var millis = timeDif % 1000;
-        var second = (timeDif / 1000) % 60;
-        var minute = (timeDif / (1000 * 60)) % 60;
-        var hour = (timeDif / (1000 * 60 * 60)) % 24;
-        var readableTime = "";
-        if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
-        else readableTime = String.format("%d:%02d.%d", minute, second, millis);
-
-        final Text bingoFinished = Text.literal("%s team wins in %s!".formatted(team.getName(), readableTime)).formatted(team.getColor());
-        MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
-
-        var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
-        if (world != null) {
-            for (var i = 0; i < Card.size; i++) {
-                for (var j = 0; j < Card.size; j++) {
-                    var slot = Card.slots[i][j];
-                    var framePos = BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
-                    if (slot.teams.contains(team))
-                        world.setBlockState(framePos, getConcrete(team));
-                }
-            }
-        }
-        setScoreboardStats(getTeamNumber(team));
-
-        Status = GameStatus.Idle;
-    }
-
-    @Override
-    public boolean checkItem(Item item, PlayerEntity player) {
-        var foundByTeam = player.getScoreboardTeam();
-        var server = player.getServer();
-        if (foundByTeam == null || server == null)
-            return false;
-
-        var rowIndex = 0;
-        for (var row : Card.slots) {
-            var colIndex = 0;
-            for (var bingoItem : row) {
-                if (bingoItem.item == item) {
-                    for (var team : bingoItem.teams) {
-                        if (team == foundByTeam)
-                            return false;
-                    }
-
-                    bingoItem.teams.add(foundByTeam);
-                    Card.updateMap(player, rowIndex, colIndex, false);
-
-                    final Text itemFound = Text.literal("%s found item: %s".formatted(player.getDisplayName().getString(), item.getName().getString())).formatted(foundByTeam.getColor());
-                    MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
-                    playNotificationSound(player.getWorld());
-                    return true;
-                }
-                colIndex++;
-            }
-            rowIndex++;
-        }
-        return false;
     }
 
     private boolean parseCardForBingo(AbstractTeam team) {

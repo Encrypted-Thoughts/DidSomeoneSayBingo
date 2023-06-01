@@ -6,6 +6,7 @@ import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.defaultconfigs.*;
 import encrypted.dssb.config.itempools.ItemPool;
 import encrypted.dssb.config.itempools.defaultpools.*;
+import encrypted.dssb.event.PlayerInventoryChangedCallback;
 import encrypted.dssb.util.MapRenderHelper;
 import net.fabricmc.api.ModInitializer;
 
@@ -51,6 +52,8 @@ public class BingoMod implements ModInitializer {
 		ServerTickEvents.START_SERVER_TICK.register(BingoManager::runOnServerTickEvent);
 		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> runAfterPlayerRespawnEvent(newPlayer));
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> runOnPlayerConnectionEvent(handler.player, server));
+
+		PlayerInventoryChangedCallback.EVENT.register(BingoManager::checkItem);
 	}
 
 	private void loadConfigs() {

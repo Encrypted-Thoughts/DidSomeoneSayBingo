@@ -27,7 +27,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.*;
 
-public class HiddenBingo extends GameMode {
+public class HiddenBingo extends GameModeBase {
 
     public enum HiddenType {Diagonal, DoubleDiagonal, All}
 
@@ -123,7 +123,8 @@ public class HiddenBingo extends GameMode {
             player.playSound(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
     }
 
-    private void handleWin(AbstractTeam team) {
+    @Override
+    public void handleWin(AbstractTeam team) {
         TimerRunning = false;
 
         var timeDif = System.currentTimeMillis() - TimerStart;

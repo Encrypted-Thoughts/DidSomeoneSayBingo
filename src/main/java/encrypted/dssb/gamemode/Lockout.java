@@ -1,7 +1,6 @@
 package encrypted.dssb.gamemode;
 
 import encrypted.dssb.BingoManager;
-import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.WorldHelper;
@@ -13,13 +12,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Lockout extends GameMode {
+public class Lockout extends GameModeBase {
 
     private int MajorityWinCount = 13;
 
@@ -195,37 +193,6 @@ public class Lockout extends GameMode {
             return true;
 
         return checkForTie();
-    }
-
-    private void handleWin(AbstractTeam team) {
-        TimerRunning = false;
-
-        var timeDif = System.currentTimeMillis() - TimerStart;
-        var millis = timeDif % 1000;
-        var second = (timeDif / 1000) % 60;
-        var minute = (timeDif / (1000 * 60)) % 60;
-        var hour = (timeDif / (1000 * 60 * 60)) % 24;
-        var readableTime = "";
-        if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
-        else readableTime = String.format("%d:%02d.%d", minute, second, millis);
-
-        final Text bingoFinished = Text.literal("%s team wins in %s!".formatted(team.getName(), readableTime)).formatted(team.getColor());
-        MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
-
-        var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
-        if (world != null) {
-            for (var i = 0; i < Card.size; i++) {
-                for (var j = 0; j < Card.size; j++) {
-                    var slot = Card.slots[i][j];
-                    var framePos = BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
-                    if (slot.teams.contains(team))
-                        world.setBlockState(framePos, getConcrete(team));
-                }
-            }
-        }
-
-        setScoreboardStats(getTeamNumber(team));
-        Status = GameStatus.Idle;
     }
 
     private void handleGameTimeout() {
