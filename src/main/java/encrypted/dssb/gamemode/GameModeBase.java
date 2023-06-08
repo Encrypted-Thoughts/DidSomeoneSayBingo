@@ -259,6 +259,7 @@ public abstract class GameModeBase {
 
             // check if top block is valid
             var state = world.getBlockState(mutable);
+            //noinspection deprecation
             if (state.isLiquid() || state.isIn(BlockTags.FIRE)) continue;
 
             return mutable.move(Direction.UP);
