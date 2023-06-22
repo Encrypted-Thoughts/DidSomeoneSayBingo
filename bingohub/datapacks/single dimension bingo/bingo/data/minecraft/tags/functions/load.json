@@ -1,0 +1,6 @@
+{
+	"values": [
+		"bingo:load",
+		"bingo:tick"
+	]
+}

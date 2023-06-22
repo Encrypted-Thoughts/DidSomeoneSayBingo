@@ -21,12 +21,9 @@
             {"text":"Overworld - Easy","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Easy"}},{"text":"\\n","color":"dark_green"},
             {"text":"Overworld - Normal","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Normal"}},{"text":"\\n","color":"dark_green"},
             {"text":"Overworld - Hard","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Hard"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Tinyworld - Easy","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Tinyworld - Easy"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Tinyworld - Normal","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Tinyworld - Normal"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Tinyworld - Hard","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Tinyworld - Hard"}},{"text":"\\n","color":"dark_green"},
             {"text":"Nether","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Nether"}},{"text":"\\n\\n","color":"dark_green"},
             {"text":"Overworld - Super","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Super"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Tinyworld - Cursed","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Tinyworld - Cursed"}}
+            {"text":"Overworld - Cursed","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Cursed"}}
         ]',
         '[
             "",
@@ -45,7 +42,6 @@
             "",
             {"text":"Dimension:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
             {"text":"Overworld","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings dimension bingo:duplicate_overworld 200 50"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Tinyworld","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings dimension bingo:tiny_biomes_overworld 200 50"}},{"text":"\\n","color":"dark_green"},
             {"text":"Nether","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings dimension bingo:duplicate_nether 110 0"}},{"text":"\\n\\n","color":"reset"},
             {"text":"Spawn Radius:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
             {"text":"Small","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings radius small"}},{"text":"\\n","color":"dark_green"},

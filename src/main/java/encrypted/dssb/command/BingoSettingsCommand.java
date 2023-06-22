@@ -16,6 +16,7 @@ import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.command.argument.DimensionArgumentType;
 import net.minecraft.command.argument.ItemStackArgumentType;
 import net.minecraft.command.argument.RegistryEntryArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,22 +52,6 @@ public class BingoSettingsCommand {
                                 // Chose a random profile
                                 .then(literal("randomize")
                                         .executes(ctx -> randomizeSettings(ctx.getSource().getServer())))
-
-                                // Set y offset on spawning during bingo game
-                                .then(literal("ySpawnOffset")
-                                        .then(argument("offset", IntegerArgumentType.integer())
-                                                .executes(ctx -> {
-                                                    GameSettings.YSpawnOffset = IntegerArgumentType.getInteger(ctx, "offset");
-                                                    return Command.SINGLE_SUCCESS;
-                                                })))
-
-                                // Set max y level for spawning in targeted bingo dimension
-                                .then(literal("maxYLevel")
-                                        .then(argument("maxy", IntegerArgumentType.integer())
-                                                .executes(ctx -> {
-                                                    GameSettings.MaxYLevel = IntegerArgumentType.getInteger(ctx, "maxy");
-                                                    return Command.SINGLE_SUCCESS;
-                                                })))
 
                                 // Set the game mode to play
                                 .then(literal("gamemode")
@@ -347,28 +332,34 @@ public class BingoSettingsCommand {
 
                                 // Set profile dimension
                                 .then(literal("dimension")
-                                        .then(argument("dimension", StringArgumentType.greedyString())
+                                        .then(argument("dimension", DimensionArgumentType.dimension())
                                                 .suggests(BingoSettingsCommand::GetDimensionSuggestions)
-                                                .executes(ctx -> {
-                                                    var player = ctx.getSource().getPlayer();
-                                                    if (Game != null && Game.Status != GameStatus.Idle) {
-                                                        if (player != null)
-                                                            MessageHelper.sendSystemMessage(player, Text.literal("Can't change dimension while game in process.").formatted(Formatting.RED));
-                                                        return Command.SINGLE_SUCCESS;
-                                                    }
+                                                    .then(argument("maxYLevel", IntegerArgumentType.integer())
+                                                        .then(argument("ySpawnOffset", IntegerArgumentType.integer())
+                                                        .executes(ctx -> {
+                                                            var player = ctx.getSource().getPlayer();
+                                                            GameSettings.MaxYLevel = IntegerArgumentType.getInteger(ctx, "maxYLevel");
+                                                            GameSettings.YSpawnOffset = IntegerArgumentType.getInteger(ctx, "ySpawnOffset");
 
-                                                    var dimension = StringArgumentType.getString(ctx, "dimension");
-                                                    if (!BingoMod.CONFIG.BingoDimensions.contains(dimension)) {
-                                                        if (player != null)
-                                                            MessageHelper.sendSystemMessage(player, Text.literal("%s is not a valid bingo dimension".formatted(dimension)).formatted(Formatting.RED));
-                                                    } else {
-                                                        MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                                Text.literal("Dimension set to ").formatted(Formatting.WHITE).append(dimension).formatted(Formatting.GREEN));
-                                                        GameSettings.Dimension = dimension;
-                                                    }
+                                                            if (Game != null && Game.Status != GameStatus.Idle) {
+                                                                if (player != null)
+                                                                    MessageHelper.sendSystemMessage(player, Text.literal("Can't change dimension while game in process.").formatted(Formatting.RED));
+                                                                return Command.SINGLE_SUCCESS;
+                                                            }
 
-                                                    return Command.SINGLE_SUCCESS;
-                                                })))
+                                                            var dimension = DimensionArgumentType.getDimensionArgument(ctx, "dimension");
+                                                            if (dimension == null) {
+                                                                if (player != null)
+                                                                    MessageHelper.sendSystemMessage(player, Text.literal("%s is not a valid bingo dimension".formatted(dimension)).formatted(Formatting.RED));
+                                                            } else {
+                                                                var dimensionName = dimension.getRegistryKey().getValue().toString();
+                                                                MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                                        Text.literal("Dimension set to ").formatted(Formatting.WHITE).append(dimensionName).formatted(Formatting.GREEN));
+                                                                GameSettings.Dimension = dimensionName;
+                                                            }
+
+                                                            return Command.SINGLE_SUCCESS;
+                                                    })))))
 
                                 // Set game timer
                                 .then(literal("timer")
