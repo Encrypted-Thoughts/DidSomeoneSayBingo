@@ -342,16 +342,14 @@ public class BingoSettingsCommand {
                                                             GameSettings.YSpawnOffset = IntegerArgumentType.getInteger(ctx, "ySpawnOffset");
 
                                                             if (Game != null && Game.Status != GameStatus.Idle) {
-                                                                if (player != null)
-                                                                    MessageHelper.sendSystemMessage(player, Text.literal("Can't change dimension while game in process.").formatted(Formatting.RED));
+                                                                MessageHelper.sendSystemMessage(player, Text.literal("Can't change dimension while game in process.").formatted(Formatting.RED));
                                                                 return Command.SINGLE_SUCCESS;
                                                             }
 
                                                             var dimension = DimensionArgumentType.getDimensionArgument(ctx, "dimension");
-                                                            if (dimension == null) {
-                                                                if (player != null)
-                                                                    MessageHelper.sendSystemMessage(player, Text.literal("%s is not a valid bingo dimension".formatted(dimension)).formatted(Formatting.RED));
-                                                            } else {
+                                                            if (dimension == null)
+                                                                MessageHelper.sendSystemMessage(player, Text.literal("%s is not a valid bingo dimension".formatted(dimension)).formatted(Formatting.RED));
+                                                            else {
                                                                 var dimensionName = dimension.getRegistryKey().getValue().toString();
                                                                 MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
                                                                         Text.literal("Dimension set to ").formatted(Formatting.WHITE).append(dimensionName).formatted(Formatting.GREEN));
@@ -370,17 +368,16 @@ public class BingoSettingsCommand {
                                                         if (minutes == 0) {
                                                             BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, "minutes");
                                                             MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                                    Text.literal("Game timer disabled.").formatted(Formatting.WHITE));
+                                                                Text.literal("Game timer disabled.").formatted(Formatting.WHITE));
                                                         } else if (minutes > 0) {
                                                             BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, "minutes");
                                                             MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                                    Text.literal("Game timer set to %s minutes.".formatted(minutes)).formatted(Formatting.WHITE));
+                                                                Text.literal("Game timer set to %s minutes.".formatted(minutes)).formatted(Formatting.WHITE));
                                                         }
                                                     } else {
                                                         var player = ctx.getSource().getPlayer();
-                                                        if (player != null)
-                                                            MessageHelper.sendSystemMessage(player,
-                                                                    Text.literal("Can't change timer while in game.").formatted(Formatting.RED));
+                                                        MessageHelper.sendSystemMessage(player,
+                                                            Text.literal("Can't change timer while in game.").formatted(Formatting.RED));
                                                     }
                                                     return Command.SINGLE_SUCCESS;
                                                 })))));

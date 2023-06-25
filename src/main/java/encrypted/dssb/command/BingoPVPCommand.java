@@ -21,14 +21,12 @@ public class BingoPVPCommand {
                                 .then(argument("enabled", BoolArgumentType.bool())
                                         .executes(ctx -> {
                                             var player = ctx.getSource().getPlayer();
-                                            if (player != null) {
-                                                if (Game.Status != GameStatus.Idle || ctx.getSource().hasPermissionLevel(2)) {
-                                                    var bool = BoolArgumentType.getBool(ctx, "enabled");
-                                                    ctx.getSource().getServer().setPvpEnabled(bool);
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), Text.literal(bool ? "PVP set to enabled." : "PVP disabled.").formatted(Formatting.WHITE));
-                                                } else
-                                                    MessageHelper.sendSystemMessage(player, Text.literal("Only Ops can change PVP status while game in progress.").formatted(Formatting.RED));
-                                            }
+                                            if (Game.Status == GameStatus.Idle || ctx.getSource().hasPermissionLevel(2)) {
+                                                var bool = BoolArgumentType.getBool(ctx, "enabled");
+                                                ctx.getSource().getServer().setPvpEnabled(bool);
+                                                MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), Text.literal(bool ? "PVP set to enabled." : "PVP disabled.").formatted(Formatting.WHITE));
+                                            } else
+                                                MessageHelper.sendSystemMessage(player, Text.literal("Only Ops can change PVP status while game in progress.").formatted(Formatting.RED));
                                             return Command.SINGLE_SUCCESS;
                                         }))));
     }

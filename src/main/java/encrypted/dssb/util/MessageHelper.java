@@ -7,10 +7,12 @@ import net.minecraft.text.Text;
 
 public class MessageHelper {
     public static void sendSystemMessage(ServerPlayerEntity player, Text message) {
+        if (player == null) return;
         player.sendMessage(message);
     }
 
     public static void sendSystemMessageOverlay(ServerPlayerEntity player, Text message) {
+        if (player == null) return;
         player.sendMessage(message, true);
     }
 
