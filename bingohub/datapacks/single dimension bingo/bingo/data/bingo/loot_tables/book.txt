@@ -77,9 +77,9 @@
             {"text":"OFF","color":"dark_red","clickEvent":{"action":"run_command","value":"/bingo pvp false"}},
             {"text":"\\n\\n","color":"dark_green"},
             {"text":"KEEP INVENTORY: \\n","color":"black"},
-            {"text":"ON","color":"dark_green","clickEvent":{"action":"run_command","value":"/gamerule keepInventory true"}},
+            {"text":"ON","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo keepInventory true"}},
             {"text":" | ","color":"black"},
-            {"text":"OFF","color":"dark_red","clickEvent":{"action":"run_command","value":"/gamerule keepInventory false"}}
+            {"text":"OFF","color":"dark_red","clickEvent":{"action":"run_command","value":"/bingo keepInventory false"}}
         ]'
     ]
 }

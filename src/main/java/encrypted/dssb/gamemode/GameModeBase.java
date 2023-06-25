@@ -333,7 +333,6 @@ public abstract class GameModeBase {
 
     public void runAfterRespawn(ServerPlayerEntity player) {
         if (Status == GameStatus.Playing && BingoManager.BingoPlayers.contains(player.getUuid())) {
-            player.getInventory().clear();
             givePlayerEquipment(player, true);
             givePlayerStatusEffects(player, true);
             player.getInventory().offHand.set(0, getMap());
