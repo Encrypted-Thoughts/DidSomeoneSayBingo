@@ -13,7 +13,8 @@
             {"text":"Dimensions","color":"dark_green","clickEvent":{"action":"change_page","value":4}},{"text":"\\n","color":"dark_green"},
             {"text":"Spawn Radius","color":"dark_green","clickEvent":{"action":"change_page","value":4}},{"text":"\\n","color":"dark_green"},
             {"text":"Item Pools","color":"dark_green","clickEvent":{"action":"change_page","value":5}},{"text":"\\n","color":"dark_green"},
-            {"text":"Equipment","color":"dark_green","clickEvent":{"action":"change_page","value":6}},{"text":"\\n\\n\\n ","color":"reset"}
+            {"text":"Equipment","color":"dark_green","clickEvent":{"action":"change_page","value":6}},{"text":"\\n","color":"dark_green"},
+            {"text":"Miscellaneous","color":"dark_green","clickEvent":{"action":"change_page","value":7}}
         ]',
         '[
             "",
@@ -70,6 +71,19 @@
             {"text":"Diamond","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment diamond"}},{"text":"\\n","color":"dark_green"},
             {"text":"Food","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment food true"}},{"text":"\\n","color":"dark_green"},
             {"text":"No Food","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment food false"}}
+        ]',
+        '[
+            "",
+            {"text":"Miscellaneous:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
+            {"text":"PVP: \\n","color":"black"},
+            {"text":"ON","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo pvp true"}},
+            {"text":" | ","color":"black"},
+            {"text":"OFF","color":"dark_red","clickEvent":{"action":"run_command","value":"/bingo pvp false"}},
+            {"text":"\\n\\n","color":"dark_green"},
+            {"text":"KEEP INVENTORY: \\n","color":"black"},
+            {"text":"ON","color":"dark_green","clickEvent":{"action":"run_command","value":"/gamerule keepInventory true"}},
+            {"text":" | ","color":"black"},
+            {"text":"OFF","color":"dark_red","clickEvent":{"action":"run_command","value":"/gamerule keepInventory false"}}
         ]'
     ]
 }
