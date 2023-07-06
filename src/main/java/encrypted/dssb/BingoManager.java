@@ -515,7 +515,7 @@ public class BingoManager {
         }
     }
 
-    public static  void runAfterPlayerRespawnEvent(ServerPlayerEntity player) {
+    public static void runAfterPlayerRespawnEvent(ServerPlayerEntity player) {
         Game.runAfterRespawn(player);
     }
 
