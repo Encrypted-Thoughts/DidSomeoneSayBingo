@@ -191,7 +191,7 @@ public abstract class GameModeBase {
 
     public void teleportPlayersToTeamSpawns(ServerWorld world) {
         for (var team : TeamSpawns.entrySet()) {
-            if (team.getKey() == null || team.getKey().getPlayerList().size() == 0)
+            if (team.getKey() == null || team.getKey().getPlayerList().isEmpty())
                 continue;
 
             for (var name : team.getKey().getPlayerList()) {
@@ -398,12 +398,12 @@ public abstract class GameModeBase {
 
     public void setScoreboardStats(int teamNumber){
         var scoreboard = Server.getScoreboard();
-        var updatePending = scoreboard.getObjective("bingo_update_pending");
-        var winningTeam = scoreboard.getObjective("bingo_winning_team");
-        var gamesPlayed = scoreboard.getObjective("bingo_games_played");
-        var win = scoreboard.getObjective("bingo_win");
-        var loss = scoreboard.getObjective("bingo_loss");
-        var percentage = scoreboard.getObjective("bingo_percentage");
+        var updatePending = scoreboard.getNullableObjective("bingo_update_pending");
+        var winningTeam = scoreboard.getNullableObjective("bingo_winning_team");
+        var gamesPlayed = scoreboard.getNullableObjective("bingo_games_played");
+        var win = scoreboard.getNullableObjective("bingo_win");
+        var loss = scoreboard.getNullableObjective("bingo_loss");
+        var percentage = scoreboard.getNullableObjective("bingo_percentage");
 
         if (updatePending == null || winningTeam == null || gamesPlayed == null || win == null || loss == null || percentage == null )
             return;

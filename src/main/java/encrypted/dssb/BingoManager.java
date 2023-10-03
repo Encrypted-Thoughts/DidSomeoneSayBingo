@@ -54,7 +54,7 @@ public class BingoManager {
             return;
         }
 
-        if (BingoManager.getValidPlayers(server.getPlayerManager()).size() == 0) {
+        if (BingoManager.getValidPlayers(server.getPlayerManager()).isEmpty()) {
             MessageHelper.sendSystemMessage(starter, Text.literal("No players on any teams to play the game.").formatted(Formatting.RED));
             return;
         }
@@ -341,7 +341,7 @@ public class BingoManager {
                     teammates.add(target);
             }
 
-            if (teammates.size() == 0) {
+            if (teammates.isEmpty()) {
                 MessageHelper.sendSystemMessage(player, Text.literal("No teammate more than 50 blocks away to tp to.").formatted(Formatting.RED));
                 return;
             }

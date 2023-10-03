@@ -86,12 +86,12 @@ public class HiddenBingo extends GameModeBase {
 
     private void handleGameTimeout() {
         var teams = new HashMap<AbstractTeam, Integer>();
-        for (var team : Server.getScoreboard().getTeams().stream().filter(t -> t.getPlayerList().size() > 0).toList())
+        for (var team : Server.getScoreboard().getTeams().stream().filter(t -> !t.getPlayerList().isEmpty()).toList())
             teams.put(team, 0);
 
         for (var row : Card.slots) {
             for (var slot : row) {
-                if (slot.teams.size() > 0) {
+                if (!slot.teams.isEmpty()) {
                     for (var team : slot.teams)
                         teams.put(team, teams.get(team) + 1);
                 }
@@ -242,7 +242,7 @@ public class HiddenBingo extends GameModeBase {
             var text = Text.literal("%s%s%s".formatted(hourText, minuteText, secondText)).formatted(Formatting.GOLD);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
-            if (elapsedSeconds / unlockInterval > unlocked && lockedSlots.size() > 0) {
+            if (elapsedSeconds / unlockInterval > unlocked && !lockedSlots.isEmpty()) {
                 var index = new Random().nextInt(lockedSlots.size());
                 var lockedSlot = lockedSlots.remove(index);
                 var slot = Card.getSlot(lockedSlot[0], lockedSlot[1]);

@@ -112,7 +112,7 @@ public class Lockout extends GameModeBase {
             var colIndex = 0;
             for (var bingoItem : row) {
                 if (bingoItem.item == item) {
-                    if (bingoItem.teams.size() > 0)
+                    if (!bingoItem.teams.isEmpty())
                         return false;
 
                     bingoItem.teams.add(foundByTeam);
@@ -197,12 +197,12 @@ public class Lockout extends GameModeBase {
 
     private void handleGameTimeout() {
         var teams = new HashMap<AbstractTeam, Integer>();
-        for (var team : Server.getScoreboard().getTeams().stream().filter(t -> t.getPlayerList().size() > 0).toList())
+        for (var team : Server.getScoreboard().getTeams().stream().filter(t -> !t.getPlayerList().isEmpty()).toList())
             teams.put(team, 0);
 
         for (var row : Card.slots) {
             for (var slot : row) {
-                if (slot.teams.size() > 0) {
+                if (!slot.teams.isEmpty()) {
                     for (var team : slot.teams)
                         teams.put(team, teams.get(team) + 1);
                 }
@@ -238,7 +238,7 @@ public class Lockout extends GameModeBase {
 
         for (var row : Card.slots) {
             for (var slot : row) {
-                if (slot.teams.size() == 0)
+                if (slot.teams.isEmpty())
                     return false;
             }
         }
@@ -251,12 +251,12 @@ public class Lockout extends GameModeBase {
         // determine Max team and number of items needed to win
         var teams = new HashMap<AbstractTeam, Integer>();
         var unfound = 0;
-        for (var team : Server.getScoreboard().getTeams().stream().filter(t -> t.getPlayerList().size() > 0).toList())
+        for (var team : Server.getScoreboard().getTeams().stream().filter(t -> !t.getPlayerList().isEmpty()).toList())
             teams.put(team, 0);
 
         for (var row : Card.slots) {
             for (var slot : row) {
-                if (slot.teams.size() > 0) {
+                if (!slot.teams.isEmpty()) {
                     for (var team : slot.teams)
                         teams.put(team, teams.get(team) + 1);
                 } else

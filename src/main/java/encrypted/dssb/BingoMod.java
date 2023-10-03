@@ -38,7 +38,7 @@ public class BingoMod implements ModInitializer {
 		MapRenderHelper.loadTeamSlotAreas();
 		MapRenderHelper.loadBingoCardBorder();
 
-		if (GamePresets.size() > 0) {
+		if (!GamePresets.isEmpty()) {
 			GameSettings = new GamePreset(GamePresets.get(0));
 			for (var preset : GamePresets) {
 				if (preset.Name.equals(CONFIG.DefaultGameProfile)) {
