@@ -40,7 +40,7 @@ public class BingoConfig {
                 BingoDimensions = temp.BingoDimensions;
             } catch (FileNotFoundException e) {
                 BingoMod.LOGGER.error("Failed to read a config file.");
-                e.printStackTrace();
+                BingoMod.LOGGER.error(e.getMessage());
             }
         } else
             SaveToFile();
@@ -59,7 +59,7 @@ public class BingoConfig {
             }
         } catch (Exception e) {
             BingoMod.LOGGER.error("Failed to save a config file.");
-            e.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
         }
     }
 }

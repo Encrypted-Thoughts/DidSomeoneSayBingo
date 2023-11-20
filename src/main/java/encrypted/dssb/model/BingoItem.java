@@ -34,9 +34,9 @@ public class BingoItem {
                     slotPixels[row][col] = nearest;
                 }
             }
-        } catch (Exception ex) {
+        } catch (Exception e) {
             BingoMod.LOGGER.error("Unable to load image for %s.".formatted(item.toString()));
-            ex.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
         }
     }
 }

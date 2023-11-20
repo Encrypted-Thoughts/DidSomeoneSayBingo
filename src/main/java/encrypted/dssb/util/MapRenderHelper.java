@@ -106,9 +106,9 @@ public class MapRenderHelper {
                     bingoCardBorder[row][col] = nearest;
                 }
             }
-        } catch (Exception ex) {
-            BingoMod.LOGGER.warn("Unable to load bingo board resource.");
-            ex.printStackTrace();
+        } catch (Exception e) {
+            BingoMod.LOGGER.error("Unable to load bingo board resource.");
+            BingoMod.LOGGER.error(e.getMessage());
         }
     }
 
@@ -137,7 +137,7 @@ public class MapRenderHelper {
 
         } catch (Exception e) {
             BingoMod.LOGGER.error("Unable to load resource file for one of the team areas.");
-            e.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
         }
     }
 

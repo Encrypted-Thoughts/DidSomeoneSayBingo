@@ -1,0 +1,12 @@
+{
+  "dssb.game.name": "Did Someone Say Bingo",
+
+  "dssb.rules.first": "",
+
+  "dssb.error.no_bingo_card": "No bingo card has been generated yet since last server restart. Please generate a new card first.",
+  "dssb.error.in_progress": "Game of Bingo already in progress.",
+  "dssb.error.no_players": "No players on any teams to play the game.",
+  "dssb.error.generating": "Still generating previous board.",
+  "dssb.error.not_enough_items": "Not enough enough possible items in item pools to generate a bingo card.",
+  "dssb.error.generic_generation_failure": "Unable to generate board check system console for more information."
+}

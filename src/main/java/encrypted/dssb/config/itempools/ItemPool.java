@@ -33,7 +33,7 @@ public class ItemPool {
                 Name = temp.Name;
                 Items = temp.Items;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                BingoMod.LOGGER.error(e.getMessage());
             }
         }
     }
@@ -55,7 +55,7 @@ public class ItemPool {
                 }
             }
 
-            if (possibleItems.size() > 0)
+            if (!possibleItems.isEmpty())
                 list.add(new ItemGroup(possibleItems.toArray(new String[0])));
         }
         return list;
@@ -74,7 +74,7 @@ public class ItemPool {
             }
         } catch (Exception e) {
             BingoMod.LOGGER.error("Failed to save a config file.");
-            e.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
         }
     }
 }

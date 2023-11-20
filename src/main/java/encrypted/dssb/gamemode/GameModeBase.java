@@ -115,9 +115,9 @@ public abstract class GameModeBase {
                 player.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
             }
             Status = GameStatus.Initializing;
-        }).exceptionally(ex -> {
+        }).exceptionally(e -> {
             MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), Text.literal("Problem finding team spawns."));
-            ex.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
             return null;
         });
     }
@@ -215,7 +215,7 @@ public abstract class GameModeBase {
                 player.changeGameMode(net.minecraft.world.GameMode.SURVIVAL);
                 player.setSpawnPoint(player.getWorld().getRegistryKey(), spawn, 0, true, false);
             } catch (CommandSyntaxException e) {
-                e.printStackTrace();
+                BingoMod.LOGGER.error(e.getMessage());
             }
         }
     }

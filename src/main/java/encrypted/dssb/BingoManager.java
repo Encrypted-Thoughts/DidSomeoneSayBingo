@@ -45,17 +45,17 @@ public class BingoManager {
 
     public static void start(ServerPlayerEntity starter, MinecraftServer server) throws CommandSyntaxException {
         if (Game == null) {
-            MessageHelper.sendSystemMessage(starter, Text.literal("No bingo card has been generated yet since last server restart. Please generate a new card first.").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(starter, Text.translatable("dssb.error.no_bingo_card").formatted(Formatting.RED));
             return;
         }
 
         if (Game.Status != GameStatus.Idle) {
-            MessageHelper.sendSystemMessage(starter, Text.literal("Game of Bingo already in progress.").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(starter, Text.translatable("dssb.error.in_progress").formatted(Formatting.RED));
             return;
         }
 
         if (BingoManager.getValidPlayers(server.getPlayerManager()).isEmpty()) {
-            MessageHelper.sendSystemMessage(starter, Text.literal("No players on any teams to play the game.").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(starter, Text.translatable("dssb.error.no_players").formatted(Formatting.RED));
             return;
         }
 
@@ -104,16 +104,16 @@ public class BingoManager {
 
     public static void generate(ServerPlayerEntity player, MinecraftServer server, boolean start) throws CommandSyntaxException {
         if (GenerateInProgress)
-            MessageHelper.sendSystemMessage(player, Text.literal("Still generating previous board.").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.generating").formatted(Formatting.RED));
         else if (Game != null && Game.Status != GameStatus.Idle)
-            MessageHelper.sendSystemMessage(player, Text.literal("Game already in progress.").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.in_progress").formatted(Formatting.RED));
         else {
             GenerateInProgress = true;
             try {
                 var possibleItems = generateItemPool();
 
                 if (possibleItems.size() < 25) {
-                    MessageHelper.sendSystemMessage(player, Text.literal("Not enough enough possible items in item pools to generate a bingo card.").formatted(Formatting.RED));
+                    MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.not_enough_items").formatted(Formatting.RED));
                     GenerateInProgress = false;
                     return;
                 }
@@ -130,8 +130,8 @@ public class BingoManager {
                 if (spawnWorld != null) Game.buildBingoBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
                 if (start) start(player, server);
             } catch (Exception e) {
-                MessageHelper.sendSystemMessage(player, Text.literal("Unable to generate board check system console for more information.").formatted(Formatting.RED));
-                e.printStackTrace();
+                MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.generic_generation_failure").formatted(Formatting.RED));
+                BingoMod.LOGGER.error(e.getMessage());
             }
             GenerateInProgress = false;
         }
@@ -148,7 +148,7 @@ public class BingoManager {
                 try {
                     generate(player, server, false);
                 } catch (CommandSyntaxException e) {
-                    e.printStackTrace();
+                    BingoMod.LOGGER.error(e.getMessage());
                 }
             }
             try {
@@ -179,7 +179,7 @@ public class BingoManager {
                 generate(player, server, false);
             } catch (Exception e) {
                 BingoMod.LOGGER.error("Failed to broadcast message to players on gamemode change.");
-                e.printStackTrace();
+                BingoMod.LOGGER.error(e.getMessage());
             }
         } else {
             MessageHelper.sendSystemMessage(player, Text.literal("Can't change game mode while game in progress.").formatted(Formatting.RED));
@@ -271,7 +271,7 @@ public class BingoManager {
                 BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
         } catch (CommandSyntaxException e) {
             BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
-            e.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
         }
     }
 
@@ -536,9 +536,9 @@ public class BingoManager {
                 };
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
                 if (spawnWorld != null) Game.buildBingoBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 BingoMod.LOGGER.error("Failure during server startup for handling initial bingo generation.");
-                ex.printStackTrace();
+                BingoMod.LOGGER.error(e.getMessage());
             }
         }
 
@@ -550,7 +550,7 @@ public class BingoManager {
             BingoSettingsCommand.tellSettings(player);
         } catch (CommandSyntaxException e) {
             BingoMod.LOGGER.error("Unable to tell player: %s the command options".formatted(player.getDisplayName().getString()));
-            e.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
         }
 
         if (!BingoPlayers.contains(player.getUuid())) {

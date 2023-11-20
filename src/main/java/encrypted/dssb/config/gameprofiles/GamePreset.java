@@ -61,7 +61,7 @@ public class GamePreset {
                 StartingGear = temp.StartingGear;
                 ItemPools = temp.ItemPools;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                BingoMod.LOGGER.error(e.getMessage());
             }
         }
     }
@@ -79,7 +79,7 @@ public class GamePreset {
             }
         } catch (Exception e) {
             BingoMod.LOGGER.error("Failed to save a config file.");
-            e.printStackTrace();
+            BingoMod.LOGGER.error(e.getMessage());
         }
     }
 }
