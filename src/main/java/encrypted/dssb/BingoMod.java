@@ -27,6 +27,7 @@ public class BingoMod implements ModInitializer {
 	public static final String MOD_ID = "dssbingo";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static BingoConfig CONFIG = new BingoConfig();
+	//public static LanguageConfig Language = new LanguageConfig();
 	public static ArrayList<GamePreset> GamePresets = new ArrayList<>();
 	public static ArrayList<ItemPool> ItemPools = new ArrayList<>();
 
@@ -57,7 +58,8 @@ public class BingoMod implements ModInitializer {
 	}
 
 	private void loadConfigs() {
-		CONFIG.ReadFromFile();
+		CONFIG.readFromFile();
+		//Language.readFromFile(CONFIG.Language);
 
 		ItemPools = new ArrayList<>();
 		var poolDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/itempools").toFile();

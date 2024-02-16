@@ -1,6 +1,7 @@
 package encrypted.dssb.model;
 
 import encrypted.dssb.util.MapRenderHelper;
+import encrypted.dssb.util.TranslationHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
@@ -24,7 +25,7 @@ public class BingoCard {
 
     public BingoCard(ServerWorld world, ArrayList<Item> items) throws Exception {
         if (items.size() < (size * size))
-            throw new Exception("Not enough items to fill bingo board.");
+            throw new Exception(TranslationHelper.get("dssb.error.not_enough_items"));
 
         slots = new BingoItem[size][size];
         var rowIndex = 0;
@@ -74,6 +75,11 @@ public class BingoCard {
         bingoPixels = new int[128][128];
         for (int i = 0; i < MapRenderHelper.getBingoCardBorder().length; i++)
             bingoPixels[i] = MapRenderHelper.getBingoCardBorder()[i].clone();
+
+        for (BingoItem[] slot : slots) {
+            for (BingoItem bingoItem : slot)
+                bingoItem.teams.clear();
+        }
 
         redrawCard(world);
     }

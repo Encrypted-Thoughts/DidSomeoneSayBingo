@@ -9,8 +9,10 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class TeamTPCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+        var teamTPCommand = "teamtp";
+
         dispatcher.register(
-                literal("teamtp")
+                literal(teamTPCommand)
                         .executes(ctx -> {
                             teamTP(ctx.getSource().getPlayer(), ctx.getSource().getServer());
                             return Command.SINGLE_SUCCESS;

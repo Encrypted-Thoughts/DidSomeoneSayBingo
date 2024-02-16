@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoItem;
+import encrypted.dssb.util.TranslationHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
@@ -47,11 +48,11 @@ public class ItemPool {
                     var item = Registries.ITEM.get(new Identifier(itemId));
                     var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(item.toString()));
                     if (stream == null)
-                        throw new Exception("Can't obtain stream for: /assets/dssb/items/%s.png".formatted(item.toString()));
+                        throw new Exception(TranslationHelper.get("dssb.error.asset_failure", item.toString()));
                     ImageIO.read(stream);
                     possibleItems.add(itemId);
                 } catch (Exception e) {
-                    BingoMod.LOGGER.info("No asset for item: %s".formatted(itemId));
+                    BingoMod.LOGGER.info(TranslationHelper.get("dssb.error.no_asset", itemId));
                 }
             }
 
@@ -68,12 +69,12 @@ public class ItemPool {
             var json = gson.toJson(this);
             var directory = path.resolve("bingo/itempools/").toFile();
             if (!directory.exists())
-                if (!directory.mkdirs()) throw new Exception("Unable to create directory to store config files.");
+                if (!directory.mkdirs()) throw new Exception(TranslationHelper.get("dssb.error.config_directory_creation_failure"));
             try (PrintWriter writer = new PrintWriter(directory.getPath() + "/%s.json".formatted(filename))) {
                 writer.println(json);
             }
         } catch (Exception e) {
-            BingoMod.LOGGER.error("Failed to save a config file.");
+            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.config_save_failure"));
             BingoMod.LOGGER.error(e.getMessage());
         }
     }

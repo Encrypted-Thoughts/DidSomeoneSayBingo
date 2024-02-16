@@ -3,6 +3,7 @@ package encrypted.dssb.gamemode;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
+import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -11,7 +12,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class Lockout extends GameModeBase {
     @Override
     public void start() {
         Status = GameStatus.Loading;
-        var text = Text.literal("Game of Lockout Bingo starting!").formatted(Formatting.GREEN);
+        var text = TranslationHelper.getAsText("dssb.game.lockout.starting");
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), text);
 
         initialize();
@@ -50,7 +50,7 @@ public class Lockout extends GameModeBase {
 
         if (CurrentCountdownSecond < elapsedSeconds) {
             CurrentCountdownSecond = elapsedSeconds;
-            var text = Text.literal("%s".formatted(30 - elapsedSeconds)).formatted(Formatting.GOLD);
+            var text = TranslationHelper.getAsText("dssb.game.countdown", 30 - elapsedSeconds);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
             if (elapsedSeconds >= 30) {
@@ -87,10 +87,10 @@ public class Lockout extends GameModeBase {
             minuteText = minutes == 0 ? "" : minuteText;
             var secondText = seconds < 10 ? "0" + seconds : String.valueOf(seconds);
 
-            var text = Text.literal("Majority Win: ").formatted(Formatting.DARK_AQUA)
-                    .append(Text.literal("%s".formatted(MajorityWinCount)).formatted(Formatting.GOLD))
-                    .append(Text.literal(" more tiles | ").formatted(Formatting.WHITE))
-                    .append(Text.literal("%s%s%s".formatted(hourText, minuteText, secondText)).formatted(Formatting.GOLD));
+            var text = TranslationHelper.getAsText("dssb.game.lockout.majority_win")
+                    .append(TranslationHelper.getAsText("dssb.game.lockout.majority_win_count", MajorityWinCount))
+                    .append(TranslationHelper.getAsText("dssb.game.lockout.majority_win2"))
+                    .append(TranslationHelper.getAsText("dssb.game.timer", hourText, minuteText, secondText));
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
             if (remaining <= 0) {
@@ -118,7 +118,7 @@ public class Lockout extends GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, true);
 
-                    final Text itemFound = Text.literal("%s found item: %s".formatted(player.getDisplayName().getString(), item.getName().getString())).formatted(foundByTeam.getColor());
+                    final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", player.getDisplayName().getString(), item.getName().getString()).formatted(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
                     playNotificationSound(player.getWorld());
                     return true;
@@ -180,7 +180,6 @@ public class Lockout extends GameModeBase {
             }
         }
         return bingo;
-
     }
 
     public boolean checkBingo(AbstractTeam team) {
@@ -226,7 +225,7 @@ public class Lockout extends GameModeBase {
             handleWin(maxTeam.getKey());
         else {
             end();
-            Text text = Text.literal("The game has ended in a tie.").formatted(Formatting.GOLD);
+            Text text = TranslationHelper.getAsText("dssb.game.tie");
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
         }
 

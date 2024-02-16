@@ -9,9 +9,12 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class BingoVoteEndCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+        var bingoCommand = "bingo";
+        var voteEndCommand = "voteend";
+
         dispatcher.register(
-                literal(BingoCommands.bingoCommand)
-                        .then(literal("voteend")
+                literal(bingoCommand)
+                        .then(literal(voteEndCommand)
                                 .executes(ctx -> {
                                     BingoManager.handleVote(ctx.getSource().getPlayer(), ctx.getSource().getServer());
                                     return Command.SINGLE_SUCCESS;

@@ -7,6 +7,7 @@ import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.model.BingoItem;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TeleportHelper;
+import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.scoreboard.AbstractTeam;
+import net.minecraft.scoreboard.ScoreHolder;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -30,7 +32,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
@@ -59,9 +60,7 @@ public abstract class GameModeBase {
 
     public String Name = "Base";
 
-    public GameModeBase(MinecraftServer server) {
-        Server = server;
-    }
+    public GameModeBase(MinecraftServer server) { Server = server; }
 
     public abstract void start();
 
@@ -77,7 +76,7 @@ public abstract class GameModeBase {
         var world = WorldHelper.getWorldByName(Server, BingoManager.GameSettings.Dimension);
 
         if (world == null) {
-            BingoMod.LOGGER.error("Unable to initialize game. World is null.");
+            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.initialize_world_null"));
             return;
         }
 
@@ -104,7 +103,7 @@ public abstract class GameModeBase {
                 if (pos != null)
                     TeamSpawns.put(team, pos);
                 else {
-                    MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), Text.literal("Unable to find spawn for %s team. Ending game.".formatted(team.getName())).formatted(Formatting.RED));
+                    MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), TranslationHelper.getAsText("dssb.error.unable_to_find_spawn", team.getName()));
                     end();
                 }
             }
@@ -116,7 +115,7 @@ public abstract class GameModeBase {
             }
             Status = GameStatus.Initializing;
         }).exceptionally(e -> {
-            MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), Text.literal("Problem finding team spawns."));
+            MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), TranslationHelper.getAsText("dssb.error.spawn_problem"));
             BingoMod.LOGGER.error(e.getMessage());
             return null;
         });
@@ -141,7 +140,7 @@ public abstract class GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, false);
 
-                    final Text itemFound = Text.literal("%s found item: %s".formatted(player.getDisplayName().getString(), item.getName().getString())).formatted(foundByTeam.getColor());
+                    final Text itemFound = TranslationHelper.getAsText("dssb.game.item_found", player.getDisplayName().getString(), item.getName().getString()).formatted(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
                     playNotificationSound(player.getWorld());
                     return true;
@@ -165,7 +164,7 @@ public abstract class GameModeBase {
         if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
         else readableTime = String.format("%d:%02d.%d", minute, second, millis);
 
-        final Text bingoFinished = Text.literal("%s team wins! Time: %s".formatted(team.getName(), readableTime)).formatted(team.getColor());
+        final Text bingoFinished = TranslationHelper.getAsText("dssb.game.team_wins",team.getName(), readableTime).formatted(team.getColor());
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
 
         var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
@@ -277,10 +276,10 @@ public abstract class GameModeBase {
 
     public void addNewPlayer(ServerPlayerEntity player, Team team) {
         var scoreboard = Server.getScoreboard();
-        scoreboard.addPlayerToTeam(player.getName().getString(), team);
+        scoreboard.addScoreHolderToTeam(player.getName().getString(), team);
         if (!BingoManager.BingoPlayers.contains(player.getUuid()))
             BingoManager.BingoPlayers.add(player.getUuid());
-        var text = Text.literal("%s joined team %s!".formatted(player.getDisplayName().getString(), team.getName())).formatted(team.getColor());
+        var text = TranslationHelper.getAsText("dssb.game.team_joined", player.getDisplayName().getString(), team.getName()).formatted(team.getColor());
         MessageHelper.broadcastChat(Server.getPlayerManager(), text);
         if (Status == GameStatus.Playing) {
             var server = player.getServer();
@@ -388,9 +387,9 @@ public abstract class GameModeBase {
 
         Text text;
         if (item == null)
-            text = Text.literal("Unable to locate item at position %s, %s".formatted(rowIndex + 1, columnIndex + 1)).formatted(Formatting.RED);
+            text = TranslationHelper.getAsText("dssb.error.clarify_fail",rowIndex + 1, columnIndex + 1);
         else
-            text = Text.literal("Item at position %s, %s: %s".formatted(rowIndex + 1, columnIndex + 1, item.item.getName().getString())).formatted(Formatting.GOLD);
+            text = TranslationHelper.getAsText("dssb.game.clarify",rowIndex + 1, columnIndex + 1, item.item.getName().getString());
 
         if (player != null)
             player.sendMessage(text);
@@ -409,9 +408,10 @@ public abstract class GameModeBase {
             return;
 
         // Set overall #bingo statistics
-        var updateScore = scoreboard.getPlayerScore("#bingo", updatePending);
-        var winningScore = scoreboard.getPlayerScore("#bingo", winningTeam);
-        var totalPlayedScore = scoreboard.getPlayerScore("#bingo", gamesPlayed);
+        var scoreHolder = ScoreHolder.fromName("#bingo");
+        var updateScore = scoreboard.getOrCreateScore(scoreHolder, updatePending);
+        var winningScore = scoreboard.getOrCreateScore(scoreHolder, winningTeam);
+        var totalPlayedScore = scoreboard.getOrCreateScore(scoreHolder, gamesPlayed);
         if (updateScore != null && winningScore != null && totalPlayedScore != null) {
             winningScore.setScore(teamNumber);
             updateScore.setScore(1);
@@ -422,10 +422,11 @@ public abstract class GameModeBase {
         for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
             var playerTeam = player.getScoreboardTeam();
             if (playerTeam != null) {
-                var playedScore = scoreboard.getPlayerScore(player.getName().getString(), gamesPlayed);
-                var winScore = scoreboard.getPlayerScore(player.getName().getString(), win);
-                var lossScore = scoreboard.getPlayerScore(player.getName().getString(), loss);
-                var percentageScore = scoreboard.getPlayerScore(player.getName().getString(), percentage);
+                var playerScoreHolder = ScoreHolder.fromProfile(player.getGameProfile());
+                var playedScore = scoreboard.getOrCreateScore(playerScoreHolder, gamesPlayed);
+                var winScore = scoreboard.getOrCreateScore(playerScoreHolder, win);
+                var lossScore = scoreboard.getOrCreateScore(playerScoreHolder, loss);
+                var percentageScore = scoreboard.getOrCreateScore(playerScoreHolder, percentage);
 
                 if (playedScore == null || winScore == null || lossScore == null || percentageScore == null)
                     continue;
@@ -442,30 +443,18 @@ public abstract class GameModeBase {
     }
 
     protected BlockState getConcrete(AbstractTeam team) {
-        return switch (team.getName()) {
-            case "Red" -> Blocks.RED_CONCRETE.getDefaultState();
-            case "Green" -> Blocks.LIME_CONCRETE.getDefaultState();
-            case "Purple" -> Blocks.PURPLE_CONCRETE.getDefaultState();
-            case "Cyan" -> Blocks.CYAN_CONCRETE.getDefaultState();
-            case "Pink" -> Blocks.PINK_CONCRETE.getDefaultState();
-            case "Orange" -> Blocks.ORANGE_CONCRETE.getDefaultState();
-            case "Blue" -> Blocks.BLUE_CONCRETE.getDefaultState();
-            case "Yellow" -> Blocks.YELLOW_CONCRETE.getDefaultState();
-            default -> null;
-        };
+        for (var configTeam : BingoMod.CONFIG.Teams) {
+            if (configTeam.Name.equals(team.getName()))
+                return Registries.BLOCK.get(new Identifier(configTeam.BlockId)).getDefaultState();
+        }
+        return null;
     }
 
     protected int getTeamNumber(AbstractTeam team) {
-        return switch (team.getName()) {
-            case "Red" -> 1;
-            case "Orange" -> 2;
-            case "Yellow" -> 3;
-            case "Green" -> 4;
-            case "Cyan" -> 5;
-            case "Blue" -> 6;
-            case "Purple" -> 7;
-            case "Pink" -> 8;
-            default -> 0;
-        };
+        for (var configTeam : BingoMod.CONFIG.Teams) {
+            if (configTeam.Name.equals(team.getName()))
+                return configTeam.Number;
+        }
+        return 0;
     }
 }

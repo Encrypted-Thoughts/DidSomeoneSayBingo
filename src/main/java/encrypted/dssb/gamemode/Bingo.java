@@ -2,6 +2,7 @@ package encrypted.dssb.gamemode;
 
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
+import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
 import encrypted.dssb.BingoManager;
 import net.minecraft.item.Item;
@@ -9,8 +10,6 @@ import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +27,7 @@ public class Bingo extends GameModeBase {
     @Override
     public void start() {
         Status = GameStatus.Loading;
-        var text = Text.literal("Game of Normal Bingo starting!").formatted(Formatting.GREEN);
+        var text = TranslationHelper.getAsText("dssb.game.normal.starting");
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), text);
 
         initialize();
@@ -65,7 +64,7 @@ public class Bingo extends GameModeBase {
             handleWin(maxTeam.getKey());
         else {
             end();
-            Text text = Text.literal("The game has ended in a tie.").formatted(Formatting.GOLD);
+            var text = TranslationHelper.getAsText("dssb.game.tie");
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
         }
 
@@ -86,7 +85,7 @@ public class Bingo extends GameModeBase {
 
         if (CurrentCountdownSecond < elapsedSeconds) {
             CurrentCountdownSecond = elapsedSeconds;
-            var text = Text.literal("%s".formatted(30 - elapsedSeconds)).formatted(Formatting.GOLD);
+            var text = TranslationHelper.getAsText("dssb.game.countdown", 30 - elapsedSeconds);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
             if (elapsedSeconds >= 30) {
@@ -123,7 +122,7 @@ public class Bingo extends GameModeBase {
             var minuteText = minutes < 10 && hours > 0 ? "0" + minutes + ":" : minutes + ":";
             minuteText = minutes == 0 ? "" : minuteText;
             var secondText = seconds < 10 ? "0" + seconds : seconds;
-            var text = Text.literal("%s%s%s".formatted(hourText, minuteText, secondText)).formatted(Formatting.GOLD);
+            var text = TranslationHelper.getAsText("dssb.game.timer", hourText, minuteText, secondText);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
             if (remaining <= 0) {

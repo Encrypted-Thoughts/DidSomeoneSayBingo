@@ -11,9 +11,12 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class BingoGetMapCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+        var bingoCommand = "bingo";
+        var getMapCommand = "getmap";
+
         dispatcher.register(
-                literal(BingoCommands.bingoCommand)
-                .then(literal("getmap")
+                literal(bingoCommand)
+                .then(literal(getMapCommand)
                         .executes(ctx -> {
                             if (BingoManager.Game.Status != GameStatus.Idle) {
                                 var player = ctx.getSource().getPlayer();

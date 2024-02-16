@@ -5,6 +5,7 @@ import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MapRenderHelper;
 import encrypted.dssb.util.MessageHelper;
+import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -21,7 +22,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -78,7 +78,7 @@ public class HiddenBingo extends GameModeBase {
     @Override
     public void start() {
         Status = GameStatus.Loading;
-        var text = Text.literal("Game of Hidden Bingo starting!").formatted(Formatting.GREEN);
+        var text = TranslationHelper.getAsText("dssb.game.hidden.starting");
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), text);
 
         initialize();
@@ -115,7 +115,7 @@ public class HiddenBingo extends GameModeBase {
             handleWin(maxTeam.getKey());
         else {
             end();
-            Text text = Text.literal("The game has ended in a tie.").formatted(Formatting.GOLD);
+            var text = TranslationHelper.getAsText("dssb.game.tie");
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
         }
 
@@ -136,7 +136,7 @@ public class HiddenBingo extends GameModeBase {
         if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
         else readableTime = String.format("%d:%02d.%d", minute, second, millis);
 
-        final Text bingoFinished = Text.literal("%s team wins in %s!".formatted(team.getName(), readableTime)).formatted(team.getColor());
+        final var bingoFinished = TranslationHelper.getAsText("dssb.game.team_wins", team.getName(), readableTime).formatted(team.getColor());
         MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
 
         var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
@@ -202,7 +202,7 @@ public class HiddenBingo extends GameModeBase {
 
         if (CurrentCountdownSecond < elapsedSeconds) {
             CurrentCountdownSecond = elapsedSeconds;
-            var text = Text.literal("%s".formatted(30 - elapsedSeconds)).formatted(Formatting.GOLD);
+            var text = TranslationHelper.getAsText("dssb.game.countdown",30 - elapsedSeconds);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
             if (elapsedSeconds >= 30) {
@@ -239,7 +239,7 @@ public class HiddenBingo extends GameModeBase {
             var minuteText = minutes < 10 && hours > 0 ? "0" + minutes + ":" : minutes + ":";
             minuteText = minutes == 0 ? "" : minuteText;
             var secondText = seconds < 10 ? "0" + seconds : String.valueOf(seconds);
-            var text = Text.literal("%s%s%s".formatted(hourText, minuteText, secondText)).formatted(Formatting.GOLD);
+            var text = TranslationHelper.getAsText("dssb.game.timer", hourText, minuteText, secondText);
             MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
 
             if (elapsedSeconds / unlockInterval > unlocked && !lockedSlots.isEmpty()) {
@@ -281,12 +281,12 @@ public class HiddenBingo extends GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, row, col, false);
 
-                    var itemFound = Text.literal("%s found item: %s".formatted(player.getDisplayName().getString(), item.getName().getString())).formatted(foundByTeam.getColor());
+                    var itemFound = TranslationHelper.getAsText("dssb.game.item_found", player.getDisplayName().getString(), item.getName().getString()).formatted(foundByTeam.getColor());
 
                     int finalRow = row;
                     int finalCol = col;
                     if (lockedSlots.stream().anyMatch(l -> l[0] == finalRow && l[1] == finalCol))
-                        itemFound = Text.literal(("%s found hidden item at %s, %s!".formatted(player.getDisplayName().getString(), row+1, col+1))).formatted(foundByTeam.getColor());
+                        itemFound = TranslationHelper.getAsText("dssb.game.hidden.item_found", player.getDisplayName().getString(), row+1, col+1).formatted(foundByTeam.getColor());
 
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
                     playNotificationSound(player.getWorld());
@@ -390,11 +390,11 @@ public class HiddenBingo extends GameModeBase {
     public void clarify(ServerPlayerEntity player, int rowIndex, int columnIndex) {
         Text text;
         if (lockedSlots.stream().anyMatch(l -> l[0] == rowIndex && l[1] == columnIndex))
-            text = Text.literal("Item at position %s, %s is currently hidden".formatted(rowIndex + 1, columnIndex + 1)).formatted(Formatting.RED);
+            text = TranslationHelper.getAsText("dssb.game.hidden.item_hidden", rowIndex + 1, columnIndex + 1);
         else {
             var item = getSlot(rowIndex, columnIndex);
-            if (item == null) text = Text.literal("Unable to locate item at position %s, %s".formatted(rowIndex + 1, columnIndex + 1)).formatted(Formatting.RED);
-            else text = Text.literal("Item at position %s, %s: %s".formatted(rowIndex + 1, columnIndex + 1, item.item.getName().getString())).formatted(Formatting.GOLD);
+            if (item == null) text = TranslationHelper.getAsText("dssb.error.clarify_fail",rowIndex + 1, columnIndex + 1);
+            else text = TranslationHelper.getAsText("dssb.game.clarify", rowIndex + 1, columnIndex + 1, item.item.getName().getString());
         }
         if (player != null) player.sendMessage(text);
     }

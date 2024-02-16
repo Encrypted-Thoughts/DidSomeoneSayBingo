@@ -7,13 +7,13 @@ import encrypted.dssb.config.itempools.ItemGroup;
 import encrypted.dssb.gamemode.*;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TeleportHelper;
+import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.registry.Registries;
-import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.ServerScoreboard;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -22,7 +22,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -45,17 +44,17 @@ public class BingoManager {
 
     public static void start(ServerPlayerEntity starter, MinecraftServer server) throws CommandSyntaxException {
         if (Game == null) {
-            MessageHelper.sendSystemMessage(starter, Text.translatable("dssb.error.no_bingo_card").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(starter, TranslationHelper.getAsText("dssb.error.no_bingo_card"));
             return;
         }
 
         if (Game.Status != GameStatus.Idle) {
-            MessageHelper.sendSystemMessage(starter, Text.translatable("dssb.error.in_progress").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(starter, TranslationHelper.getAsText("dssb.error.in_progress"));
             return;
         }
 
         if (BingoManager.getValidPlayers(server.getPlayerManager()).isEmpty()) {
-            MessageHelper.sendSystemMessage(starter, Text.translatable("dssb.error.no_players").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(starter, TranslationHelper.getAsText("dssb.error.no_players"));
             return;
         }
 
@@ -104,16 +103,16 @@ public class BingoManager {
 
     public static void generate(ServerPlayerEntity player, MinecraftServer server, boolean start) throws CommandSyntaxException {
         if (GenerateInProgress)
-            MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.generating").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.error.generating"));
         else if (Game != null && Game.Status != GameStatus.Idle)
-            MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.in_progress").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.error.in_progress"));
         else {
             GenerateInProgress = true;
             try {
                 var possibleItems = generateItemPool();
 
                 if (possibleItems.size() < 25) {
-                    MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.not_enough_items").formatted(Formatting.RED));
+                    MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.error.not_enough_items"));
                     GenerateInProgress = false;
                     return;
                 }
@@ -130,7 +129,7 @@ public class BingoManager {
                 if (spawnWorld != null) Game.buildBingoBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
                 if (start) start(player, server);
             } catch (Exception e) {
-                MessageHelper.sendSystemMessage(player, Text.translatable("dssb.error.generic_generation_failure").formatted(Formatting.RED));
+                MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.error.generic_generation_failure"));
                 BingoMod.LOGGER.error(e.getMessage());
             }
             GenerateInProgress = false;
@@ -155,22 +154,22 @@ public class BingoManager {
                 MutableText text = null;
                 switch (mode.toLowerCase()) {
                     case "bingo" -> {
-                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Regular Bingo").formatted(Formatting.GREEN));
+                        text = TranslationHelper.getAsText("dssb.game.game_mode_set").append(TranslationHelper.getAsText("dssb.game.regular_bingo").formatted(Formatting.GREEN));
                         GameSettings.GameMode = "Bingo";
                         Game = new Bingo(server, CurrentItems);
                     }
                     case "lockout" -> {
-                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Lockout Bingo").formatted(Formatting.GREEN));
+                        text = TranslationHelper.getAsText("dssb.game.game_mode_set").append(TranslationHelper.getAsText("dssb.game.lockout_bingo").formatted(Formatting.GREEN));
                         GameSettings.GameMode = "Lockout";
                         Game = new Lockout(server, CurrentItems);
                     }
                     case "hidden" -> {
-                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Hidden Bingo").formatted(Formatting.GREEN));
+                        text = TranslationHelper.getAsText("dssb.game.game_mode_set").append(TranslationHelper.getAsText("dssb.game.hidden_bingo").formatted(Formatting.GREEN));
                         GameSettings.GameMode = "Hidden";
                         Game = new HiddenBingo(server, CurrentItems, HiddenBingo.HiddenType.DoubleDiagonal, 120);
                     }
                     case "blackout" -> {
-                        text = Text.literal("Game mode set to ").formatted(Formatting.WHITE).append(Text.literal("Blackout Bingo").formatted(Formatting.GREEN));
+                        text = TranslationHelper.getAsText("dssb.game.game_mode_set").append(TranslationHelper.getAsText("dssb.game.blackout_bingo").formatted(Formatting.GREEN));
                         GameSettings.GameMode = "Blackout";
                         Game = new Blackout(server, CurrentItems);
                     }
@@ -182,7 +181,7 @@ public class BingoManager {
                 BingoMod.LOGGER.error(e.getMessage());
             }
         } else {
-            MessageHelper.sendSystemMessage(player, Text.literal("Can't change game mode while game in progress.").formatted(Formatting.RED));
+            MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.error.change_game_mode"));
         }
     }
 
@@ -195,7 +194,7 @@ public class BingoManager {
                     for (var somePlayer : getValidPlayers(server.getPlayerManager())) {
                         var scoreboard = player.getScoreboardTeam();
                         if (scoreboard != null) {
-                            var text = Text.literal("BINGO").formatted(player.getScoreboardTeam().getColor());
+                            var text = TranslationHelper.getAsText("dssb.game.game_over").formatted(player.getScoreboardTeam().getColor());
                             player.networkHandler.sendPacket(new TitleS2CPacket(text));
                             somePlayer.playSound(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
                         }
@@ -268,9 +267,9 @@ public class BingoManager {
                         0);
                 resetPlayer(tpPlayer);
             } else
-                BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
+                BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.teleport_player", player.getDisplayName().getString()));
         } catch (CommandSyntaxException e) {
-            BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
+            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.teleport_player", player.getDisplayName().getString()));
             BingoMod.LOGGER.error(e.getMessage());
         }
     }
@@ -324,8 +323,8 @@ public class BingoManager {
             var index = ThreadLocalRandom.current().nextInt(0, teams.size());
             var team = teams.get(index);
             for (var player : group) {
-                scoreboard.clearPlayerTeam(player.getName().getString());
-                scoreboard.addPlayerToTeam(player.getName().getString(), team);
+                scoreboard.clearTeam(player.getName().getString());
+                scoreboard.addScoreHolderToTeam(player.getName().getString(), team);
             }
             teams.remove(index);
         }
@@ -342,7 +341,7 @@ public class BingoManager {
             }
 
             if (teammates.isEmpty()) {
-                MessageHelper.sendSystemMessage(player, Text.literal("No teammate more than 50 blocks away to tp to.").formatted(Formatting.RED));
+                MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.no_teammate"));
                 return;
             }
 
@@ -351,8 +350,8 @@ public class BingoManager {
 
             TeleportHelper.teleport(player, tpTarget.getServerWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
 
-            MessageHelper.sendSystemMessage(teammates.get(randomNum), Text.literal("%s teleported to you.".formatted(player.getDisplayName().getString())).formatted(Formatting.GOLD));
-            MessageHelper.sendSystemMessage(player, Text.literal("Teleported to %s.".formatted(teammates.get(randomNum).getDisplayName().getString())).formatted(Formatting.GOLD));
+            MessageHelper.sendSystemMessage(teammates.get(randomNum), TranslationHelper.getAsText("dssb.game.teleport_target", player.getDisplayName().getString()));
+            MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.teleport_to", teammates.get(randomNum).getDisplayName().getString()));
         }
     }
 
@@ -368,53 +367,17 @@ public class BingoManager {
     public static void createTeams(MinecraftServer server) {
         var scoreboard = server.getScoreboard();
         var teams = scoreboard.getTeamNames();
-        if (!teams.contains("Red")) {
-            var team = scoreboard.addTeam("Red");
-            team.setColor(Formatting.RED);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
-        }
-        if (!teams.contains("Green")) {
-            var team = scoreboard.addTeam("Green");
-            team.setColor(Formatting.GREEN);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
-        }
-        if (!teams.contains("Blue")) {
-            var team = scoreboard.addTeam("Blue");
-            team.setColor(Formatting.BLUE);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
-        }
-        if (!teams.contains("Yellow")) {
-            var team = scoreboard.addTeam("Yellow");
-            team.setColor(Formatting.YELLOW);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
-        }
-        if (!teams.contains("Cyan")) {
-            var team = scoreboard.addTeam("Cyan");
-            team.setColor(Formatting.AQUA);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
-        }
-        if (!teams.contains("Purple")) {
-            var team = scoreboard.addTeam("Purple");
-            team.setColor(Formatting.DARK_PURPLE);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
-        }
-        if (!teams.contains("Pink")) {
-            var team = scoreboard.addTeam("Pink");
-            team.setColor(Formatting.LIGHT_PURPLE);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
-        }
-        if (!teams.contains("Orange")) {
-            var team = scoreboard.addTeam("Orange");
-            team.setColor(Formatting.GOLD);
-            team.setCollisionRule(AbstractTeam.CollisionRule.PUSH_OWN_TEAM);
-            team.setFriendlyFireAllowed(false);
+
+        for (var configTeam : BingoMod.CONFIG.Teams) {
+            if (!teams.contains(configTeam.Name))
+                scoreboard.addTeam(configTeam.Name);
+
+            var team = scoreboard.getTeam(configTeam.Name);
+            if (team != null) {
+                team.setColor(configTeam.Color);
+                team.setCollisionRule(configTeam.Collision);
+                team.setFriendlyFireAllowed(configTeam.FriendlyFire);
+            }
         }
     }
 
@@ -422,7 +385,7 @@ public class BingoManager {
         if (Game == null) return;
         switch (Game.Status) {
             case Loading -> {
-                var text = Text.literal("Loading Team Spawns (%s/8)".formatted(Game.TeamSpawns.size())).formatted(Formatting.GREEN);
+                var text = TranslationHelper.getAsText("dssb.game.loading_spawns", Game.TeamSpawns.size());
                 MessageHelper.broadcastOverlay(server.getPlayerManager(), text);
             }
             case Initializing -> {
@@ -438,13 +401,13 @@ public class BingoManager {
                 Game.CountDownStart = System.currentTimeMillis();
                 Game.CurrentCountdownSecond = 0;
 
-                var text = Text.literal("Use /clarify <row> <col> if unsure of what an item on the board is.").formatted(Formatting.WHITE);
+                var text = TranslationHelper.getAsText("dssb.game.clarify_info");
                 MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
-                text = Text.literal("Use /teamtp to teleport to a random teammate that's more than 50 blocks away.").formatted(Formatting.GOLD);
+                text = TranslationHelper.getAsText("dssb.game.team_tp_info");
                 MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
-                text = Text.literal("Use /bingo getmap if you lose your bingo map to get another one.").formatted(Formatting.WHITE);
+                text = TranslationHelper.getAsText("dssb.game.get_map_info");
                 MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
-                text = Text.literal("Use /bingo voteend if you want to start a vote to end the current game in a tie.").formatted(Formatting.GOLD);
+                text = TranslationHelper.getAsText("dssb.game.vote_end_info");
                 MessageHelper.broadcastChatToPlayers(server.getPlayerManager(), text);
 
                 Game.Status = GameStatus.Starting;
@@ -458,7 +421,7 @@ public class BingoManager {
                                 var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
                                 TeleportHelper.teleport(player, world, teamPos.getX() + 0.5, teamPos.getY(), teamPos.getZ() + 0.5, player.getYaw(), player.getPitch());
                             } catch (CommandSyntaxException e) {
-                                BingoMod.LOGGER.error("Unable to teleport player: %s".formatted(player.getDisplayName().getString()));
+                                BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.teleport_failure", player.getDisplayName().getString()));
                             }
                         }
                     }
@@ -476,7 +439,7 @@ public class BingoManager {
         var elapsedSeconds = (System.currentTimeMillis() - VoteStart) / 1000;
 
         if (elapsedSeconds > 30) {
-            MessageHelper.broadcastChatToPlayers(playerManager, Text.literal("Not enough votes. Vote ended.").formatted(Formatting.GOLD));
+            MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.not_enough_votes"));
             VoteInProgress = false;
         }
     }
@@ -487,25 +450,25 @@ public class BingoManager {
             var majority = getValidPlayers(playerManager).size() / 2;
 
             if (majority < 2) {
-                MessageHelper.broadcastChatToPlayers(playerManager, Text.literal("%s has voted to end the game! Game ended.".formatted(player.getDisplayName().getString())).formatted(Formatting.GOLD));
+                MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_game_ended", player.getDisplayName().getString()));
                 end(server);
                 VoteInProgress = false;
                 VotesToEnd = new ArrayList<>();
             } else {
                 if (VoteInProgress) {
                     if (VotesToEnd.contains(player.getName().getString()))
-                        MessageHelper.sendSystemMessage(player, Text.literal("You can only vote once.").formatted(Formatting.RED));
+                        MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.vote_once").formatted(Formatting.RED));
                     else {
                         VotesToEnd.add(player.getName().getString());
                         if (VotesToEnd.size() >= majority) {
-                            MessageHelper.broadcastChatToPlayers(playerManager, Text.literal("%s has voted to end the game! Game ended.".formatted(player.getDisplayName().getString())).formatted(Formatting.GOLD));
+                            MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_game_ended", player.getDisplayName().getString()));
                             end(server);
                             VoteInProgress = false;
                         } else
-                            MessageHelper.broadcastChatToPlayers(playerManager, Text.literal("%s has voted to end the game! %s more votes needed.".formatted(player.getDisplayName().getString(), majority - VotesToEnd.size())).formatted(Formatting.GOLD));
+                            MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.voted", player.getDisplayName().getString(), majority - VotesToEnd.size()));
                     }
                 } else {
-                    MessageHelper.broadcastChatToPlayers(playerManager, Text.literal("%s has started a vote to end the game! %s more votes needed to end. Use '/bingo voteend' to vote to end.".formatted(player.getDisplayName().getString(), majority - 1)).formatted(Formatting.GOLD));
+                    MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_started", player.getDisplayName().getString(), majority - 1));
                     VoteInProgress = true;
                     VotesToEnd = new ArrayList<>();
                     VotesToEnd.add(player.getName().getString());
@@ -524,7 +487,7 @@ public class BingoManager {
             try {
                 var possibleItems = generateItemPool();
                 if (possibleItems.size() < 25) {
-                    BingoMod.LOGGER.warn("Not enough items in default item pool to initialize game items.");
+                    BingoMod.LOGGER.warn(TranslationHelper.get("dssb.error.not_enough_items_in_pool"));
                     return;
                 }
                 CurrentItems = randomlySelectItems(possibleItems, 25);
@@ -537,19 +500,19 @@ public class BingoManager {
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
                 if (spawnWorld != null) Game.buildBingoBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
             } catch (Exception e) {
-                BingoMod.LOGGER.error("Failure during server startup for handling initial bingo generation.");
+                BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.initial_generation_failure"));
                 BingoMod.LOGGER.error(e.getMessage());
             }
         }
 
-        MessageHelper.sendSystemMessage(player, Text.literal("Welcome to Bingo!").formatted(Formatting.GREEN));
-        MessageHelper.sendSystemMessage(player, Text.literal("Right click a sign to join a team or do '/bingo team join <team>'").formatted(Formatting.WHITE));
-        MessageHelper.sendSystemMessage(player, Text.literal("For more information about the various commands that exist do '/bingo'").formatted(Formatting.WHITE));
+        MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.welcome"));
+        MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.join_team_info"));
+        MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.help_info"));
 
         try {
             BingoSettingsCommand.tellSettings(player);
         } catch (CommandSyntaxException e) {
-            BingoMod.LOGGER.error("Unable to tell player: %s the command options".formatted(player.getDisplayName().getString()));
+            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.tell_setting_failure", player.getDisplayName().getString()));
             BingoMod.LOGGER.error(e.getMessage());
         }
 
@@ -559,9 +522,9 @@ public class BingoManager {
             if (BingoMod.CONFIG.AssignRandomTeamOnJoin && team == null) {
                 var teams = new ArrayList<>(scoreboard.getTeams());
                 var randomTeamIndex = ThreadLocalRandom.current().nextInt(0, teams.size());
-                scoreboard.addPlayerToTeam(player.getName().getString(), teams.get(randomTeamIndex));
+                scoreboard.addScoreHolderToTeam(player.getName().getString(), teams.get(randomTeamIndex));
             } else if (!BingoMod.CONFIG.AssignRandomTeamOnJoin)
-                player.getScoreboard().clearPlayerTeam(player.getName().getString());
+                player.getScoreboard().clearTeam(player.getName().getString());
 
             if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnJoin && player.isAlive())
                 tpToBingoSpawn(player);
