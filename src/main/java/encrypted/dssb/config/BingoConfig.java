@@ -59,7 +59,7 @@ public class BingoConfig {
                 BingoDimensions = temp.BingoDimensions;
                 Teams = temp.Teams;
             } catch (FileNotFoundException e) {
-                BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.config_read_failure"));
+                BingoMod.LOGGER.error("Failed to read a config file.");
                 BingoMod.LOGGER.error(e.getMessage());
             }
         } else
@@ -73,12 +73,12 @@ public class BingoConfig {
             var json = gson.toJson(this);
             var directory = path.resolve("bingo/").toFile();
             if (!directory.exists())
-                if (!directory.mkdirs()) throw new Exception(TranslationHelper.get("dssb.error.config_directory_creation_failure"));
+                if (!directory.mkdirs()) throw new Exception(TranslationHelper.get("Unable to create directory to store config files."));
             try (PrintWriter writer = new PrintWriter(directory.getPath() + "/bingo.json")) {
                 writer.println(json);
             }
         } catch (Exception e) {
-            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.config_save_failure"));
+            BingoMod.LOGGER.error("Failed to save a config file.");
             BingoMod.LOGGER.error(e.getMessage());
         }
     }

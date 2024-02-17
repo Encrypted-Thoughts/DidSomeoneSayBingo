@@ -2,7 +2,6 @@ package encrypted.dssb.model;
 
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.util.MapRenderHelper;
-import encrypted.dssb.util.TranslationHelper;
 import net.minecraft.item.Item;
 import net.minecraft.scoreboard.AbstractTeam;
 
@@ -36,7 +35,7 @@ public class BingoItem {
                 }
             }
         } catch (Exception e) {
-            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.load_image_failure", item.toString()));
+            BingoMod.LOGGER.error("Unable to load image for %s".formatted(item.toString()));
             BingoMod.LOGGER.error(e.getMessage());
         }
     }

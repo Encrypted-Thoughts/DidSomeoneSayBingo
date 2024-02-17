@@ -76,7 +76,7 @@ public abstract class GameModeBase {
         var world = WorldHelper.getWorldByName(Server, BingoManager.GameSettings.Dimension);
 
         if (world == null) {
-            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.initialize_world_null"));
+            BingoMod.LOGGER.error("Unable to initialize game. World is null.");
             return;
         }
 

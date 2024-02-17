@@ -123,7 +123,7 @@
   "dssb.error.in_progress": "§cGame of Bingo already in progress.",
   "dssb.error.no_players": "§cNo players on any teams to play the game.",
   "dssb.error.generating": "§cStill generating previous board.",
-  "dssb.error.not_enough_items": "§cNot enough enough possible items in item pools to generate a bingo card.",
+  "dssb.error.not_enough_items": "§cNot enough possible items in item pools to generate a bingo card.",
   "dssb.error.generic_generation_failure": "§cUnable to generate board check system console for more information.",
   "dssb.error.change_game_mode": "§cCan't change game mode while game in progress.",
   "dssb.error.teleport_player": "Unable to teleport player: %s to spawn",
@@ -132,15 +132,5 @@
   "dssb.error.spawn_problem": "Problem finding team spawns.",
   "dssb.error.clarify_fail": "§cUnable to locate item at position %s, %s",
   "dssb.error.item_pool_in_process": "§cCan't change item pools while game in process.",
-  "dssb.error.teleport_failure": "Unable to teleport player: %s",
-  "dssb.error.not_enough_items_in_pool": "Not enough items in default item pool to initialize game items.",
-  "dssb.error.initial_generation_failure": "Failure during server startup for handling initial bingo generation.",
-  "dssb.error.message_failure": "Failed to broadcast message to players on gamemode change.",
-  "dssb.error.tell_setting_failure": "Unable to tell player: %s the command options",
-  "dssb.error.load_image_failure": "Unable to load image for %s.",
-  "dssb.error.config_read_failure": "Failed to read a config file.",
-  "dssb.error.config_directory_creation_failure": "Unable to create directory to store config files.",
-  "dssb.error.config_save_failure": "Failed to save a config file.",
-  "dssb.error.asset_failure": "Can't obtain stream for: /assets/dssb/items/%s.png",
-  "dssb.error.no_asset": "No asset for item: %s"
+  "dssb.error.not_enough_items_in_pool": "Not enough items in default item pool to initialize game items."
 }

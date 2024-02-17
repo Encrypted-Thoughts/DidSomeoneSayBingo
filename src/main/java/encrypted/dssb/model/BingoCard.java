@@ -1,7 +1,6 @@
 package encrypted.dssb.model;
 
 import encrypted.dssb.util.MapRenderHelper;
-import encrypted.dssb.util.TranslationHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
@@ -25,7 +24,7 @@ public class BingoCard {
 
     public BingoCard(ServerWorld world, ArrayList<Item> items) throws Exception {
         if (items.size() < (size * size))
-            throw new Exception(TranslationHelper.get("dssb.error.not_enough_items"));
+            throw new Exception("Not enough possible items in item pools to generate a bingo card.");
 
         slots = new BingoItem[size][size];
         var rowIndex = 0;

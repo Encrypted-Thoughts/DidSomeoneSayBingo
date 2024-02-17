@@ -267,9 +267,9 @@ public class BingoManager {
                         0);
                 resetPlayer(tpPlayer);
             } else
-                BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.teleport_player", player.getDisplayName().getString()));
+                BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
         } catch (CommandSyntaxException e) {
-            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.teleport_player", player.getDisplayName().getString()));
+            BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
             BingoMod.LOGGER.error(e.getMessage());
         }
     }
@@ -421,7 +421,7 @@ public class BingoManager {
                                 var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
                                 TeleportHelper.teleport(player, world, teamPos.getX() + 0.5, teamPos.getY(), teamPos.getZ() + 0.5, player.getYaw(), player.getPitch());
                             } catch (CommandSyntaxException e) {
-                                BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.teleport_failure", player.getDisplayName().getString()));
+                                BingoMod.LOGGER.error("Unable to teleport player: %s".formatted(player.getDisplayName().getString()));
                             }
                         }
                     }
@@ -487,7 +487,7 @@ public class BingoManager {
             try {
                 var possibleItems = generateItemPool();
                 if (possibleItems.size() < 25) {
-                    BingoMod.LOGGER.warn(TranslationHelper.get("dssb.error.not_enough_items_in_pool"));
+                    BingoMod.LOGGER.warn("Not enough items in default item pool to initialize game items.");
                     return;
                 }
                 CurrentItems = randomlySelectItems(possibleItems, 25);
@@ -500,7 +500,7 @@ public class BingoManager {
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
                 if (spawnWorld != null) Game.buildBingoBoard(spawnWorld, BingoMod.CONFIG.DisplayBoardCoords.getBlockPos());
             } catch (Exception e) {
-                BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.initial_generation_failure"));
+                BingoMod.LOGGER.error("Failure during server startup for handling initial bingo generation.");
                 BingoMod.LOGGER.error(e.getMessage());
             }
         }
@@ -512,7 +512,7 @@ public class BingoManager {
         try {
             BingoSettingsCommand.tellSettings(player);
         } catch (CommandSyntaxException e) {
-            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.tell_setting_failure", player.getDisplayName().getString()));
+            BingoMod.LOGGER.error("Unable to tell player: %s the command options".formatted(player.getDisplayName().getString()));
             BingoMod.LOGGER.error(e.getMessage());
         }
 

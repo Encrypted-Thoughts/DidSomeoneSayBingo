@@ -70,6 +70,7 @@ public class AllItemPool extends ItemPool {
                 "minecraft:enderman_spawn_egg",
                 "minecraft:skeleton_horse_spawn_egg",
                 "minecraft:elder_guardian_spawn_egg",
+                "minecraft:sniffer_spawn_egg",
                 "minecraft:command_block",
                 "minecraft:goat_spawn_egg",
                 "minecraft:debug_stick",

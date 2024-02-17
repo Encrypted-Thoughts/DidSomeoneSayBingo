@@ -293,7 +293,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:copper_ingot"
                 }),
                 new ItemGroup(new String[]{"minecraft:calcite"}),
-                new ItemGroup(new String[]{"minecraft:grass"}),
+                new ItemGroup(new String[]{"minecraft:short_grass"}),
                 new ItemGroup(new String[]{"minecraft:composter"}),
                 new ItemGroup(new String[]{"minecraft:minecart"}),
                 new ItemGroup(new String[]{"minecraft:arrow"}),

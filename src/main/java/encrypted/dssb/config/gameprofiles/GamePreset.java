@@ -3,7 +3,6 @@ package encrypted.dssb.config.gameprofiles;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import encrypted.dssb.BingoMod;
-import encrypted.dssb.util.TranslationHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
@@ -74,12 +73,12 @@ public class GamePreset {
             var json = gson.toJson(this);
             var directory = path.resolve("bingo/presets/").toFile();
             if (!directory.exists())
-                if (!directory.mkdirs()) throw new Exception(TranslationHelper.get("dssb.error.config_directory_creation_failure"));
+                if (!directory.mkdirs()) throw new Exception("Unable to create directory to store config files.");
             try (PrintWriter writer = new PrintWriter(directory.getPath() + "/%s.json".formatted(filename))) {
                 writer.println(json);
             }
         } catch (Exception e) {
-            BingoMod.LOGGER.error(TranslationHelper.get("dssb.error.config_save_failure"));
+            BingoMod.LOGGER.error("Failed to save a config file.");
             BingoMod.LOGGER.error(e.getMessage());
         }
     }
