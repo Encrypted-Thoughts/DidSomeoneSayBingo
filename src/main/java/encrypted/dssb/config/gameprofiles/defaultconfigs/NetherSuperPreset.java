@@ -4,16 +4,19 @@ import encrypted.dssb.config.gameprofiles.Enchantment;
 import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
-import encrypted.dssb.config.itempools.defaultpools.OverworldNormalItemPool;
+import encrypted.dssb.config.itempools.defaultpools.NetherItemPool;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuperPreset extends GamePreset {
+public class NetherSuperPreset extends GamePreset {
 
-    public SuperPreset() {
-        Name = "Overworld - Super";
+    public NetherSuperPreset() {
+        Name = "Nether - Super";
         GameMode = "blackout";
+        Dimension = "minecraft:the_nether";
+        YSpawnOffset = 0;
+        MaxYLevel = 110;
         Effects = new ArrayList<>(List.of(
             new StatusEffect("minecraft:slow_falling", 20, 6, true),
                 new StatusEffect("minecraft:regeneration", -1, 100, false, false, false, true),
@@ -38,7 +41,7 @@ public class SuperPreset extends GamePreset {
             )))
         ));
         ItemPools = new ArrayList<>(List.of(
-                new OverworldNormalItemPool().Name
+                new NetherItemPool().Name
         ));
     }
 }

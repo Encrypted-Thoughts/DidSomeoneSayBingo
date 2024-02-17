@@ -27,7 +27,6 @@ public class BingoMod implements ModInitializer {
 	public static final String MOD_ID = "dssbingo";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static BingoConfig CONFIG = new BingoConfig();
-	//public static LanguageConfig Language = new LanguageConfig();
 	public static ArrayList<GamePreset> GamePresets = new ArrayList<>();
 	public static ArrayList<ItemPool> ItemPools = new ArrayList<>();
 
@@ -124,7 +123,11 @@ public class BingoMod implements ModInitializer {
 				GamePresets.add(preset);
 				preset.SaveToFile(preset.Name);
 
-				preset = new SuperPreset();
+				preset = new OverworldSuperPreset();
+				GamePresets.add(preset);
+				preset.SaveToFile(preset.Name);
+
+				preset = new NetherSuperPreset();
 				GamePresets.add(preset);
 				preset.SaveToFile(preset.Name);
 			} else

@@ -48,6 +48,7 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
+	//options.deprecation = true
 }
 
 java {
