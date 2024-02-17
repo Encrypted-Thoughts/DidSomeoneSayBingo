@@ -623,7 +623,20 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:yellow_concrete",
                         "minecraft:yellow_concrete_powder"
                 }),
-                new ItemGroup(new String[]{"minecraft:tuff"}),
+                new ItemGroup(new String[]{
+                        "minecraft:tuff",
+                        "minecraft:tuff_bricks",
+                        "minecraft:chiseled_tuff_bricks",
+                        "minecraft:tuff_wall",
+                        "minecraft:tuff_stairs",
+                        "minecraft:tuff_slab",
+                        "minecraft:polished_tuff_wall",
+                        "minecraft:polished_tuff_stairs",
+                        "minecraft:polished_tuff_slab",
+                        "minecraft:tuff_brick_wall",
+                        "minecraft:tuff_brick_stairs",
+                        "minecraft:tuff_brick_slab"
+                }),
                 new ItemGroup(new String[]{
                         "minecraft:white_dye",
                         "minecraft:yellow_dye",

@@ -463,7 +463,20 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:seagrass"}),
                 new ItemGroup(new String[]{"minecraft:sweet_berries"}),
                 new ItemGroup(new String[]{"minecraft:dropper"}),
-                new ItemGroup(new String[]{"minecraft:tuff"}),
+                new ItemGroup(new String[]{
+                        "minecraft:tuff",
+                        "minecraft:tuff_bricks",
+                        "minecraft:chiseled_tuff_bricks",
+                        "minecraft:tuff_wall",
+                        "minecraft:tuff_stairs",
+                        "minecraft:tuff_slab",
+                        "minecraft:polished_tuff_wall",
+                        "minecraft:polished_tuff_stairs",
+                        "minecraft:polished_tuff_slab",
+                        "minecraft:tuff_brick_wall",
+                        "minecraft:tuff_brick_stairs",
+                        "minecraft:tuff_brick_slab"
+                }),
                 new ItemGroup(new String[]{"minecraft:iron_bars"}),
                 new ItemGroup(new String[]{
                         "minecraft:lapis_block",
@@ -474,6 +487,11 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:cut_copper",
                         "minecraft:cut_copper_stairs",
                         "minecraft:cut_copper_slab",
+                        "minecraft:copper_door",
+                        "minecraft:chiseled_copper",
+                        "minecraft:copper_grate",
+                        "minecraft:copper_trapdoor",
+                        "minecraft:copper_bulb",
                         "minecraft:copper_ingot"
                 }),
                 new ItemGroup(new String[]{
@@ -484,6 +502,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:mutton",
                         "minecraft:cooked_mutton"
                 }),
+                //new ItemGroup(new String[]{"minecraft:armadillo_scute"}),
+                //new ItemGroup(new String[]{"minecraft:wind_charge"}),
                 new ItemGroup(new String[]{"minecraft:target"}),
                 new ItemGroup(new String[]{"minecraft:fern"}),
                 new ItemGroup(new String[]{
@@ -822,6 +842,9 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:brick_stairs",
                         "minecraft:brick_wall",
                         "minecraft:brick_slab"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:crafter"
                 })
         ));
 
