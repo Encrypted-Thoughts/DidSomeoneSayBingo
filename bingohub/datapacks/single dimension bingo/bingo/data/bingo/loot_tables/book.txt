@@ -1,85 +1,16 @@
 {
-    title:"Bingo Book",
-    author:"Encryptd",
-    datapack:"bingo",
-    CustomModelData:10,
-    pages:[
-        '[
-            "",
-            {"text":"Index:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"Presets","color":"dark_green","clickEvent":{"action":"change_page","value":2}},{"text":"\\n","color":"dark_green"},
-            {"text":"Game Mode","color":"dark_green","clickEvent":{"action":"change_page","value":3}},{"text":"\\n","color":"dark_green"},
-            {"text":"Timer","color":"dark_green","clickEvent":{"action":"change_page","value":3}},{"text":"\\n","color":"dark_green"},
-            {"text":"Dimensions","color":"dark_green","clickEvent":{"action":"change_page","value":4}},{"text":"\\n","color":"dark_green"},
-            {"text":"Spawn Radius","color":"dark_green","clickEvent":{"action":"change_page","value":4}},{"text":"\\n","color":"dark_green"},
-            {"text":"Item Pools","color":"dark_green","clickEvent":{"action":"change_page","value":5}},{"text":"\\n","color":"dark_green"},
-            {"text":"Equipment","color":"dark_green","clickEvent":{"action":"change_page","value":6}},{"text":"\\n","color":"dark_green"},
-            {"text":"Miscellaneous","color":"dark_green","clickEvent":{"action":"change_page","value":7}}
-        ]',
-        '[
-            "",
-            {"text":"Game Presets:","bold":true,"underlined":true,"hoverEvent":{"action":"show_text","contents":"These are for quick changing settings and will override all other settings you may have applied individually."}},{"text":"\\n\\n","color":"reset"},
-            {"text":"Overworld - Easy","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Easy"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Normal","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Normal"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Hard","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Hard"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Nether","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Nether"}},{"text":"\\n\\n","color":"dark_green"},
-            {"text":"Overworld - Super","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Super"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Cursed","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Cursed"}}
-        ]',
-        '[
-            "",
-            {"text":"Game Mode:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"Normal Bingo","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode bingo"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Lockout","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode lockout"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Blackout","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode blackout"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Hidden","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode hidden"}},{"text":"\\n\\n","color":"reset"},
-            {"text":"Timer:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"No Timer","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 0"}},{"text":"\\n","color":"dark_green"},
-            {"text":"5 Minute","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 5"}},{"text":"\\n","color":"dark_green"},
-            {"text":"10 Minute","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 10"}},{"text":"\\n","color":"dark_green"},
-            {"text":"20 Minute","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 20"}}
-        ]',
-        '[
-            "",
-            {"text":"Dimension:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"Overworld","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings dimension bingo:duplicate_overworld 200 50"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Nether","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings dimension bingo:duplicate_nether 110 0"}},{"text":"\\n\\n","color":"reset"},
-            {"text":"Spawn Radius:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"Small","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings radius small"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Medium","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings radius medium"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Large","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings radius large"}}
-        ]',
-        '[
-            "",
-            {"text":"Item Pools:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"Overworld - Easy","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Easy"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Normal","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Normal"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Overworld - Hard","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Hard"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Nether","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Nether"}},{"text":"\\n","color":"dark_green"},
-            {"text":"All","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set All"}}
-        ]',
-        '[
-            "",
-            {"text":"Equipment:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"None","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment none"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Stone","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment stone"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Iron","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment iron"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Diamond","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment diamond"}},{"text":"\\n","color":"dark_green"},
-            {"text":"Food","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment food true"}},{"text":"\\n","color":"dark_green"},
-            {"text":"No Food","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment food false"}}
-        ]',
-        '[
-            "",
-            {"text":"Miscellaneous:","bold":true,"underlined":true},{"text":"\\n\\n","color":"reset"},
-            {"text":"PVP: \\n","color":"black"},
-            {"text":"ON","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo pvp true"}},
-            {"text":" | ","color":"black"},
-            {"text":"OFF","color":"dark_red","clickEvent":{"action":"run_command","value":"/bingo pvp false"}},
-            {"text":"\\n\\n","color":"dark_green"},
-            {"text":"KEEP INVENTORY: \\n","color":"black"},
-            {"text":"ON","color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo keepInventory true"}},
-            {"text":" | ","color":"black"},
-            {"text":"OFF","color":"dark_red","clickEvent":{"action":"run_command","value":"/bingo keepInventory false"}}
-        ]'
-    ]
+    CustomModelData: 10,
+    author: "Encryptd",
+    datapack: "bingo",
+    pages: [
+      '{"extra":[{"bold":true,"underlined":true,"text":"Index:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"2"},"text":"Presets"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"3"},"text":"Game Mode"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"3"},"text":"Timer"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"4"},"text":"Dimensions"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"4"},"text":"Spawn Radius"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"5"},"text":"Item Pools"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"6"},"text":"Equipment"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"change_page","value":"7"},"text":"Miscellaneous"}],"text":""}',
+      '{"extra":[{"bold":true,"underlined":true,"hoverEvent":{"action":"show_text","contents":{"text":"These are for quick changing settings and will override all other settings you may have applied individually."}},"text":"Game Presets:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Easy"},"text":"Overworld - Easy"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Normal"},"text":"Overworld - Normal"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Hard"},"text":"Overworld - Hard"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Nether"},"text":"Nether"},{"color":"dark_green","text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Super"},"text":"Overworld - Super"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Nether - Super"},"text":"Nether - Super"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo preset Overworld - Cursed"},"text":"Overworld - Cursed"}],"text":""}',
+      '{"extra":[{"bold":true,"underlined":true,"text":"Game Mode:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode bingo"},"text":"Normal Bingo"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode lockout"},"text":"Lockout"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode blackout"},"text":"Blackout"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings gamemode hidden"},"text":"Hidden"},{"text":"\\n\\n"},{"bold":true,"underlined":true,"text":"Timer:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 0"},"text":"No Timer"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 5"},"text":"5 Minute"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 10"},"text":"10 Minute"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings timer 20"},"text":"20 Minute"}],"text":""}',
+      '{"extra":[{"bold":true,"underlined":true,"text":"Dimension:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings dimension bingo:duplicate_overworld 200 50"},"text":"Overworld"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings dimension bingo:duplicate_nether 110 0"},"text":"Nether"},{"text":"\\n\\n"},{"bold":true,"underlined":true,"text":"Spawn Radius:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings radius small"},"text":"Small"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings radius medium"},"text":"Medium"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings radius large"},"text":"Large"}],"text":""}',
+      '{"extra":[{"bold":true,"underlined":true,"text":"Item Pools:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Easy"},"text":"Overworld - Easy"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Normal"},"text":"Overworld - Normal"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Overworld - Hard"},"text":"Overworld - Hard"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set Nether"},"text":"Nether"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings items set All"},"text":"All"}],"text":""}',
+      '{"extra":[{"bold":true,"underlined":true,"text":"Equipment:"},{"text":"\\n\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment none"},"text":"None"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment stone"},"text":"Stone"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment iron"},"text":"Iron"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment diamond"},"text":"Diamond"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment food true"},"text":"Food"},{"color":"dark_green","text":"\\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo settings equipment food false"},"text":"No Food"}],"text":""}',
+      '{"extra":[{"bold":true,"underlined":true,"text":"Miscellaneous:"},{"text":"\\n\\n"},{"color":"black","text":"PVP: \\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo pvp true"},"text":"ON"},{"color":"black","text":" | "},{"color":"dark_red","clickEvent":{"action":"run_command","value":"/bingo pvp false"},"text":"OFF"},{"color":"dark_green","text":"\\n\\n"},{"color":"black","text":"KEEP INVENTORY: \\n"},{"color":"dark_green","clickEvent":{"action":"run_command","value":"/bingo keepInventory true"},"text":"ON"},{"color":"black","text":" | "},{"color":"dark_red","clickEvent":{"action":"run_command","value":"/bingo keepInventory false"},"text":"OFF"}],"text":""}'
+    ],
+    resolved: 1b,
+    title: "Bingo Book"
 }
