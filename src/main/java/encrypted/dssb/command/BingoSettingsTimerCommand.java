@@ -27,13 +27,13 @@ public class BingoSettingsTimerCommand {
                                         .then(argument(minutesArgument, IntegerArgumentType.integer())
                                                 .executes(ctx -> {
                                                     if (Game.Status == GameStatus.Idle) {
-                                                        var minutes = IntegerArgumentType.getInteger(ctx, TranslationHelper.get("dssb.arguments.minutes"));
+                                                        var minutes = IntegerArgumentType.getInteger(ctx, minutesArgument);
                                                         if (minutes == 0) {
-                                                            BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, TranslationHelper.get("dssb.arguments.minutes"));
+                                                            BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, minutesArgument);
                                                             MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
                                                                     TranslationHelper.getAsText("dssb.commands.settings.timer.disabled"));
                                                         } else if (minutes > 0) {
-                                                            BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, TranslationHelper.get("dssb.arguments.minutes"));
+                                                            BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, minutesArgument);
                                                             MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
                                                                     TranslationHelper.getAsText("dssb.commands.settings.timer.set", minutes));
                                                         }
