@@ -69,7 +69,7 @@ public class Bingo extends GameModeBase {
         }
 
         for (var player : BingoManager.getValidPlayers(Server.getPlayerManager()))
-            player.playSound(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
+            player.playSoundToPlayer(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
     }
 
     @Override

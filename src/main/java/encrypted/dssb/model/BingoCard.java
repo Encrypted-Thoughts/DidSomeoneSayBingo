@@ -1,13 +1,13 @@
 package encrypted.dssb.model;
 
 import encrypted.dssb.util.MapRenderHelper;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
@@ -96,20 +96,10 @@ public class BingoCard {
 
     private void createMap(World world) {
         map = new ItemStack(Items.FILLED_MAP);
-        var id = 1;
-        var nbt = new NbtCompound();
-
-        nbt.putString("dimension", world.getRegistryKey().getValue().toString());
-        nbt.putInt("xCenter", 0);
-        nbt.putInt("zCenter", 0);
-        nbt.putBoolean("locked", true);
-        nbt.putBoolean("unlimitedTracking", false);
-        nbt.putBoolean("trackingPosition", false);
-        nbt.putByte("scale", (byte) 3);
-        var mapState = MapState.fromNbt(nbt);
-        world.putMapState(FilledMapItem.getMapName(id), mapState);
-        map.getOrCreateNbt().putInt("map", id);
-
+        var mapState = MapState.of((byte) 3, true, world.getRegistryKey());
+        var mapIdComponent = new MapIdComponent(1);
+        world.putMapState(mapIdComponent, mapState);
+        map.set(DataComponentTypes.MAP_ID, mapIdComponent);
         updateMapState(mapState);
     }
 
@@ -141,19 +131,20 @@ public class BingoCard {
 
     public void updateMaps(MinecraftServer server) {
         if (server != null && map != null) {
-            var mapId = FilledMapItem.getMapId(map);
             createMap(server.getOverworld());
-            for (var p : server.getPlayerManager().getPlayerList()) {
-                var inventory = p.getInventory();
-                for (int i = 0; i < inventory.main.size(); ++i) {
-                    var id = FilledMapItem.getMapId(inventory.main.get(i));
-                    if (id != null && id.equals(mapId)) {
-                        inventory.main.set(i, map.copy());
+            var mapId = map.get(DataComponentTypes.MAP_ID);
+            if (mapId != null) {
+                for (var p : server.getPlayerManager().getPlayerList()) {
+                    var inventory = p.getInventory();
+                    for (int i = 0; i < inventory.main.size(); ++i) {
+                        var id = inventory.main.get(i).get(DataComponentTypes.MAP_ID);
+                        if (id != null && id.id() == mapId.id())
+                            inventory.main.set(i, map.copy());
                     }
+                    var id = inventory.offHand.getFirst().get(DataComponentTypes.MAP_ID);
+                    if (id != null && id.id() == mapId.id())
+                        inventory.offHand.set(0, map.copy());
                 }
-                var id = FilledMapItem.getMapId(inventory.offHand.get(0));
-                if (id != null && id.equals(mapId))
-                    inventory.offHand.set(0, map.copy());
             }
         }
     }

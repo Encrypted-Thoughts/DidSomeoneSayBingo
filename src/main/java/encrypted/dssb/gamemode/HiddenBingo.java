@@ -3,10 +3,7 @@ package encrypted.dssb.gamemode;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
-import encrypted.dssb.util.MapRenderHelper;
-import encrypted.dssb.util.MessageHelper;
-import encrypted.dssb.util.TranslationHelper;
-import encrypted.dssb.util.WorldHelper;
+import encrypted.dssb.util.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -120,7 +117,7 @@ public class HiddenBingo extends GameModeBase {
         }
 
         for (var player : BingoManager.getValidPlayers(Server.getPlayerManager()))
-            player.playSound(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
+            player.playSoundToPlayer(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
     }
 
     @Override
@@ -281,12 +278,12 @@ public class HiddenBingo extends GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, row, col, false);
 
-                    var itemFound = TranslationHelper.getAsText("dssb.game.item_found", player.getDisplayName().getString(), item.getName().getString()).formatted(foundByTeam.getColor());
+                    var itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).formatted(foundByTeam.getColor());
 
                     int finalRow = row;
                     int finalCol = col;
                     if (lockedSlots.stream().anyMatch(l -> l[0] == finalRow && l[1] == finalCol))
-                        itemFound = TranslationHelper.getAsText("dssb.game.hidden.item_found", player.getDisplayName().getString(), row+1, col+1).formatted(foundByTeam.getColor());
+                        itemFound = TranslationHelper.getAsText("dssb.game.hidden.item_found", PlayerHelper.getPlayerName(player), row+1, col+1).formatted(foundByTeam.getColor());
 
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
                     playNotificationSound(player.getWorld());

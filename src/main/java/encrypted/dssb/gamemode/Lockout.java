@@ -3,6 +3,7 @@ package encrypted.dssb.gamemode;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
+import encrypted.dssb.util.PlayerHelper;
 import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -118,7 +119,7 @@ public class Lockout extends GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, true);
 
-                    final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", player.getDisplayName().getString(), item.getName().getString()).formatted(foundByTeam.getColor());
+                    final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).formatted(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
                     playNotificationSound(player.getWorld());
                     return true;
@@ -230,7 +231,7 @@ public class Lockout extends GameModeBase {
         }
 
         for (var player : BingoManager.getValidPlayers(Server.getPlayerManager()))
-            player.playSound(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
+            player.playSoundToPlayer(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
     }
 
     private boolean checkForTie() {

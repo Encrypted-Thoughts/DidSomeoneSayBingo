@@ -5,10 +5,7 @@ import encrypted.dssb.command.BingoSettingsCommand;
 import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.config.itempools.ItemGroup;
 import encrypted.dssb.gamemode.*;
-import encrypted.dssb.util.MessageHelper;
-import encrypted.dssb.util.TeleportHelper;
-import encrypted.dssb.util.TranslationHelper;
-import encrypted.dssb.util.WorldHelper;
+import encrypted.dssb.util.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -42,7 +39,7 @@ public class BingoManager {
     public static long VoteStart;
     public static ArrayList<UUID> BingoPlayers = new ArrayList<>();
 
-    public static void start(ServerPlayerEntity starter, MinecraftServer server) throws CommandSyntaxException {
+    public static void start(ServerPlayerEntity starter, MinecraftServer server) {
         if (Game == null) {
             MessageHelper.sendSystemMessage(starter, TranslationHelper.getAsText("dssb.error.no_bingo_card"));
             return;
@@ -196,7 +193,7 @@ public class BingoManager {
                         if (scoreboard != null) {
                             var text = TranslationHelper.getAsText("dssb.game.game_over").formatted(player.getScoreboardTeam().getColor());
                             player.networkHandler.sendPacket(new TitleS2CPacket(text));
-                            somePlayer.playSound(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
+                            somePlayer.playSoundToPlayer(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
                         }
                     }
                     Game.Status = GameStatus.Idle;
@@ -267,9 +264,9 @@ public class BingoManager {
                         0);
                 resetPlayer(tpPlayer);
             } else
-                BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
+                BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(PlayerHelper.getPlayerName(player)));
         } catch (CommandSyntaxException e) {
-            BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(player.getDisplayName().getString()));
+            BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(PlayerHelper.getPlayerName(player)));
             BingoMod.LOGGER.error(e.getMessage());
         }
     }
@@ -350,8 +347,8 @@ public class BingoManager {
 
             TeleportHelper.teleport(player, tpTarget.getServerWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
 
-            MessageHelper.sendSystemMessage(teammates.get(randomNum), TranslationHelper.getAsText("dssb.game.teleport_target", player.getDisplayName().getString()));
-            MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.teleport_to", teammates.get(randomNum).getDisplayName().getString()));
+            MessageHelper.sendSystemMessage(teammates.get(randomNum), TranslationHelper.getAsText("dssb.game.teleport_target", PlayerHelper.getPlayerName(player)));
+            MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.teleport_to", PlayerHelper.getPlayerName(teammates.get(randomNum))));
         }
     }
 
@@ -421,7 +418,7 @@ public class BingoManager {
                                 var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
                                 TeleportHelper.teleport(player, world, teamPos.getX() + 0.5, teamPos.getY(), teamPos.getZ() + 0.5, player.getYaw(), player.getPitch());
                             } catch (CommandSyntaxException e) {
-                                BingoMod.LOGGER.error("Unable to teleport player: %s".formatted(player.getDisplayName().getString()));
+                                BingoMod.LOGGER.error("Unable to teleport player: %s".formatted(PlayerHelper.getPlayerName(player)));
                             }
                         }
                     }
@@ -450,7 +447,7 @@ public class BingoManager {
             var majority = getValidPlayers(playerManager).size() / 2;
 
             if (majority < 2) {
-                MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_game_ended", player.getDisplayName().getString()));
+                MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_game_ended", PlayerHelper.getPlayerName(player)));
                 end(server);
                 VoteInProgress = false;
                 VotesToEnd = new ArrayList<>();
@@ -461,14 +458,14 @@ public class BingoManager {
                     else {
                         VotesToEnd.add(player.getName().getString());
                         if (VotesToEnd.size() >= majority) {
-                            MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_game_ended", player.getDisplayName().getString()));
+                            MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_game_ended", PlayerHelper.getPlayerName(player)));
                             end(server);
                             VoteInProgress = false;
                         } else
-                            MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.voted", player.getDisplayName().getString(), majority - VotesToEnd.size()));
+                            MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.voted",  PlayerHelper.getPlayerName(player), majority - VotesToEnd.size()));
                     }
                 } else {
-                    MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_started", player.getDisplayName().getString(), majority - 1));
+                    MessageHelper.broadcastChatToPlayers(playerManager, TranslationHelper.getAsText("dssb.game.vote_started", PlayerHelper.getPlayerName(player), majority - 1));
                     VoteInProgress = true;
                     VotesToEnd = new ArrayList<>();
                     VotesToEnd.add(player.getName().getString());
@@ -512,7 +509,7 @@ public class BingoManager {
         try {
             BingoSettingsCommand.tellSettings(player);
         } catch (CommandSyntaxException e) {
-            BingoMod.LOGGER.error("Unable to tell player: %s the command options".formatted(player.getDisplayName().getString()));
+            BingoMod.LOGGER.error("Unable to tell player: %s the command options".formatted(PlayerHelper.getPlayerName(player)));
             BingoMod.LOGGER.error(e.getMessage());
         }
 

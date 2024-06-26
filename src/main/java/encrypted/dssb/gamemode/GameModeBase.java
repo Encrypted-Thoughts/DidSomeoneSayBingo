@@ -5,10 +5,7 @@ import encrypted.dssb.BingoManager;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.model.BingoItem;
-import encrypted.dssb.util.MessageHelper;
-import encrypted.dssb.util.TeleportHelper;
-import encrypted.dssb.util.TranslationHelper;
-import encrypted.dssb.util.WorldHelper;
+import encrypted.dssb.util.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -140,7 +137,7 @@ public abstract class GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, false);
 
-                    final Text itemFound = TranslationHelper.getAsText("dssb.game.item_found", player.getDisplayName().getString(), item.getName().getString()).formatted(foundByTeam.getColor());
+                    final Text itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).formatted(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
                     playNotificationSound(player.getWorld());
                     return true;
@@ -279,7 +276,7 @@ public abstract class GameModeBase {
         scoreboard.addScoreHolderToTeam(player.getName().getString(), team);
         if (!BingoManager.BingoPlayers.contains(player.getUuid()))
             BingoManager.BingoPlayers.add(player.getUuid());
-        var text = TranslationHelper.getAsText("dssb.game.team_joined", player.getDisplayName().getString(), team.getName()).formatted(team.getColor());
+        var text = TranslationHelper.getAsText("dssb.game.team_joined", PlayerHelper.getPlayerName(player), team.getName()).formatted(team.getColor());
         MessageHelper.broadcastChat(Server.getPlayerManager(), text);
         if (Status == GameStatus.Playing) {
             var server = player.getServer();
@@ -376,9 +373,10 @@ public abstract class GameModeBase {
 
         for (var entry : BingoManager.GameSettings.Effects) {
             if (!entry.OnRespawn && respawn) continue;
-            var effect = Registries.STATUS_EFFECT.get(new Identifier(entry.Type));
-            if (effect != null)
-                player.addStatusEffect(new StatusEffectInstance(effect, entry.Duration < 0 ? -1 : entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon));
+            var effect = Registries.STATUS_EFFECT.getEntry(new Identifier(entry.Type));
+            effect.ifPresent(statusEffectReference ->
+                player.addStatusEffect(new StatusEffectInstance(statusEffectReference, entry.Duration < 0 ? -1 : entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon))
+            );
         }
     }
 

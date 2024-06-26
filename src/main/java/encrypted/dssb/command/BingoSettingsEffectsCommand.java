@@ -8,7 +8,7 @@ import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.RegistryEntryArgumentType;
+import net.minecraft.command.argument.RegistryEntryReferenceArgumentType;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.command.ServerCommandSource;
 
@@ -31,10 +31,10 @@ public class BingoSettingsEffectsCommand {
                         .then(literal(settingsCommand)
                                 .then(literal(settingsEffectsCommand)
                                         .then(literal(settingsEffectsAddCommand)
-                                                .then(argument(settingsEffectArgument, RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.STATUS_EFFECT))
+                                                .then(argument(settingsEffectArgument, RegistryEntryReferenceArgumentType.registryEntry(registryAccess, RegistryKeys.STATUS_EFFECT))
                                                         .then(argument(settingsEffectAmplifierArgument, IntegerArgumentType.integer(0, 255))
                                                                 .executes(ctx -> {
-                                                                    var status = RegistryEntryArgumentType.getStatusEffect(ctx, settingsEffectArgument);
+                                                                    var status = RegistryEntryReferenceArgumentType.getStatusEffect(ctx, settingsEffectArgument);
                                                                     var amplifier = IntegerArgumentType.getInteger(ctx, settingsEffectAmplifierArgument);
                                                                     BingoManager.GameSettings.Effects.add(new StatusEffect(status.registryKey().getValue().toString(), 99999, amplifier, true));
 
@@ -44,9 +44,9 @@ public class BingoSettingsEffectsCommand {
                                                                 }))))
 
                                         .then(literal(settingsEffectsRemoveCommand)
-                                                .then(argument(settingsEffectArgument, RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.STATUS_EFFECT)))
+                                                .then(argument(settingsEffectArgument, RegistryEntryReferenceArgumentType.registryEntry(registryAccess, RegistryKeys.STATUS_EFFECT)))
                                                 .executes(ctx -> {
-                                                    var status = RegistryEntryArgumentType.getStatusEffect(ctx, settingsEffectArgument);
+                                                    var status = RegistryEntryReferenceArgumentType.getStatusEffect(ctx, settingsEffectArgument);
                                                     var effect = BingoManager.GameSettings.Effects.removeIf(statusEffect -> statusEffect.Type.equals(status.value().getName().toString()));
                                                     if (!effect) {
                                                         var text = TranslationHelper.getAsText("dssb.commands.settings.effects.remove.invalid_effect", status.value().getName().getString());
