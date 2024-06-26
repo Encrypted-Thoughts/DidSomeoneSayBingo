@@ -25,7 +25,7 @@ public class BingoSpawnCommand {
 
                                 // Set the spawn point location in the spawn hub
                                 .then(literal(spawnPointArgument)
-                                        .then(argument(displayPointArgument, BlockPosArgumentType.blockPos())
+                                        .then(argument(positionArgument, BlockPosArgumentType.blockPos())
                                                 .executes(ctx -> {
                                                     var pos = BlockPosArgumentType.getBlockPos(ctx, positionArgument);
                                                     BingoMod.CONFIG.SpawnSettings.HubCoords = new Coordinates(pos.getX(), pos.getY(), pos.getZ());

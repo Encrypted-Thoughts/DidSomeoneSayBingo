@@ -10,7 +10,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -18,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.scoreboard.ScoreHolder;
@@ -349,15 +349,20 @@ public abstract class GameModeBase {
         for (var gear : BingoManager.GameSettings.StartingGear) {
             if (!gear.OnRespawn && respawn) continue;
 
-            var item = Registries.ITEM.get(new Identifier(gear.Name));
+            var item = Registries.ITEM.get(Identifier.of(gear.Name));
             var stack = new ItemStack(item, gear.Amount);
             if (stack.isEnchantable()) {
-                for (var enchantment : gear.Enchantments)
-                    stack.addEnchantment(Registries.ENCHANTMENT.get(new Identifier(enchantment.Type)), enchantment.Level);
+                var server = player.getServer();
+                if (server != null) {
+                    for (var enchantment : gear.Enchantments) {
+                        var entry = server.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Identifier.of(enchantment.Type));
+                        entry.ifPresent(enchantmentReference -> stack.addEnchantment(enchantmentReference, enchantment.Level));
+                    }
+                }
             }
 
             if (gear.AutoEquip) {
-                var slot = LivingEntity.getPreferredEquipmentSlot(stack);
+                var slot = player.getPreferredEquipmentSlot(stack);
                 player.equipStack(slot, stack);
             } else {
                 player.giveItemStack(stack);
@@ -373,7 +378,7 @@ public abstract class GameModeBase {
 
         for (var entry : BingoManager.GameSettings.Effects) {
             if (!entry.OnRespawn && respawn) continue;
-            var effect = Registries.STATUS_EFFECT.getEntry(new Identifier(entry.Type));
+            var effect = Registries.STATUS_EFFECT.getEntry(Identifier.of(entry.Type));
             effect.ifPresent(statusEffectReference ->
                 player.addStatusEffect(new StatusEffectInstance(statusEffectReference, entry.Duration < 0 ? -1 : entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon))
             );
@@ -443,7 +448,7 @@ public abstract class GameModeBase {
     protected BlockState getConcrete(AbstractTeam team) {
         for (var configTeam : BingoMod.CONFIG.Teams) {
             if (configTeam.Name.equals(team.getName()))
-                return Registries.BLOCK.get(new Identifier(configTeam.BlockId)).getDefaultState();
+                return Registries.BLOCK.get(Identifier.of(configTeam.BlockId)).getDefaultState();
         }
         return null;
     }

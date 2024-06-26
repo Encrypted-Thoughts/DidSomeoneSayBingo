@@ -87,7 +87,7 @@ public class BingoManager {
             var group = getRandomItem(possibleItems);
             var random = ThreadLocalRandom.current().nextInt(0, group.Items.length);
             var possible = group.Items[random];
-            var item = Registries.ITEM.get(new Identifier(possible));
+            var item = Registries.ITEM.get(Identifier.of(possible));
 
             if (GameSettings.StartingGear.stream().noneMatch(gear -> gear.Name.equals(possible)) || attempts > 100) {
                 items.add(item);
@@ -233,20 +233,6 @@ public class BingoManager {
     public static void tpAllToBingoSpawn(MinecraftServer server) {
         for (var player : getValidPlayers(server.getPlayerManager()))
             tpToBingoSpawn(player);
-    }
-
-    public static void setPlayerSpawn(ServerPlayerEntity player) {
-        var server = player.getServer();
-        if (Game.Status != GameStatus.Idle && server != null) {
-            var team = player.getScoreboardTeam();
-            var spawn = Game.TeamSpawns.get(team).offset(Direction.Axis.Y, GameSettings.YSpawnOffset);
-            var dimension = WorldHelper.getWorldRegistryKeyByName(server, BingoManager.GameSettings.Dimension);
-            player.setSpawnPoint(dimension, spawn, 0, true, false);
-        } else if (server != null) {
-            var dimension = WorldHelper.getWorldRegistryKeyByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
-            var spawn = BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos();
-            player.setSpawnPoint(dimension, spawn, 0, true, false);
-        }
     }
 
     public static void tpToBingoSpawn(ServerPlayerEntity player) {

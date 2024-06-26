@@ -43,7 +43,7 @@ public class ItemPool {
             var possibleItems = new ArrayList<String>();
             for (var itemId : itemGroup.Items) {
                 try {
-                    var item = Registries.ITEM.get(new Identifier(itemId));
+                    var item = Registries.ITEM.get(Identifier.of(itemId));
                     var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(item.toString()));
                     if (stream == null)
                         throw new Exception("Can't obtain stream for: /assets/dssb/items/%s.png".formatted(item.toString()));
