@@ -194,8 +194,7 @@ public abstract class GameModeBase {
                 var player = Server.getPlayerManager().getPlayer(name);
                 if (player != null) {
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 300 * 20, 255, false, false, false));
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 300 * 20, 250, false, false, false));
+                    player.setNoGravity(true);
                     teleportPlayerToTeamSpawn(world, player, team.getValue().offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset));
                 }
             }
@@ -298,8 +297,7 @@ public abstract class GameModeBase {
                 player.getInventory().clear();
                 player.getInventory().offHand.set(0, getMap());
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 300 * 20, 255, false, false, false));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 300 * 20, 250, false, false, false));
+                player.setNoGravity(true);
                 BingoManager.Game.teleportPlayerToTeamSpawn(
                         WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
                         player,

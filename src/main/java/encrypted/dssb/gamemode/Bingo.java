@@ -91,6 +91,7 @@ public class Bingo extends GameModeBase {
             if (elapsedSeconds >= 30) {
                 for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
                     player.setMovementSpeed(1);
+                    player.setNoGravity(false);
                     givePlayerEquipment(player, false);
                     givePlayerStatusEffects(player, false);
                 }
