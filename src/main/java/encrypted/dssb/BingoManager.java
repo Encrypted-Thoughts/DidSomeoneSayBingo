@@ -209,6 +209,7 @@ public class BingoManager {
 
     public static void resetPlayer(ServerPlayerEntity player) {
         player.setMovementSpeed(1);
+        player.setNoGravity(false);
         player.setVelocity(0, 0, 0);
         player.clearStatusEffects();
 
