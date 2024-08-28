@@ -44,9 +44,9 @@ public class ItemPool {
             for (var itemId : itemGroup.Items) {
                 try {
                     var item = Registries.ITEM.get(Identifier.of(itemId));
-                    var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(item.toString()));
+                    var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(Registries.ITEM.getId(item).getPath()));
                     if (stream == null)
-                        throw new Exception("Can't obtain stream for: /assets/dssb/items/%s.png".formatted(item.toString()));
+                        throw new Exception("Can't obtain stream for: /assets/dssb/items/%s.png".formatted(Registries.ITEM.getId(item).getPath()));
                     ImageIO.read(stream);
                     possibleItems.add(itemId);
                 } catch (Exception e) {

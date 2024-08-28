@@ -380,7 +380,10 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:sheaf_pottery_sherd",
                         "minecraft:shelter_pottery_sherd",
                         "minecraft:skull_pottery_sherd",
-                        "minecraft:snort_pottery_sherd"
+                        "minecraft:snort_pottery_sherd",
+                        "minecraft:scrape_pottery_sherd",
+                        "minecraft:guster_pottery_sherd",
+                        "minecraft:flow_pottery_sherd"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:coast_armor_trim_smithing_template",
@@ -394,7 +397,10 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:tide_armor_trim_smithing_template",
                         "minecraft:vex_armor_trim_smithing_template",
                         "minecraft:ward_armor_trim_smithing_template",
-                        "minecraft:wild_armor_trim_smithing_template"
+                        "minecraft:wild_armor_trim_smithing_template",
+                        "minecraft:flow_armor_trim_smithing_template",
+                        "minecraft:bolt_armor_trim_smithing_template"
+
                 }),
                 new ItemGroup(new String[]{"minecraft:dropper"}),
                 new ItemGroup(new String[]{"minecraft:trident"}),
@@ -795,6 +801,17 @@ public class OverworldHardItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:crafter"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:breeze_rod",
+                        "minecraft:wind_charge"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:heavy_core",
+                        "minecraft:mace"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:ominous_trial_key"
                 })
         ));
 

@@ -845,6 +845,15 @@ public class OverworldNormalItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:crafter"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:ominous_bottle"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:armadillo_scute"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:wolf_armor"
                 })
         ));
 

@@ -39,7 +39,7 @@ public class BingoMod implements ModInitializer {
 		MapRenderHelper.loadBingoCardBorder();
 
 		if (!GamePresets.isEmpty()) {
-			GameSettings = new GamePreset(GamePresets.get(0));
+			GameSettings = new GamePreset(GamePresets.getFirst());
 			for (var preset : GamePresets) {
 				if (preset.Name.equals(CONFIG.DefaultGameProfile)) {
 					GameSettings = new GamePreset(preset);
@@ -58,7 +58,6 @@ public class BingoMod implements ModInitializer {
 
 	private void loadConfigs() {
 		CONFIG.readFromFile();
-		//Language.readFromFile(CONFIG.Language);
 
 		ItemPools = new ArrayList<>();
 		var poolDirectory = FabricLoader.getInstance().getConfigDir().resolve("bingo/itempools").toFile();
