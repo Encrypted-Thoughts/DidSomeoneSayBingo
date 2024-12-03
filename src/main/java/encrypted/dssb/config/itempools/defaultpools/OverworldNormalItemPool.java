@@ -301,8 +301,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:pale_oak_leaves",
                         "minecraft:pale_oak_sign",
                         "minecraft:pale_oak_trapdoor",
-                        "minecraft:pale_oak_spruce_log",
-                        "minecraft:pale_oak_spruce_wood"
+                        "minecraft:stripped_pale_oak_log",
+                        "minecraft:stripped_pale_oak_wood"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:cherry_boat",
