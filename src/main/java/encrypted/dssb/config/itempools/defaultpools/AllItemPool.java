@@ -12,6 +12,7 @@ public class AllItemPool extends ItemPool {
     public AllItemPool() {
         var creativeOnly = new ArrayList<>(List.of(
                 "minecraft:air",
+                "minecraft:creaking_spawn_egg",
                 "minecraft:warden_spawn_egg",
                 "minecraft:petrified_oak_slab",
                 "minecraft:zombie_horse_spawn_egg",

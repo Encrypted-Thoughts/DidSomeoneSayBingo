@@ -167,6 +167,7 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:emerald",
                         "minecraft:emerald_block"
                 }),
+                new ItemGroup(new String[]{"minecraft:creaking_heart"}),
                 new ItemGroup(new String[]{"minecraft:hanging_roots"}),
                 new ItemGroup(new String[]{"minecraft:brown_mushroom"}),
                 new ItemGroup(new String[]{"minecraft:sweet_berries"}),
@@ -342,10 +343,7 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:waxed_weathered_copper_trapdoor",
                         "minecraft:waxed_weathered_copper_bulb",
                 }),
-                //new ItemGroup(new String[]{"minecraft:wolf_armor"}),
                 new ItemGroup(new String[]{"minecraft:trial_key"}),
-                //new ItemGroup(new String[]{"minecraft:armadillo_scute"}),
-                //new ItemGroup(new String[]{"minecraft:wind_charge"}),
                 new ItemGroup(new String[]{"minecraft:lead"}),
                 new ItemGroup(new String[]{"minecraft:cake"}),
                 new ItemGroup(new String[]{"minecraft:name_tag"}),
@@ -436,7 +434,7 @@ public class OverworldHardItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:comparator"}),
                 new ItemGroup(new String[]{"minecraft:honey_block"}),
                 new ItemGroup(new String[]{"minecraft:glow_berries"}),
-                new ItemGroup(new String[]{"minecraft:scute"}),
+                new ItemGroup(new String[]{"minecraft:turtle_scute"}),
                 new ItemGroup(new String[]{
                         "minecraft:sculk",
                         "minecraft:sculk_catalyst",

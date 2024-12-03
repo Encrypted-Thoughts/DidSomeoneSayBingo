@@ -29,7 +29,25 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:light_weighted_pressure_plate"
                 }),
                 new ItemGroup(new String[]{"minecraft:flint_and_steel"}),
-                new ItemGroup(new String[]{"minecraft:bundle"}),
+                new ItemGroup(new String[]{
+                        "minecraft:bundle",
+                        "minecraft:brown_bundle",
+                        "minecraft:lime_bundle",
+                        "minecraft:light_gray_bundle",
+                        "minecraft:pink_bundle",
+                        "minecraft:cyan_bundle",
+                        "minecraft:white_bundle",
+                        "minecraft:light_blue_bundle",
+                        "minecraft:orange_bundle",
+                        "minecraft:black_bundle",
+                        "minecraft:yellow_bundle",
+                        "minecraft:green_bundle",
+                        "minecraft:gray_bundle",
+                        "minecraft:purple_bundle",
+                        "minecraft:red_bundle",
+                        "minecraft:magenta_bundle",
+                        "minecraft:blue_bundle"
+                }),
                 new ItemGroup(new String[]{"minecraft:blast_furnace"}),
                 new ItemGroup(new String[]{"minecraft:dead_bush"}),
                 new ItemGroup(new String[]{"minecraft:coarse_dirt"}),
@@ -267,6 +285,26 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:stripped_spruce_wood"
                 }),
                 new ItemGroup(new String[]{
+                        "minecraft:pale_oak_boat",
+                        "minecraft:pale_oak_stairs",
+                        "minecraft:pale_oak_slab",
+                        "minecraft:pale_oak_fence",
+                        "minecraft:pale_oak_fence_gate",
+                        "minecraft:pale_oak_pressure_plate",
+                        "minecraft:pale_oak_button",
+                        "minecraft:pale_oak_chest_boat",
+                        "minecraft:pale_oak_door",
+                        "minecraft:pale_oak_log",
+                        "minecraft:pale_oak_wood",
+                        "minecraft:pale_oak_planks",
+                        "minecraft:pale_oak_sapling",
+                        "minecraft:pale_oak_leaves",
+                        "minecraft:pale_oak_sign",
+                        "minecraft:pale_oak_trapdoor",
+                        "minecraft:pale_oak_spruce_log",
+                        "minecraft:pale_oak_spruce_wood"
+                }),
+                new ItemGroup(new String[]{
                         "minecraft:cherry_boat",
                         "minecraft:cherry_stairs",
                         "minecraft:cherry_slab",
@@ -502,8 +540,6 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:mutton",
                         "minecraft:cooked_mutton"
                 }),
-                //new ItemGroup(new String[]{"minecraft:armadillo_scute"}),
-                //new ItemGroup(new String[]{"minecraft:wind_charge"}),
                 new ItemGroup(new String[]{"minecraft:target"}),
                 new ItemGroup(new String[]{"minecraft:fern"}),
                 new ItemGroup(new String[]{
@@ -534,6 +570,11 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:chest_minecart",
                         "minecraft:furnace_minecart"
                 }),
+                new ItemGroup(new String[]{
+                        "minecraft:pale_hanging_moss",
+                        "minecraft:pale_moss_block",
+                        "minecraft:pale_moss_carpet"
+                }),
                 new ItemGroup(new String[]{"minecraft:grindstone"}),
                 new ItemGroup(new String[]{
                         "minecraft:acacia_hanging_sign",
@@ -544,7 +585,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:dark_oak_hanging_sign",
                         "minecraft:mangrove_hanging_sign",
                         "minecraft:bamboo_hanging_sign",
-                        "minecraft:cherry_hanging_sign"
+                        "minecraft:cherry_hanging_sign",
+                        "minecraft:pale_oak_hanging_sign"
                 }),
                 new ItemGroup(new String[]{"minecraft:cauldron"}),
                 new ItemGroup(new String[]{"minecraft:observer"}),
