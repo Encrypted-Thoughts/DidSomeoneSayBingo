@@ -28,21 +28,21 @@ public class BingoSettingsCommand {
 
     public static int tellSettings(PlayerEntity player) throws CommandSyntaxException {
         var text = TranslationHelper.getAsText("dssb.commands.settings.tell.current");
-        player.sendMessage(text);
+        player.sendMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.game_mode").append(TranslationHelper.getAsText(GameSettings.GameMode));
-        player.sendMessage(text);
+        player.sendMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.time_limit").append(GameSettings.TimeLimit > 0 ? TranslationHelper.get("dssb.commands.settings.tell.time_limit.minutes", GameSettings.TimeLimit) : TranslationHelper.get("dssb.commands.settings.tell.time_limit.none"));
-        player.sendMessage(text);
+        player.sendMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.area_size").append(TranslationHelper.getAsText(String.valueOf(GameSettings.TPRandomizationRadius)));
-        player.sendMessage(text);
+        player.sendMessage(text, false);
         if (GameSettings != null) {
             text = TranslationHelper.getAsText("dssb.commands.settings.tell.profile").append(TranslationHelper.getAsText(GameSettings.Name));
-            player.sendMessage(text);
+            player.sendMessage(text, false);
         }
         var server = player.getServer();
         if (server != null) {
             text = TranslationHelper.getAsText("dssb.commands.settings.tell.pvp").append(TranslationHelper.getAsText(server.isPvpEnabled() ? "dssb.commands.settings.tell.pvp.yes" : "dssb.commands.settings.tell.pvp.no"));
-            player.sendMessage(text);
+            player.sendMessage(text, false);
         }
         return Command.SINGLE_SUCCESS;
     }

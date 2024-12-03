@@ -212,8 +212,8 @@ public class BingoManager {
         player.setNoGravity(false);
         player.setVelocity(0, 0, 0);
         player.clearStatusEffects();
-
-        player.playerScreenHandler.clearCraftingSlots();
+        
+        player.playerScreenHandler.getCraftingInput().clear();
         player.currentScreenHandler.setCursorStack(new ItemStack(Items.AIR));
         player.getInventory().clear();
         player.currentScreenHandler.sendContentUpdates();

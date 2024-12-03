@@ -353,7 +353,7 @@ public abstract class GameModeBase {
                 var server = player.getServer();
                 if (server != null) {
                     for (var enchantment : gear.Enchantments) {
-                        var entry = server.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Identifier.of(enchantment.Type));
+                        var entry = server.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getEntry(Identifier.of(enchantment.Type));
                         entry.ifPresent(enchantmentReference -> stack.addEnchantment(enchantmentReference, enchantment.Level));
                     }
                 }
