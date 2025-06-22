@@ -332,7 +332,7 @@ public class BingoManager {
             int randomNum = ThreadLocalRandom.current().nextInt(0, teammates.size());
             var tpTarget = teammates.get(randomNum);
 
-            TeleportHelper.teleport(player, tpTarget.getServerWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
+            TeleportHelper.teleport(player, tpTarget.getWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
 
             MessageHelper.sendSystemMessage(teammates.get(randomNum), TranslationHelper.getAsText("dssb.game.teleport_target", PlayerHelper.getPlayerName(player)));
             MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.teleport_to", PlayerHelper.getPlayerName(teammates.get(randomNum))));

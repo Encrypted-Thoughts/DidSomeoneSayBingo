@@ -176,6 +176,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:stripped_oak_log",
                         "minecraft:stripped_oak_wood"
                 }),
+                new ItemGroup(new String[]{"minecraft:saddle"}),
                 new ItemGroup(new String[]{
                         "minecraft:cherry_boat",
                         "minecraft:cherry_stairs",
@@ -520,6 +521,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:bush",
                         "minecraft:firefly_bush"
                 }),
+                new ItemGroup(new String[]{"minecraft:white_harness"}),
                 new ItemGroup(new String[]{"minecraft:bell"}),
                 new ItemGroup(new String[]{"minecraft:paper"}),
                 new ItemGroup(new String[]{

@@ -112,6 +112,7 @@ public class AllItemPool extends ItemPool {
                 "minecraft:armadillo_spawn_egg",
                 "minecraft:bogged_spawn_egg",
                 "minecraft:creaking_spawn_egg",
+                "minecraft:happy_ghast_spawn_egg",
                 "minecraft:spawner",
                 "minecraft:jigsaw",
                 "minecraft:knowledge_book",

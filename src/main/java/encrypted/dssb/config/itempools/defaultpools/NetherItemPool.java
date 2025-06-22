@@ -19,6 +19,8 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:ender_eye"
                 }),
                 new ItemGroup(new String[]{"minecraft:ender_chest"}),
+                new ItemGroup(new String[]{"minecraft:music_disc_tears"}),
+                new ItemGroup(new String[]{"minecraft:dried_ghast"}),
                 new ItemGroup(new String[]{
                         "minecraft:chest",
                         "minecraft:composter",
