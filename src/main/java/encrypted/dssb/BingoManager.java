@@ -223,11 +223,11 @@ public class BingoManager {
             player.getInventory().insertStack(Game.getMap());
         player.heal(player.getMaxHealth());
         player.getHungerManager().setFoodLevel(20);
-        player.changeGameMode(net.minecraft.world.GameMode.byName(BingoMod.CONFIG.SpawnSettings.HubMode.toLowerCase()));
+        player.changeGameMode(net.minecraft.world.GameMode.byId(BingoMod.CONFIG.SpawnSettings.HubMode.toLowerCase()));
         var server = player.getServer();
         if (server != null) {
             var world = WorldHelper.getWorldRegistryKeyByName(player.getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
-            player.setSpawnPoint(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true, false);
+            player.setSpawnPoint(new ServerPlayerEntity.Respawn(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true), false);
         }
     }
 

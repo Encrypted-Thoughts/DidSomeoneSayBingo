@@ -293,7 +293,11 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:copper_ingot"
                 }),
                 new ItemGroup(new String[]{"minecraft:calcite"}),
-                new ItemGroup(new String[]{"minecraft:short_grass"}),
+                new ItemGroup(new String[]{
+                        "minecraft:short_grass",
+                        "minecraft:short_dry_grass",
+                        "minecraft:tall_dry_grass"
+                }),
                 new ItemGroup(new String[]{"minecraft:composter"}),
                 new ItemGroup(new String[]{"minecraft:minecart"}),
                 new ItemGroup(new String[]{"minecraft:arrow"}),
@@ -505,7 +509,16 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:blue_orchid",
                         "minecraft:cornflower",
                         "minecraft:azure_bluet",
-                        "minecraft:allium"
+                        "minecraft:allium",
+                        "minecraft:closed_eyeblossom",
+                        "minecraft:open_eyeblossom",
+                        "minecraft:wildflowers",
+                        "minecraft:cactus_flower"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:fern",
+                        "minecraft:bush",
+                        "minecraft:firefly_bush"
                 }),
                 new ItemGroup(new String[]{"minecraft:bell"}),
                 new ItemGroup(new String[]{"minecraft:paper"}),
@@ -562,6 +575,7 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:stripped_jungle_log",
                         "minecraft:stripped_jungle_wood"
                 }),
+                new ItemGroup(new String[]{"minecraft:leaf_litter"}),
                 new ItemGroup(new String[]{
                         "minecraft:spruce_boat",
                         "minecraft:spruce_stairs",

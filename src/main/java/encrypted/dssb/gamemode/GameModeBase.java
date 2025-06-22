@@ -14,6 +14,7 @@ import net.minecraft.entity.decoration.GlowItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -107,7 +108,7 @@ public abstract class GameModeBase {
 
             for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
                 player.getInventory().clear();
-                player.getInventory().offHand.set(0, Card.getMap());
+                player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, Card.getMap());
                 player.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
             }
             Status = GameStatus.Initializing;
@@ -208,7 +209,7 @@ public abstract class GameModeBase {
                 player.getHungerManager().setFoodLevel(20);
                 TeleportHelper.teleport(player, world, spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5, 0, 0);
                 player.changeGameMode(net.minecraft.world.GameMode.SURVIVAL);
-                player.setSpawnPoint(player.getWorld().getRegistryKey(), spawn, 0, true, false);
+                player.setSpawnPoint(new ServerPlayerEntity.Respawn(player.getWorld().getRegistryKey(), spawn, 0, true), false);
             } catch (CommandSyntaxException e) {
                 BingoMod.LOGGER.error(e.getMessage());
             }
@@ -281,7 +282,7 @@ public abstract class GameModeBase {
             var server = player.getServer();
             if (server != null) {
                 player.getInventory().clear();
-                player.getInventory().offHand.set(0, getMap());
+                player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
                 givePlayerStatusEffects(player, true);
                 givePlayerEquipment(player, true);
                 BingoManager.Game.teleportPlayerToTeamSpawn(
@@ -295,7 +296,7 @@ public abstract class GameModeBase {
             var server = player.getServer();
             if (server != null) {
                 player.getInventory().clear();
-                player.getInventory().offHand.set(0, getMap());
+                player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
                 player.setNoGravity(true);
                 BingoManager.Game.teleportPlayerToTeamSpawn(
@@ -329,12 +330,12 @@ public abstract class GameModeBase {
         if (Status == GameStatus.Playing && BingoManager.BingoPlayers.contains(player.getUuid())) {
             givePlayerEquipment(player, true);
             givePlayerStatusEffects(player, true);
-            player.getInventory().offHand.set(0, getMap());
+            player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
         } else if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnRespawn) {
             var server = player.getServer();
             if (server != null) {
                 var world = WorldHelper.getWorldRegistryKeyByName(player.getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
-                player.setSpawnPoint(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true, false);
+                player.setSpawnPoint(new ServerPlayerEntity.Respawn(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true), false);
                 BingoManager.tpToBingoSpawn(player);
             }
         }

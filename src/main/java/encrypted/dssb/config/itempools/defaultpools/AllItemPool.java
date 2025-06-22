@@ -111,6 +111,7 @@ public class AllItemPool extends ItemPool {
                 "minecraft:breeze_spawn_egg",
                 "minecraft:armadillo_spawn_egg",
                 "minecraft:bogged_spawn_egg",
+                "minecraft:creaking_spawn_egg",
                 "minecraft:spawner",
                 "minecraft:jigsaw",
                 "minecraft:knowledge_book",
@@ -124,7 +125,9 @@ public class AllItemPool extends ItemPool {
                 "minecraft:chorus_plant",
                 "minecraft:end_portal_frame",
                 "minecraft:trial_spawner",
-                "minecraft:vault"
+                "minecraft:vault",
+                "minecraft:test_block",
+                "minecraft:test_instance_block"
         ));
 
         Name = "All";

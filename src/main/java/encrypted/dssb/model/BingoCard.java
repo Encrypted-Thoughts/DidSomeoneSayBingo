@@ -10,7 +10,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
@@ -45,7 +44,7 @@ public class BingoCard {
         resetCard(world);
     }
 
-    public void redrawCard(World world) {
+    public void redrawCard(ServerWorld world) {
         var sideOffset = 2;
         var offsetBetweenSlots = 1;
         var slotOffset = 24;
@@ -70,7 +69,7 @@ public class BingoCard {
         createMap(world);
     }
 
-    public void resetCard(World world) {
+    public void resetCard(ServerWorld world) {
         bingoPixels = new int[128][128];
         for (int i = 0; i < MapRenderHelper.getBingoCardBorder().length; i++)
             bingoPixels[i] = MapRenderHelper.getBingoCardBorder()[i].clone();
@@ -94,7 +93,7 @@ public class BingoCard {
         return map.copy();
     }
 
-    private void createMap(World world) {
+    private void createMap(ServerWorld world) {
         map = new ItemStack(Items.FILLED_MAP);
         var mapState = MapState.of((byte) 3, true, world.getRegistryKey());
         var mapIdComponent = new MapIdComponent(1);
@@ -136,14 +135,11 @@ public class BingoCard {
             if (mapId != null) {
                 for (var p : server.getPlayerManager().getPlayerList()) {
                     var inventory = p.getInventory();
-                    for (int i = 0; i < inventory.main.size(); ++i) {
-                        var id = inventory.main.get(i).get(DataComponentTypes.MAP_ID);
+                    for (int i = 0; i < inventory.size(); ++i) {
+                        var id = inventory.getStack(i).get(DataComponentTypes.MAP_ID);
                         if (id != null && id.id() == mapId.id())
-                            inventory.main.set(i, map.copy());
+                            inventory.setStack(i, map.copy());
                     }
-                    var id = inventory.offHand.getFirst().get(DataComponentTypes.MAP_ID);
-                    if (id != null && id.id() == mapId.id())
-                        inventory.offHand.set(0, map.copy());
                 }
             }
         }

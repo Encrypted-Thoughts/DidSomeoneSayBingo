@@ -518,7 +518,11 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:tall_grass",
                         "minecraft:large_fern"
                 }),
-                new ItemGroup(new String[]{"minecraft:egg"}),
+                new ItemGroup(new String[]{
+                        "minecraft:egg",
+                        "minecraft:brown_egg",
+                        "minecraft:blue_egg"
+                }),
                 new ItemGroup(new String[]{"minecraft:mushroom_stew"}),
                 new ItemGroup(new String[]{
                         "minecraft:beetroot",
