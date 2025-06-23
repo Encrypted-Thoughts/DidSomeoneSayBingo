@@ -176,6 +176,25 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:stripped_oak_log",
                         "minecraft:stripped_oak_wood"
                 }),
+                new ItemGroup(new String[]{
+                        "minecraft:bundle",
+                        "minecraft:brown_bundle",
+                        "minecraft:lime_bundle",
+                        "minecraft:light_gray_bundle",
+                        "minecraft:pink_bundle",
+                        "minecraft:cyan_bundle",
+                        "minecraft:white_bundle",
+                        "minecraft:light_blue_bundle",
+                        "minecraft:orange_bundle",
+                        "minecraft:black_bundle",
+                        "minecraft:yellow_bundle",
+                        "minecraft:green_bundle",
+                        "minecraft:gray_bundle",
+                        "minecraft:purple_bundle",
+                        "minecraft:red_bundle",
+                        "minecraft:magenta_bundle",
+                        "minecraft:blue_bundle"
+                }),
                 new ItemGroup(new String[]{"minecraft:saddle"}),
                 new ItemGroup(new String[]{
                         "minecraft:cherry_boat",
