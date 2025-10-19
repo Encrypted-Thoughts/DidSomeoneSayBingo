@@ -7,6 +7,7 @@ import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.world.GameRules;
 
 import static encrypted.dssb.BingoManager.Game;
 import static net.minecraft.server.command.CommandManager.argument;
@@ -26,7 +27,8 @@ public class BingoPVPCommand {
                                             var player = ctx.getSource().getPlayer();
                                             if (Game.Status == GameStatus.Idle || ctx.getSource().hasPermissionLevel(2)) {
                                                 var bool = BoolArgumentType.getBool(ctx, pvpEnabledArgument);
-                                                ctx.getSource().getServer().setPvpEnabled(bool);
+                                                var server = ctx.getSource().getServer();
+                                                server.getGameRules().get(GameRules.PVP).set(bool, server);
                                                 MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), TranslationHelper.getAsText(bool ? "dssb.commands.pvp.set_enabled" : "dssb.commands.pvp.set_disabled"));
                                             } else
                                                 MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.commands.pvp.op_only"));

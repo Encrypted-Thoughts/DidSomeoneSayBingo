@@ -21,8 +21,8 @@ public class BingoGetMapCommand {
                             if (BingoManager.Game.Status != GameStatus.Idle) {
                                 var player = ctx.getSource().getPlayer();
                                 if (player != null && !player.getInventory().insertStack(BingoManager.Game.getMap())) {
-                                    var itemEntity = new ItemEntity(player.getWorld(), player.getPos().x, player.getPos().y, player.getPos().z, BingoManager.Game.getMap());
-                                    player.getWorld().spawnEntity(itemEntity);
+                                    var itemEntity = new ItemEntity(player.getEntityWorld(), player.getEntityPos().x, player.getEntityPos().y, player.getEntityPos().z, BingoManager.Game.getMap());
+                                    player.getEntityWorld().spawnEntity(itemEntity);
                                 }
                             }
                             return Command.SINGLE_SUCCESS;

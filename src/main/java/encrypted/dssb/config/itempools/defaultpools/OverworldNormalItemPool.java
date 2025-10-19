@@ -73,6 +73,7 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:golden_boots"
                 }),
                 new ItemGroup(new String[]{"minecraft:lantern"}),
+                new ItemGroup(new String[]{"minecraft:copper_lantern"}),
                 new ItemGroup(new String[]{
                         "minecraft:tropical_fish",
                         "minecraft:tropical_fish_bucket"
@@ -141,7 +142,9 @@ public class OverworldNormalItemPool extends ItemPool {
                 }),
                 new ItemGroup(new String[]{"minecraft:suspicious_stew"}),
                 new ItemGroup(new String[]{"minecraft:flower_pot"}),
-                new ItemGroup(new String[]{"minecraft:chain"}),
+                new ItemGroup(new String[]{"minecraft:iron_chain"}),
+                new ItemGroup(new String[]{"minecraft:copper_chain"}),
+                new ItemGroup(new String[]{"minecraft:copper_torch"}),
                 new ItemGroup(new String[]{
                         "minecraft:moss_block",
                         "minecraft:moss_carpet"
@@ -299,30 +302,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:jungle_sign",
                         "minecraft:jungle_trapdoor",
                         "minecraft:stripped_jungle_log",
-                        "minecraft:stripped_jungle_wood"
-                }),
-                new ItemGroup(new String[]{
-                        "minecraft:pale_oak_boat",
-                        "minecraft:pale_oak_stairs",
-                        "minecraft:pale_oak_slab",
-                        "minecraft:pale_oak_button",
-                        "minecraft:pale_oak_pressure_plate",
-                        "minecraft:pale_oak_fence",
-                        "minecraft:pale_oak_fence_gate",
-                        "minecraft:pale_oak_leaves",
-                        "minecraft:pale_oak_chest_boat",
-                        "minecraft:pale_oak_door",
-                        "minecraft:pale_oak_log",
-                        "minecraft:pale_oak_wood",
-                        "minecraft:pale_oak_planks",
-                        "minecraft:pale_oak_sapling",
-                        "minecraft:pale_oak_sign",
-                        "minecraft:pale_oak_trapdoor",
-                        "minecraft:stripped_pale_oak_log",
-                        "minecraft:stripped_pale_oak_wood",
-                        "minecraft:pale_moss_block",
-                        "minecraft:pale_moss_carpet",
-                        "minecraft:pale_hanging_moss"
+                        "minecraft:stripped_jungle_wood",
+                        "minecraft:jungle_shelf"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:spruce_boat",
@@ -342,7 +323,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:spruce_sign",
                         "minecraft:spruce_trapdoor",
                         "minecraft:stripped_spruce_log",
-                        "minecraft:stripped_spruce_wood"
+                        "minecraft:stripped_spruce_wood",
+                        "minecraft:spruce_shelf"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:pale_oak_boat",
@@ -362,7 +344,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:pale_oak_sign",
                         "minecraft:pale_oak_trapdoor",
                         "minecraft:stripped_pale_oak_log",
-                        "minecraft:stripped_pale_oak_wood"
+                        "minecraft:stripped_pale_oak_wood",
+                        "minecraft:pale_oak_shelf"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:cherry_boat",
@@ -383,7 +366,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:cherry_trapdoor",
                         "minecraft:cherry_log",
                         "minecraft:stripped_cherry_wood",
-                        "minecraft:pink_petals"
+                        "minecraft:pink_petals",
+                        "minecraft:cherry_shelf"
                 }),
                 new ItemGroup(new String[]{"minecraft:brush"}),
                 new ItemGroup(new String[]{"minecraft:decorated_pot"}),
@@ -461,6 +445,12 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:iron_helmet",
                         "minecraft:iron_leggings"
                 }),
+                new ItemGroup(new String[]{
+                        "minecraft:copper_boots",
+                        "minecraft:copper_chestplate",
+                        "minecraft:copper_helmet",
+                        "minecraft:copper_leggings"
+                }),
                 new ItemGroup(new String[]{"minecraft:writable_book"}),
                 new ItemGroup(new String[]{
                         "minecraft:golden_axe",
@@ -468,6 +458,13 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:golden_pickaxe",
                         "minecraft:golden_shovel",
                         "minecraft:golden_sword"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:copper_axe",
+                        "minecraft:copper_hoe",
+                        "minecraft:copper_pickaxe",
+                        "minecraft:copper_shovel",
+                        "minecraft:copper_sword"
                 }),
                 new ItemGroup(new String[]{"minecraft:note_block"}),
                 new ItemGroup(new String[]{
@@ -537,7 +534,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:stripped_acacia_wood",
                         "minecraft:acacia_sapling",
                         "minecraft:acacia_sign",
-                        "minecraft:acacia_trapdoor"
+                        "minecraft:acacia_trapdoor",
+                        "minecraft:acacia_shelf"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:raw_iron_block",
@@ -576,6 +574,7 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:tuff_brick_slab"
                 }),
                 new ItemGroup(new String[]{"minecraft:iron_bars"}),
+                new ItemGroup(new String[]{"minecraft:copper_bars"}),
                 new ItemGroup(new String[]{
                         "minecraft:lapis_block",
                         "minecraft:lapis_lazuli"
@@ -590,7 +589,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:copper_grate",
                         "minecraft:copper_trapdoor",
                         "minecraft:copper_bulb",
-                        "minecraft:copper_ingot"
+                        "minecraft:copper_ingot",
+                        "minecraft:copper_nugget"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:beetroot",
@@ -626,7 +626,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:bamboo_door",
                         "minecraft:bamboo_trapdoor",
                         "minecraft:bamboo_raft",
-                        "minecraft:bamboo_chest_raft"
+                        "minecraft:bamboo_chest_raft",
+                        "minecraft:bamboo_shelf"
                 }),
                 new ItemGroup(new String[]{"minecraft:iron_trapdoor"}),
                 new ItemGroup(new String[]{
@@ -671,6 +672,7 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:armor_stand"}),
                 new ItemGroup(new String[]{"minecraft:composter"}),
                 new ItemGroup(new String[]{"minecraft:trapped_chest"}),
+                new ItemGroup(new String[]{"minecraft:copper_chest"}),
                 new ItemGroup(new String[]{"minecraft:carrot_on_a_stick"}),
                 new ItemGroup(new String[]{"minecraft:dispenser"}),
                 new ItemGroup(new String[]{
@@ -692,7 +694,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:mangrove_sign",
                         "minecraft:mangrove_trapdoor",
                         "minecraft:stripped_mangrove_log",
-                        "minecraft:stripped_mangrove_wood"
+                        "minecraft:stripped_mangrove_wood",
+                        "minecraft:mangrove_shelf"
                 }),
                 new ItemGroup(new String[]{"minecraft:ender_pearl"}),
                 new ItemGroup(new String[]{

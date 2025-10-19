@@ -73,6 +73,7 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:crimson_door",
                         "minecraft:crimson_sign",
                         "minecraft:crimson_trapdoor",
+                        "minecraft:crimson_shelf",
                         "minecraft:stripped_crimson_stem",
                         "minecraft:stripped_crimson_hyphae"
                 }),
@@ -162,6 +163,7 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:warped_door",
                         "minecraft:warped_sign",
                         "minecraft:warped_trapdoor",
+                        "minecraft:warped_shelf",
                         "minecraft:stripped_warped_stem",
                         "minecraft:stripped_warped_hyphae"
                 }),
@@ -192,7 +194,7 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:iron_bars",
                         "minecraft:iron_trapdoor",
                         "minecraft:smithing_table",
-                        "minecraft:chain",
+                        "minecraft:iron_chain",
                         "minecraft:tripwire_hook"
                 }),
                 new ItemGroup(new String[]{"minecraft:soul_torch"}),

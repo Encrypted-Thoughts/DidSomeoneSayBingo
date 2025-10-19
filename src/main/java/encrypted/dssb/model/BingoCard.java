@@ -124,7 +124,7 @@ public class BingoCard {
                 }
             }
 
-            updateMaps(player.getServer());
+            updateMaps(player.getEntityWorld().getServer());
         }
     }
 

@@ -26,23 +26,44 @@ import java.util.*;
 
 public class HiddenBingo extends GameModeBase {
 
-    public enum HiddenType {Diagonal, DoubleDiagonal, All}
+    public enum HiddenType {CheckerBoard, InverseCheckerBoard, Diagonal, DoubleDiagonal, All}
 
     private long unlocked = 0;
     private ArrayList<int[]> lockedSlots;
-    private final int unlockInterval;
-    private final HiddenType hiddenType;
+    private int unlockInterval;
+    private HiddenType hiddenType = HiddenType.DoubleDiagonal;
 
-    public HiddenBingo(MinecraftServer server, ArrayList<Item> items, HiddenType type, int interval) throws Exception {
+    public HiddenBingo(MinecraftServer server, ArrayList<Item> items, String type) throws Exception {
         super(server);
         var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
         Card = new BingoCard(world, items);
         Name = "Hidden";
 
-        unlockInterval = interval;
-        hiddenType = type;
+        var secondsOffset = 60;
+        switch (type) {
+            case "diagonal" -> {
+                hiddenType = HiddenType.Diagonal;
+                unlockInterval = (BingoManager.GameSettings.TimeLimit * 60 - secondsOffset) / 5;
+            }
+            case "doubleDiagonal" -> {
+                hiddenType = HiddenType.DoubleDiagonal;
+                unlockInterval = (BingoManager.GameSettings.TimeLimit * 60 - secondsOffset) / 9;
+            }
+            case "checkerboard" -> {
+                hiddenType = HiddenType.CheckerBoard;
+                unlockInterval = (BingoManager.GameSettings.TimeLimit * 60 - secondsOffset) / 13;
+            }
+            case "inverseCheckerboard" -> {
+                hiddenType = HiddenType.InverseCheckerBoard;
+                unlockInterval = (BingoManager.GameSettings.TimeLimit * 60 - secondsOffset) / 12;
+            }
+            case "all" -> {
+                hiddenType = HiddenType.All;
+                unlockInterval = (BingoManager.GameSettings.TimeLimit * 60 - secondsOffset) / 25;
+            }
+        }
 
-        hideSlots(world, type);
+        hideSlots(world, hiddenType);
     }
 
     private void hideSlots(ServerWorld world, HiddenType type) throws Exception {
@@ -50,6 +71,22 @@ public class HiddenBingo extends GameModeBase {
         for (var row = 0; row < Card.slots.length; row++) {
             for (var col = 0; col < Card.slots.length; col++) {
                 switch (type) {
+                    case CheckerBoard -> {
+                        var evenRow = (row + 1 & 1) == 0;
+                        var evenColumn = (col + 1 & 1) == 0;
+                        if (evenRow == evenColumn) {
+                            lockedSlots.add(new int[] {row, col});
+                            Card.slots[row][col].slotPixels = MapRenderHelper.getUnknownItemIcon();
+                        }
+                    }
+                    case InverseCheckerBoard -> {
+                        var evenRow = (row + 1 & 1) == 0;
+                        var evenColumn = (col + 1 & 1) == 0;
+                        if (evenRow != evenColumn) {
+                            lockedSlots.add(new int[] {row, col});
+                            Card.slots[row][col].slotPixels = MapRenderHelper.getUnknownItemIcon();
+                        }
+                    }
                     case Diagonal -> {
                         if (row + col == 4) {
                             lockedSlots.add(new int[] {row, col});
@@ -259,13 +296,13 @@ public class HiddenBingo extends GameModeBase {
 
     public void playUnlockSound(MinecraftServer server) {
         for (var player : BingoManager.getValidPlayers(server.getPlayerManager()))
-            player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.MASTER, 1, 0.5F);
+            player.getEntityWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.MASTER, 1, 0.5F);
     }
 
     @Override
     public boolean checkItem(Item item, PlayerEntity player) {
         var foundByTeam = player.getScoreboardTeam();
-        var server = player.getServer();
+        var server = player.getEntityWorld().getServer();
         if (foundByTeam == null || server == null)
             return false;
 
@@ -287,7 +324,7 @@ public class HiddenBingo extends GameModeBase {
                         itemFound = TranslationHelper.getAsText("dssb.game.hidden.item_found", PlayerHelper.getPlayerName(player), row+1, col+1).formatted(foundByTeam.getColor());
 
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
-                    playNotificationSound(player.getWorld());
+                    playNotificationSound(player.getEntityWorld());
                     return true;
                 }
             }
@@ -308,6 +345,22 @@ public class HiddenBingo extends GameModeBase {
                 frame.setInvulnerable(true);
 
                 switch (hiddenType) {
+                    case CheckerBoard -> {
+                        var evenRow = (i + 1 & 1) == 0;
+                        var evenColumn = (j + 1 & 1) == 0;
+                        if (evenRow == evenColumn)
+                            frame.setHeldItemStack(Items.STRUCTURE_VOID.getDefaultStack(), true);
+                        else
+                            frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
+                    }
+                    case InverseCheckerBoard -> {
+                        var evenRow = (i + 1 & 1) == 0;
+                        var evenColumn = (j + 1 & 1) == 0;
+                        if (evenRow != evenColumn)
+                            frame.setHeldItemStack(Items.STRUCTURE_VOID.getDefaultStack(), true);
+                        else
+                            frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
+                    }
                     case Diagonal -> {
                         if (i + j == 4) frame.setHeldItemStack(Items.STRUCTURE_VOID.getDefaultStack(), true);
                         else frame.setHeldItemStack(new ItemStack(slot.item, 1), true);

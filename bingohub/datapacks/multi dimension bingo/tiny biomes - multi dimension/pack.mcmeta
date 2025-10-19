@@ -1,6 +1,8 @@
 {
 	"pack": {
-		"pack_format": 77,
-		"description": "Adds a tiny biomes overworld dimension."
+		"pack_format": 88,
+		"description": "Adds a tiny biomes overworld dimension.",
+        "min_format": 88,
+        "max_format": 88
 	}
 }

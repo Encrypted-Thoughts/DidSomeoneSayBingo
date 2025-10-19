@@ -22,6 +22,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.WorldProperties;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,6 +32,7 @@ import java.util.stream.IntStream;
 public class BingoManager {
 
     public static GameModeBase Game;
+    public static String GameModeModifier;
     public static GamePreset GameSettings;
     public static ArrayList<Item> CurrentItems = new ArrayList<>();
     public static boolean GenerateInProgress = false;
@@ -119,7 +121,7 @@ public class BingoManager {
                 Game = switch (GameSettings.GameMode.toLowerCase()) {
                     case "lockout" -> new Lockout(server, CurrentItems);
                     case "blackout" -> new Blackout(server, CurrentItems);
-                    case "hidden" -> new HiddenBingo(server, CurrentItems, HiddenBingo.HiddenType.DoubleDiagonal, 120);
+                    case "hidden" -> new HiddenBingo(server, CurrentItems, GameModeModifier);
                     default -> new Bingo(server, CurrentItems);
                 };
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
@@ -138,7 +140,7 @@ public class BingoManager {
         tpAllToBingoSpawn(server);
     }
 
-    public static void setGameMode(ServerPlayerEntity player, MinecraftServer server, String mode) {
+    public static void setGameMode(ServerPlayerEntity player, MinecraftServer server, String mode, String modeModifier) {
         if (Game.Status == GameStatus.Idle) {
             if (CurrentItems.size() < 25) {
                 try {
@@ -148,6 +150,7 @@ public class BingoManager {
                 }
             }
             try {
+                GameModeModifier = null;
                 MutableText text = null;
                 switch (mode.toLowerCase()) {
                     case "bingo" -> {
@@ -163,7 +166,8 @@ public class BingoManager {
                     case "hidden" -> {
                         text = TranslationHelper.getAsText("dssb.game.game_mode_set").append(TranslationHelper.getAsText("dssb.game.hidden_bingo").formatted(Formatting.GREEN));
                         GameSettings.GameMode = "Hidden";
-                        Game = new HiddenBingo(server, CurrentItems, HiddenBingo.HiddenType.DoubleDiagonal, 120);
+                        GameModeModifier = modeModifier;
+                        Game = new HiddenBingo(server, CurrentItems, GameModeModifier);
                     }
                     case "blackout" -> {
                         text = TranslationHelper.getAsText("dssb.game.game_mode_set").append(TranslationHelper.getAsText("dssb.game.blackout_bingo").formatted(Formatting.GREEN));
@@ -185,19 +189,17 @@ public class BingoManager {
     public static void checkItem(ServerPlayerEntity player, ItemStack itemStack) {
         if (Game.Status == GameStatus.Playing) {
             if (Game.checkItem(itemStack.getItem(), player) && Game.checkBingo(player.getScoreboardTeam())) {
-                var server = player.getServer();
-                if (server != null) {
-                    tpAllToBingoSpawn(server);
-                    for (var somePlayer : getValidPlayers(server.getPlayerManager())) {
-                        var scoreboard = player.getScoreboardTeam();
-                        if (scoreboard != null) {
-                            var text = TranslationHelper.getAsText("dssb.game.game_over").formatted(player.getScoreboardTeam().getColor());
-                            player.networkHandler.sendPacket(new TitleS2CPacket(text));
-                            somePlayer.playSoundToPlayer(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
-                        }
+                var server = player.getEntityWorld().getServer();
+                tpAllToBingoSpawn(server);
+                for (var somePlayer : getValidPlayers(server.getPlayerManager())) {
+                    var scoreboard = player.getScoreboardTeam();
+                    if (scoreboard != null) {
+                        var text = TranslationHelper.getAsText("dssb.game.game_over").formatted(player.getScoreboardTeam().getColor());
+                        player.networkHandler.sendPacket(new TitleS2CPacket(text));
+                        somePlayer.playSoundToPlayer(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
                     }
-                    Game.Status = GameStatus.Idle;
                 }
+                Game.Status = GameStatus.Idle;
             }
         }
     }
@@ -224,11 +226,8 @@ public class BingoManager {
         player.heal(player.getMaxHealth());
         player.getHungerManager().setFoodLevel(20);
         player.changeGameMode(net.minecraft.world.GameMode.byId(BingoMod.CONFIG.SpawnSettings.HubMode.toLowerCase()));
-        var server = player.getServer();
-        if (server != null) {
-            var world = WorldHelper.getWorldRegistryKeyByName(player.getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
-            player.setSpawnPoint(new ServerPlayerEntity.Respawn(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true), false);
-        }
+        var world = WorldHelper.getWorldRegistryKeyByName(player.getEntityWorld().getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
+        player.setSpawnPoint(new ServerPlayerEntity.Respawn(WorldProperties.SpawnPoint.create(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0.0f, 0.0f), true), false);
     }
 
     public static void tpAllToBingoSpawn(MinecraftServer server) {
@@ -238,20 +237,17 @@ public class BingoManager {
 
     public static void tpToBingoSpawn(ServerPlayerEntity player) {
         try {
-            var server = player.getServer();
-            if (server != null) {
-                var world = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
-                var tpPlayer = TeleportHelper.teleport(
-                        player,
-                        world,
-                        BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getX() + 0.5,
-                        BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getY(),
-                        BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getZ() + 0.5,
-                        180,
-                        0);
-                resetPlayer(tpPlayer);
-            } else
-                BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(PlayerHelper.getPlayerName(player)));
+            var server = player.getEntityWorld().getServer();
+            var world = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
+            var tpPlayer = TeleportHelper.teleport(
+                    player,
+                    world,
+                    BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getX() + 0.5,
+                    BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getY(),
+                    BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos().getZ() + 0.5,
+                    180,
+                    0);
+            resetPlayer(tpPlayer);
         } catch (CommandSyntaxException e) {
             BingoMod.LOGGER.error("Unable to teleport player: %s to spawn".formatted(PlayerHelper.getPlayerName(player)));
             BingoMod.LOGGER.error(e.getMessage());
@@ -320,7 +316,7 @@ public class BingoManager {
             var teammates = new ArrayList<ServerPlayerEntity>();
 
             for (var target : players) {
-                if (target.isTeammate(player) && target.getPos().distanceTo(player.getPos()) > 50)
+                if (target.isTeammate(player) && target.getEntityPos().distanceTo(player.getEntityPos()) > 50)
                     teammates.add(target);
             }
 
@@ -332,7 +328,7 @@ public class BingoManager {
             int randomNum = ThreadLocalRandom.current().nextInt(0, teammates.size());
             var tpTarget = teammates.get(randomNum);
 
-            TeleportHelper.teleport(player, tpTarget.getWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
+            TeleportHelper.teleport(player, tpTarget.getEntityWorld(), tpTarget.getX(), tpTarget.getY(), tpTarget.getZ(), 0, 0);
 
             MessageHelper.sendSystemMessage(teammates.get(randomNum), TranslationHelper.getAsText("dssb.game.teleport_target", PlayerHelper.getPlayerName(player)));
             MessageHelper.sendSystemMessage(player, TranslationHelper.getAsText("dssb.game.teleport_to", PlayerHelper.getPlayerName(teammates.get(randomNum))));
@@ -478,7 +474,7 @@ public class BingoManager {
                 Game = switch (GameSettings.GameMode.toLowerCase()) {
                     case "lockout" -> new Lockout(server, CurrentItems);
                     case "blackout" -> new Blackout(server, CurrentItems);
-                    case "hidden" -> new HiddenBingo(server, CurrentItems, HiddenBingo.HiddenType.DoubleDiagonal, 120);
+                    case "hidden" -> new HiddenBingo(server, CurrentItems, GameModeModifier);
                     default -> new Bingo(server, CurrentItems);
                 };
                 var spawnWorld = WorldHelper.getWorldByName(server, BingoMod.CONFIG.SpawnSettings.Dimension);
@@ -501,14 +497,14 @@ public class BingoManager {
         }
 
         if (!BingoPlayers.contains(player.getUuid())) {
-            var scoreboard = player.getScoreboard();
+            var scoreboard = player.getEntityWorld().getScoreboard();
             var team = player.getScoreboardTeam();
             if (BingoMod.CONFIG.AssignRandomTeamOnJoin && team == null) {
                 var teams = new ArrayList<>(scoreboard.getTeams());
                 var randomTeamIndex = ThreadLocalRandom.current().nextInt(0, teams.size());
                 scoreboard.addScoreHolderToTeam(player.getName().getString(), teams.get(randomTeamIndex));
             } else if (!BingoMod.CONFIG.AssignRandomTeamOnJoin)
-                player.getScoreboard().clearTeam(player.getName().getString());
+                scoreboard.clearTeam(player.getName().getString());
 
             if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnJoin && player.isAlive())
                 tpToBingoSpawn(player);

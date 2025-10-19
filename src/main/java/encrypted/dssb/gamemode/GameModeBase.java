@@ -34,6 +34,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProperties;
 import net.minecraft.world.biome.BiomeKeys;
 
 import java.util.HashMap;
@@ -121,7 +122,7 @@ public abstract class GameModeBase {
 
     public boolean checkItem(Item item, PlayerEntity player) {
         var foundByTeam = player.getScoreboardTeam();
-        var server = player.getServer();
+        var server = player.getEntityWorld().getServer();
         if (foundByTeam == null || server == null)
             return false;
 
@@ -140,7 +141,7 @@ public abstract class GameModeBase {
 
                     final Text itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).formatted(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
-                    playNotificationSound(player.getWorld());
+                    playNotificationSound(player.getEntityWorld());
                     return true;
                 }
                 colIndex++;
@@ -183,7 +184,7 @@ public abstract class GameModeBase {
 
     public void playNotificationSound(World world) {
         for (var player : world.getPlayers())
-            player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.MASTER, 1, 1);
+            player.getEntityWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.MASTER, 1, 1);
     }
 
     public void teleportPlayersToTeamSpawns(ServerWorld world) {
@@ -209,7 +210,7 @@ public abstract class GameModeBase {
                 player.getHungerManager().setFoodLevel(20);
                 TeleportHelper.teleport(player, world, spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5, 0, 0);
                 player.changeGameMode(net.minecraft.world.GameMode.SURVIVAL);
-                player.setSpawnPoint(new ServerPlayerEntity.Respawn(player.getWorld().getRegistryKey(), spawn, 0, true), false);
+                player.setSpawnPoint(new ServerPlayerEntity.Respawn(WorldProperties.SpawnPoint.create(player.getEntityWorld().getRegistryKey(), spawn, 0.0f, 0.0f), true), false);
             } catch (CommandSyntaxException e) {
                 BingoMod.LOGGER.error(e.getMessage());
             }
@@ -279,32 +280,28 @@ public abstract class GameModeBase {
         var text = TranslationHelper.getAsText("dssb.game.team_joined", PlayerHelper.getPlayerName(player), team.getName()).formatted(team.getColor());
         MessageHelper.broadcastChat(Server.getPlayerManager(), text);
         if (Status == GameStatus.Playing) {
-            var server = player.getServer();
-            if (server != null) {
-                player.getInventory().clear();
-                player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
-                givePlayerStatusEffects(player, true);
-                givePlayerEquipment(player, true);
-                BingoManager.Game.teleportPlayerToTeamSpawn(
-                        WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
-                        player,
-                        BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
-                );
-            }
+            var server = player.getEntityWorld().getServer();
+            player.getInventory().clear();
+            player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
+            givePlayerStatusEffects(player, true);
+            givePlayerEquipment(player, true);
+            BingoManager.Game.teleportPlayerToTeamSpawn(
+                    WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
+                    player,
+                    BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
+            );
         }
         else if (Status == GameStatus.Starting) {
-            var server = player.getServer();
-            if (server != null) {
-                player.getInventory().clear();
-                player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
-                player.setNoGravity(true);
-                BingoManager.Game.teleportPlayerToTeamSpawn(
-                        WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
-                        player,
-                        BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
-                );
-            }
+            var server = player.getEntityWorld().getServer();
+            player.getInventory().clear();
+            player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
+            player.setNoGravity(true);
+            BingoManager.Game.teleportPlayerToTeamSpawn(
+                    WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
+                    player,
+                    BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
+            );
         }
     }
 
@@ -332,16 +329,13 @@ public abstract class GameModeBase {
             givePlayerStatusEffects(player, true);
             player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
         } else if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnRespawn) {
-            var server = player.getServer();
-            if (server != null) {
-                var world = WorldHelper.getWorldRegistryKeyByName(player.getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
-                player.setSpawnPoint(new ServerPlayerEntity.Respawn(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0, true), false);
-                BingoManager.tpToBingoSpawn(player);
-            }
+            var world = WorldHelper.getWorldRegistryKeyByName(player.getEntityWorld().getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
+            player.setSpawnPoint(new ServerPlayerEntity.Respawn(WorldProperties.SpawnPoint.create(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0.0f, 0.0f), true), false);
+            BingoManager.tpToBingoSpawn(player);
         }
     }
 
-    public void givePlayerEquipment(PlayerEntity player, boolean respawn) {
+    public void givePlayerEquipment(ServerPlayerEntity player, boolean respawn) {
         var team = player.getScoreboardTeam();
         if (team == null) return;
 
@@ -351,12 +345,10 @@ public abstract class GameModeBase {
             var item = Registries.ITEM.get(Identifier.of(gear.Name));
             var stack = new ItemStack(item, gear.Amount);
             if (stack.isEnchantable()) {
-                var server = player.getServer();
-                if (server != null) {
-                    for (var enchantment : gear.Enchantments) {
-                        var entry = server.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getEntry(Identifier.of(enchantment.Type));
-                        entry.ifPresent(enchantmentReference -> stack.addEnchantment(enchantmentReference, enchantment.Level));
-                    }
+                var server = player.getEntityWorld().getServer();
+                for (var enchantment : gear.Enchantments) {
+                    var entry = server.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getEntry(Identifier.of(enchantment.Type));
+                    entry.ifPresent(enchantmentReference -> stack.addEnchantment(enchantmentReference, enchantment.Level));
                 }
             }
 

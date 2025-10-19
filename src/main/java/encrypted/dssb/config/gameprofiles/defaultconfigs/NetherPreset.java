@@ -24,7 +24,8 @@ public class NetherPreset extends GamePreset {
                 new StartingItem("minecraft:diamond_shovel", 1, true, false),
                 new StartingItem("minecraft:diamond_axe", 1, true, false),
                 new StartingItem("minecraft:diamond_sword", 1, true, false),
-                new StartingItem("minecraft:bread", 64, true, false)
+                new StartingItem("minecraft:bread", 64, true, false),
+                new StartingItem("minecraft:crafting_table", 64, true, false)
         ));
         ItemPools = new ArrayList<>(List.of(
                 new NetherItemPool().Name

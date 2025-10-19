@@ -15,7 +15,8 @@ public class OverworldHardItemPool extends ItemPool {
                 new ItemGroup(new String[]{
                         "minecraft:iron_horse_armor",
                         "minecraft:golden_horse_armor",
-                        "minecraft:diamond_horse_armor"
+                        "minecraft:diamond_horse_armor",
+                        "minecraft:copper_horse_armor"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:peony",
@@ -342,6 +343,46 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:waxed_weathered_copper_grate",
                         "minecraft:waxed_weathered_copper_trapdoor",
                         "minecraft:waxed_weathered_copper_bulb",
+                        "minecraft:copper_chest",
+                        "minecraft:waxed_exposed_copper_chest",
+                        "minecraft:waxed_weathered_copper_chest",
+                        "minecraft:waxed_oxidized_copper_chest",
+                        "minecraft:waxed_copper_chest",
+                        "minecraft:waxed_exposed_copper_chest",
+                        "minecraft:waxed_weathered_copper_chest",
+                        "minecraft:waxed_oxidized_copper_chest",
+                        "minecraft:lightning_rod",
+                        "minecraft:waxed_exposed_lightning_rod",
+                        "minecraft:waxed_weathered_lightning_rod",
+                        "minecraft:waxed_oxidized_lightning_rod",
+                        "minecraft:waxed_lightning_rod",
+                        "minecraft:waxed_exposed_lightning_rod",
+                        "minecraft:waxed_weathered_lightning_rod",
+                        "minecraft:waxed_oxidized_lightning_rod",
+                        "minecraft:copper_golem_statue",
+                        "minecraft:waxed_exposed_copper_golem_statue",
+                        "minecraft:waxed_weathered_copper_golem_statue",
+                        "minecraft:waxed_oxidized_copper_golem_statue",
+                        "minecraft:waxed_copper_golem_statue",
+                        "minecraft:waxed_exposed_copper_golem_statue",
+                        "minecraft:waxed_weathered_copper_golem_statue",
+                        "minecraft:waxed_oxidized_copper_golem_statue",
+                        "minecraft:copper_bars",
+                        "minecraft:waxed_exposed_copper_bars",
+                        "minecraft:waxed_weathered_copper_bars",
+                        "minecraft:waxed_oxidized_copper_bars",
+                        "minecraft:waxed_copper_bars",
+                        "minecraft:waxed_exposed_copper_bars",
+                        "minecraft:waxed_weathered_copper_bars",
+                        "minecraft:waxed_oxidized_copper_bars",
+                        "minecraft:copper_lantern",
+                        "minecraft:waxed_exposed_copper_lantern",
+                        "minecraft:waxed_weathered_copper_lantern",
+                        "minecraft:waxed_oxidized_copper_lantern",
+                        "minecraft:waxed_copper_lantern",
+                        "minecraft:waxed_exposed_copper_lantern",
+                        "minecraft:waxed_weathered_copper_lantern",
+                        "minecraft:waxed_oxidized_copper_lantern",
                 }),
                 new ItemGroup(new String[]{"minecraft:trial_key"}),
                 new ItemGroup(new String[]{"minecraft:lead"}),
@@ -459,13 +500,20 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:rabbit_foot",
                         "minecraft:rabbit_stew"
                 }),
-                new ItemGroup(new String[]{"minecraft:chain"}),
+                new ItemGroup(new String[]{"minecraft:iron_chain"}),
                 new ItemGroup(new String[]{
                         "minecraft:golden_axe",
                         "minecraft:golden_hoe",
                         "minecraft:golden_pickaxe",
                         "minecraft:golden_shovel",
                         "minecraft:golden_sword"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:copper_axe",
+                        "minecraft:copper_hoe",
+                        "minecraft:copper_pickaxe",
+                        "minecraft:copper_shovel",
+                        "minecraft:copper_sword"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:tropical_fish",
@@ -696,7 +744,8 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:stripped_acacia_wood",
                         "minecraft:acacia_sapling",
                         "minecraft:acacia_sign",
-                        "minecraft:acacia_trapdoor"
+                        "minecraft:acacia_trapdoor",
+                        "minecraft:acacia_shelf"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:cherry_boat",
@@ -717,7 +766,8 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:cherry_trapdoor",
                         "minecraft:cherry_log",
                         "minecraft:stripped_cherry_wood",
-                        "minecraft:pink_petals"
+                        "minecraft:pink_petals",
+                        "minecraft:cherry_shelf"
                 }),
                 new ItemGroup(new String[]{"minecraft:hay_block"}),
                 new ItemGroup(new String[]{"minecraft:scaffolding"}),
@@ -726,6 +776,12 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:iron_chestplate",
                         "minecraft:iron_helmet",
                         "minecraft:iron_leggings"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:copper_boots",
+                        "minecraft:copper_chestplate",
+                        "minecraft:copper_helmet",
+                        "minecraft:copper_leggings"
                 }),
                 new ItemGroup( new String[]{"minecraft:raw_iron_block"}),
                 new ItemGroup(new String[]{"minecraft:clock"}),
@@ -768,7 +824,8 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:jungle_sapling",
                         "minecraft:jungle_sign",
                         "minecraft:jungle_trapdoor",
-                        "minecraft:stripped_jungle_log"
+                        "minecraft:stripped_jungle_log",
+                        "minecraft:jungle_shelf"
                 }),
                 new ItemGroup(new String[]{"minecraft:grindstone"}),
                 new ItemGroup(new String[]{
@@ -800,7 +857,6 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:sponge",
                         "minecraft:wet_sponge"
                 }),
-                new ItemGroup(new String[]{"minecraft:lightning_rod"}),
                 new ItemGroup(new String[]{"minecraft:rail"}),
                 new ItemGroup(new String[]{
                         "minecraft:arrow",
@@ -813,7 +869,8 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:mangrove_propagule",
                         "minecraft:mangrove_sign",
                         "minecraft:mangrove_trapdoor",
-                        "minecraft:stripped_mangrove_log"
+                        "minecraft:stripped_mangrove_log",
+                        "minecraft:mangrove_shelf"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:redstone",

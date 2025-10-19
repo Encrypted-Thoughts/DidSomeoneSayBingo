@@ -105,7 +105,7 @@ public class Lockout extends GameModeBase {
     @Override
     public boolean checkItem(Item item, PlayerEntity player) {
         var foundByTeam = player.getScoreboardTeam();
-        var server = player.getServer();
+        var server = player.getEntityWorld().getServer();
         if (foundByTeam == null || server == null)
             return false;
 
@@ -122,7 +122,7 @@ public class Lockout extends GameModeBase {
 
                     final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).formatted(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
-                    playNotificationSound(player.getWorld());
+                    playNotificationSound(player.getEntityWorld());
                     return true;
                 }
                 colIndex++;

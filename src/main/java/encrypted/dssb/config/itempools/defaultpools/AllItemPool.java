@@ -35,6 +35,7 @@ public class AllItemPool extends ItemPool {
                 "minecraft:allay_spawn_egg",
                 "minecraft:strider_spawn_egg",
                 "minecraft:zombie_villager_spawn_egg",
+                "minecraft:copper_golem_spawn_egg",
                 "minecraft:chicken_spawn_egg",
                 "minecraft:phantom_spawn_egg",
                 "minecraft:drowned_spawn_egg",
