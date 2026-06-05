@@ -135,6 +135,5 @@
   "dssb.error.spawn_problem": "Problem finding team spawns.",
   "dssb.error.clarify_fail": "§cUnable to locate item at position %s, %s",
   "dssb.error.item_pool_in_process": "§cCan't change item pools while game in process.",
-  "dssb.error.not_enough_items_in_pool": "Not enough items in default item pool to initialize game items.",
   "dssb.error.not_enough_items_in_pool": "Not enough items in default item pool to initialize game items."
 }
