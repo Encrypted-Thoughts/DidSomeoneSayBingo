@@ -457,14 +457,16 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:golden_hoe",
                         "minecraft:golden_pickaxe",
                         "minecraft:golden_shovel",
-                        "minecraft:golden_sword"
+                        "minecraft:golden_sword",
+                        "minecraft:golden_spear"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:copper_axe",
                         "minecraft:copper_hoe",
                         "minecraft:copper_pickaxe",
                         "minecraft:copper_shovel",
-                        "minecraft:copper_sword"
+                        "minecraft:copper_sword",
+                        "minecraft:copper_spear"
                 }),
                 new ItemGroup(new String[]{"minecraft:note_block"}),
                 new ItemGroup(new String[]{
@@ -514,7 +516,17 @@ public class OverworldNormalItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:name_tag"}),
                 new ItemGroup(new String[]{"minecraft:goat_horn"}),
                 new ItemGroup(new String[]{"minecraft:nautilus_shell"}),
-                new ItemGroup(new String[]{"minecraft:iron_hoe"}),
+                new ItemGroup(new String[]{
+                        "minecraft:copper_nautilus_armor",
+                        "minecraft:iron_nautilus_armor",
+                        "minecraft:golden_nautilus_armor",
+                        "minecraft:diamond_nautilus_armor",
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:iron_hoe",
+                        "minecraft:iron_sword",
+                        "minecraft:iron_spear"
+                }),
                 new ItemGroup(new String[]{"minecraft:lily_pad"}),
                 new ItemGroup(new String[]{
                         "minecraft:acacia_boat",

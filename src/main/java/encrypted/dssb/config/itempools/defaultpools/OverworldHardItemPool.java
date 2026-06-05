@@ -16,7 +16,14 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:iron_horse_armor",
                         "minecraft:golden_horse_armor",
                         "minecraft:diamond_horse_armor",
-                        "minecraft:copper_horse_armor"
+                        "minecraft:copper_horse_armor",
+                        "minecraft:netherite_horse_armor"
+                }),
+                new ItemGroup(new String[]{
+                        "minecraft:copper_nautilus_armor",
+                        "minecraft:iron_nautilus_armor",
+                        "minecraft:golden_nautilus_armor",
+                        "minecraft:diamond_nautilus_armor",
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:peony",
@@ -506,14 +513,16 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:golden_hoe",
                         "minecraft:golden_pickaxe",
                         "minecraft:golden_shovel",
-                        "minecraft:golden_sword"
+                        "minecraft:golden_sword",
+                        "minecraft:golden_spear"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:copper_axe",
                         "minecraft:copper_hoe",
                         "minecraft:copper_pickaxe",
                         "minecraft:copper_shovel",
-                        "minecraft:copper_sword"
+                        "minecraft:copper_sword",
+                        "minecraft:copper_spear"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:tropical_fish",
@@ -621,6 +630,7 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:netherite_chestplate",
                         "minecraft:netherite_leggings",
                         "minecraft:netherite_sword",
+                        "minecraft:netherite_spear",
                         "minecraft:netherite_axe",
                         "minecraft:netherite_hoe",
                         "minecraft:netherite_shovel",

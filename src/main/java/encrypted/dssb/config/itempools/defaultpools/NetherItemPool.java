@@ -45,6 +45,12 @@ public class NetherItemPool extends ItemPool {
                         "minecraft:iron_hoe"
                 }),
                 new ItemGroup(new String[]{
+                        "minecraft:wooden_spear",
+                        "minecraft:stone_spear",
+                        "minecraft:iron_spear",
+                        "minecraft:golden_spear",
+                }),
+                new ItemGroup(new String[]{
                         "minecraft:bone",
                         "minecraft:bone_meal",
                         "minecraft:bone_block"

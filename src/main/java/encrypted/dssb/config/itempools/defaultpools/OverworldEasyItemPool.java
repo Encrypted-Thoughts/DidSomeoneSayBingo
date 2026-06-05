@@ -62,7 +62,10 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:egg"}),
                 new ItemGroup(new String[]{"minecraft:iron_bars"}),
                 new ItemGroup(new String[]{"minecraft:copper_bars"}),
-                new ItemGroup(new String[]{"minecraft:wooden_sword"}),
+                new ItemGroup(new String[]{
+                        "minecraft:wooden_sword",
+                        "minecraft:wooden_spear"
+                }),
                 new ItemGroup(new String[]{"minecraft:target"}),
                 new ItemGroup(new String[]{"minecraft:writable_book"}),
                 new ItemGroup(new String[]{"minecraft:lightning_rod"}),
@@ -297,7 +300,8 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:golden_hoe",
                         "minecraft:golden_pickaxe",
                         "minecraft:golden_shovel",
-                        "minecraft:golden_sword"
+                        "minecraft:golden_sword",
+                        "minecraft:golden_spear"
                 }),
                 new ItemGroup(new String[]{"minecraft:flint_and_steel"}),
                 new ItemGroup(new String[]{
@@ -337,7 +341,10 @@ public class OverworldEasyItemPool extends ItemPool {
                 new ItemGroup(new String[]{"minecraft:arrow"}),
                 new ItemGroup(new String[]{"minecraft:brown_mushroom"}),
                 new ItemGroup(new String[]{"minecraft:furnace"}),
-                new ItemGroup(new String[]{"minecraft:stone_sword"}),
+                new ItemGroup(new String[]{
+                        "minecraft:stone_sword",
+                        "minecraft:stone_spear"
+                }),
                 new ItemGroup(new String[]{"minecraft:anvil"}),
                 new ItemGroup(new String[]{
                         "minecraft:dried_kelp",
@@ -845,14 +852,16 @@ public class OverworldEasyItemPool extends ItemPool {
                         "minecraft:iron_shovel",
                         "minecraft:iron_axe",
                         "minecraft:iron_pickaxe",
-                        "minecraft:iron_sword"
+                        "minecraft:iron_sword",
+                        "minecraft:iron_spear"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:copper_hoe",
                         "minecraft:copper_shovel",
                         "minecraft:copper_axe",
                         "minecraft:copper_pickaxe",
-                        "minecraft:copper_sword"
+                        "minecraft:copper_sword",
+                        "minecraft:copper_spear"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:torch",
