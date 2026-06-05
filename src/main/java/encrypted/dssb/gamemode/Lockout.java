@@ -6,6 +6,8 @@ import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.PlayerHelper;
 import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
@@ -117,7 +119,7 @@ public class Lockout extends GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, true);
 
-                    final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).withStyle(foundByTeam.getColor());
+                    final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY)).withStyle(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), itemFound);
                     playNotificationSound(player.level());
                     return true;

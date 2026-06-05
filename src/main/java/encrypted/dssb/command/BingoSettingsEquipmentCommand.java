@@ -114,7 +114,7 @@ public class BingoSettingsEquipmentCommand {
                                                                         .then(argument(settingsEquipmentEquipArgument, BoolArgumentType.bool())
                                                                                 .executes(ctx -> {
                                                                                     var stack = ItemArgument.getItem(ctx, settingsEquipmentItemArgument);
-                                                                                    var item = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                                                                                    var item = BuiltInRegistries.ITEM.getKey(stack.item().value());
 
                                                                                     var count = IntegerArgumentType.getInteger(ctx, settingsEquipmentAmountArgument);
                                                                                     var onRespawn = BoolArgumentType.getBool(ctx, settingsEquipmentRespawnArgument);
@@ -130,7 +130,7 @@ public class BingoSettingsEquipmentCommand {
                                                 .then(argument(settingsEquipmentItemArgument, ItemArgument.item(registryAccess))
                                                         .executes(ctx -> {
                                                             var stack = ItemArgument.getItem(ctx, settingsEquipmentItemArgument);
-                                                            var item = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                                                            var item = BuiltInRegistries.ITEM.getKey(stack.item().value());
                                                             MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                                     TranslationHelper.getAsText("dssb.commands.settings.equipment.remove.item_removed", item.toString()));
                                                             BingoManager.GameSettings.StartingGear.removeIf(gear -> gear.Name.equals(item.toString()));

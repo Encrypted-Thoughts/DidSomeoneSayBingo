@@ -13,7 +13,7 @@ public class MessageHelper {
 
     public static void sendSystemMessageOverlay(ServerPlayer player, Component message) {
         if (player == null) return;
-        player.displayClientMessage(message, true);
+        player.sendSystemMessage(message, true);
     }
 
     public static void broadcastChat(PlayerList playerManager, Component message) {

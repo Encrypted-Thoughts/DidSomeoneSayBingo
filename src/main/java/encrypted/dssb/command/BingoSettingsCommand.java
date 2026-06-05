@@ -29,24 +29,24 @@ public class BingoSettingsCommand {
 
     public static int tellSettings(ServerPlayer player) throws CommandSyntaxException {
         var text = TranslationHelper.getAsText("dssb.commands.settings.tell.current");
-        player.displayClientMessage(text, false);
+        player.sendSystemMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.game_mode").append(TranslationHelper.getAsText(GameSettings.GameMode));
-        player.displayClientMessage(text, false);
+        player.sendSystemMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.time_limit").append(GameSettings.TimeLimit > 0 ? TranslationHelper.get("dssb.commands.settings.tell.time_limit.minutes", GameSettings.TimeLimit) : TranslationHelper.get("dssb.commands.settings.tell.time_limit.none"));
-        player.displayClientMessage(text, false);
+        player.sendSystemMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.area_size").append(TranslationHelper.getAsText(String.valueOf(GameSettings.TPRandomizationRadius)));
-        player.displayClientMessage(text, false);
+        player.sendSystemMessage(text, false);
         if (GameSettings != null) {
             text = TranslationHelper.getAsText("dssb.commands.settings.tell.profile").append(TranslationHelper.getAsText(GameSettings.Name));
-            player.displayClientMessage(text, false);
+            player.sendSystemMessage(text, false);
         }
         var PVPEnabled = player.level().getGameRules().get(GameRules.PVP);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.pvp").append(TranslationHelper.getAsText(PVPEnabled ? "dssb.commands.settings.tell.pvp.yes" : "dssb.commands.settings.tell.pvp.no"));
-        player.displayClientMessage(text, false);
+        player.sendSystemMessage(text, false);
 
         var keepInventoryEnabled = player.level().getGameRules().get(GameRules.KEEP_INVENTORY);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.keep_inventory").append(TranslationHelper.getAsText(keepInventoryEnabled ? "dssb.commands.settings.tell.keep_inventory.yes" : "dssb.commands.settings.tell.keep_inventory.no"));
-        player.displayClientMessage(text, false);
+        player.sendSystemMessage(text, false);
         return Command.SINGLE_SUCCESS;
     }
 }

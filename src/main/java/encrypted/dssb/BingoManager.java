@@ -370,9 +370,11 @@ public class BingoManager {
                 var world = WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension);
                 if (world == null) return;
 
+                //server.setWeatherParameters(new Random().nextInt(0, 1000000), 0, false, false);
                 for (var tempWorld : server.getAllLevels()) {
-                    tempWorld.setDayTime(1000);
-                    tempWorld.setWeatherParameters(new Random().nextInt(0, 1000000), 0, false, false);
+                    var clock =tempWorld.dimensionTypeRegistration().value().defaultClock();
+                    clock.ifPresent(worldClockHolder -> tempWorld.clockManager().setTotalTicks(worldClockHolder, 1000));
+                    tempWorld.resetWeatherCycle();
                 }
 
                 Game.teleportPlayersToTeamSpawns(world);

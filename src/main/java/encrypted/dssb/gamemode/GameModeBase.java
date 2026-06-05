@@ -8,8 +8,10 @@ import encrypted.dssb.model.BingoItem;
 import encrypted.dssb.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
@@ -141,7 +143,7 @@ public abstract class GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, false);
 
-                    final Component itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).withStyle(foundByTeam.getColor());
+                    final Component itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY)).withStyle(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), itemFound);
                     playNotificationSound(player.level());
                     return true;
@@ -385,7 +387,7 @@ public abstract class GameModeBase {
         if (item == null)
             text = TranslationHelper.getAsText("dssb.error.clarify_fail",rowIndex + 1, columnIndex + 1);
         else
-            text = TranslationHelper.getAsText("dssb.game.clarify",rowIndex + 1, columnIndex + 1, item.item.getName().getString());
+            text = TranslationHelper.getAsText("dssb.game.clarify",rowIndex + 1, columnIndex + 1, item.item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY));
 
         if (player != null)
             player.sendSystemMessage(text);

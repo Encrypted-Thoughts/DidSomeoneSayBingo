@@ -27,7 +27,7 @@ public class BingoGetMapCommand {
                                         world.addFreshEntity(itemEntity);
                                     }
                                     catch (Exception e) {
-                                        player.displayClientMessage(TranslationHelper.getAsText(""), false);
+                                        player.sendSystemMessage(TranslationHelper.getAsText(""), false);
                                     }
                                 }
                             }
