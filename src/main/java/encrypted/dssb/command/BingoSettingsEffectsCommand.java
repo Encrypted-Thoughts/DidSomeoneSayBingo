@@ -7,16 +7,16 @@ import encrypted.dssb.BingoManager;
 import encrypted.dssb.config.gameprofiles.StatusEffect;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.RegistryEntryReferenceArgumentType;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.core.registries.Registries;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoSettingsEffectsCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess) {
         var bingoCommand = "bingo";
         var settingsCommand = "settings";
         var settingsEffectsCommand = "effects";
@@ -31,31 +31,31 @@ public class BingoSettingsEffectsCommand {
                         .then(literal(settingsCommand)
                                 .then(literal(settingsEffectsCommand)
                                         .then(literal(settingsEffectsAddCommand)
-                                                .then(argument(settingsEffectArgument, RegistryEntryReferenceArgumentType.registryEntry(registryAccess, RegistryKeys.STATUS_EFFECT))
+                                                .then(argument(settingsEffectArgument, ResourceArgument.resource(registryAccess, Registries.MOB_EFFECT))
                                                         .then(argument(settingsEffectAmplifierArgument, IntegerArgumentType.integer(0, 255))
                                                                 .executes(ctx -> {
-                                                                    var status = RegistryEntryReferenceArgumentType.getStatusEffect(ctx, settingsEffectArgument);
+                                                                    var status = ResourceArgument.getMobEffect(ctx, settingsEffectArgument);
                                                                     var amplifier = IntegerArgumentType.getInteger(ctx, settingsEffectAmplifierArgument);
-                                                                    BingoManager.GameSettings.Effects.add(new StatusEffect(status.registryKey().getValue().toString(), 99999, amplifier, true));
+                                                                    BingoManager.GameSettings.Effects.add(new StatusEffect(status.key().identifier().toString(), 99999, amplifier, true));
 
-                                                                    var text = TranslationHelper.getAsText("dssb.commands.settings.effects.add.effect_added", status.value().getName().getString(), amplifier);
-                                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                                    var text = TranslationHelper.getAsText("dssb.commands.settings.effects.add.effect_added", status.value().getDisplayName().getString(), amplifier);
+                                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                                     return Command.SINGLE_SUCCESS;
                                                                 }))))
 
                                         .then(literal(settingsEffectsRemoveCommand)
-                                                .then(argument(settingsEffectArgument, RegistryEntryReferenceArgumentType.registryEntry(registryAccess, RegistryKeys.STATUS_EFFECT)))
+                                                .then(argument(settingsEffectArgument, ResourceArgument.resource(registryAccess, Registries.MOB_EFFECT)))
                                                 .executes(ctx -> {
-                                                    var status = RegistryEntryReferenceArgumentType.getStatusEffect(ctx, settingsEffectArgument);
-                                                    var effect = BingoManager.GameSettings.Effects.removeIf(statusEffect -> statusEffect.Type.equals(status.value().getName().toString()));
+                                                    var status = ResourceArgument.getMobEffect(ctx, settingsEffectArgument);
+                                                    var effect = BingoManager.GameSettings.Effects.removeIf(statusEffect -> statusEffect.Type.equals(status.value().getDisplayName().toString()));
                                                     if (!effect) {
-                                                        var text = TranslationHelper.getAsText("dssb.commands.settings.effects.remove.invalid_effect", status.value().getName().getString());
+                                                        var text = TranslationHelper.getAsText("dssb.commands.settings.effects.remove.invalid_effect", status.value().getDisplayName().getString());
                                                         var player = ctx.getSource().getPlayer();
                                                         if (player != null)
                                                             MessageHelper.sendSystemMessage(player, text);
                                                     } else {
-                                                        var text = TranslationHelper.getAsText("dssb.commands.settings.effects.remove.effect_removed", status.value().getName().getString());
-                                                        MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                        var text = TranslationHelper.getAsText("dssb.commands.settings.effects.remove.effect_removed", status.value().getDisplayName().getString());
+                                                        MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                     }
                                                     return Command.SINGLE_SUCCESS;
                                                 }))
@@ -64,7 +64,7 @@ public class BingoSettingsEffectsCommand {
                                                 .executes(ctx -> {
                                                     BingoManager.GameSettings.Effects.clear();
                                                     var text = TranslationHelper.getAsText("dssb.commands.settings.effects.clear.cleared");
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                     return Command.SINGLE_SUCCESS;
                                                 })))));
     }

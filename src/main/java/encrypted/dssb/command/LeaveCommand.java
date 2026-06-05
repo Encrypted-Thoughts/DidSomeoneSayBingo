@@ -5,15 +5,16 @@ import com.mojang.brigadier.CommandDispatcher;
 import encrypted.dssb.BingoManager;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.permissions.Permissions;
 
 import static encrypted.dssb.BingoManager.BingoPlayers;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class LeaveCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var leaveCommand = "leave";
 
         dispatcher.register(
@@ -22,28 +23,26 @@ public class LeaveCommand {
                             var player = ctx.getSource().getPlayer();
                             if (player != null) {
                                 var scoreboard = ctx.getSource().getServer().getScoreboard();
-                                scoreboard.clearTeam(player.getName().getString());
-                                BingoPlayers.removeIf(p -> player.getUuid().equals(p));
+                                scoreboard.removePlayerFromTeam(player.getName().getString());
+                                BingoPlayers.removeIf(p -> player.getUUID().equals(p));
                                 var text = TranslationHelper.getAsText("dssb.commands.leave.left_team", player.getDisplayName().getString());
-                                MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                 BingoManager.tpToBingoSpawn(player);
                             }
                             return Command.SINGLE_SUCCESS;
                         })
 
-                        .requires(source -> source.hasPermissionLevel(2))
-                        .then(argument("player", EntityArgumentType.players())
+                        .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                        .then(argument("player", EntityArgument.players())
                             .executes(ctx -> {
-                                var players = EntityArgumentType.getPlayers(ctx, "player");
+                                var players = EntityArgument.getPlayers(ctx, "player");
                                 for (var player : players) {
-                                    if (player != null) {
-                                        var scoreboard = ctx.getSource().getServer().getScoreboard();
-                                        scoreboard.clearTeam(player.getName().getString());
-                                        BingoPlayers.removeIf(p -> player.getUuid().equals(p));
-                                        var text = TranslationHelper.getAsText("dssb.commands.leave.left_team", player.getDisplayName().getString());
-                                        MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
-                                        BingoManager.tpToBingoSpawn(player);
-                                    }
+                                    var scoreboard = ctx.getSource().getServer().getScoreboard();
+                                    scoreboard.removePlayerFromTeam(player.getName().getString());
+                                    BingoPlayers.removeIf(p -> player.getUUID().equals(p));
+                                    var text = TranslationHelper.getAsText("dssb.commands.leave.left_team", player.getDisplayName().getString());
+                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
+                                    BingoManager.tpToBingoSpawn(player);
                                 }
                                 return Command.SINGLE_SUCCESS;
                             })));

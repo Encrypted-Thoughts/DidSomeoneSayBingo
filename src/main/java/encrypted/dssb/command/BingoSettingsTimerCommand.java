@@ -7,14 +7,14 @@ import encrypted.dssb.BingoManager;
 import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
 import static encrypted.dssb.BingoManager.Game;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoSettingsTimerCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var bingoCommand = "bingo";
         var settingsCommand = "settings";
         var timerCommand = "timer";
@@ -30,11 +30,11 @@ public class BingoSettingsTimerCommand {
                                                         var minutes = IntegerArgumentType.getInteger(ctx, minutesArgument);
                                                         if (minutes == 0) {
                                                             BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, minutesArgument);
-                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                                     TranslationHelper.getAsText("dssb.commands.settings.timer.disabled"));
                                                         } else if (minutes > 0) {
                                                             BingoManager.GameSettings.TimeLimit = IntegerArgumentType.getInteger(ctx, minutesArgument);
-                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                                     TranslationHelper.getAsText("dssb.commands.settings.timer.set", minutes));
                                                         }
                                                     } else {

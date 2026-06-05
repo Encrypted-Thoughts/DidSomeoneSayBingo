@@ -8,18 +8,17 @@ import encrypted.dssb.BingoManager;
 import encrypted.dssb.config.gameprofiles.StartingItem;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.ItemStackArgumentType;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.command.ServerCommandSource;
-
 import java.util.ArrayList;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.core.registries.BuiltInRegistries;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoSettingsEquipmentCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess) {
         var bingoCommand = "bingo";
         var settingsCommand = "settings";
         var settingsEquipmentCommand = "equipment";
@@ -42,14 +41,14 @@ public class BingoSettingsEquipmentCommand {
                                 .then(literal(settingsEquipmentCommand)
                                         .then(literal(settingsEquipmentNoneCommand)
                                                 .executes(ctx -> {
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                             TranslationHelper.getAsText("dssb.commands.settings.equipment.set_to").append(TranslationHelper.getAsText("dssb.commands.settings.equipment.none")));
                                                     BingoManager.GameSettings.StartingGear = new ArrayList<>();
                                                     return Command.SINGLE_SUCCESS;
                                                 }))
                                         .then(literal(settingsEquipmentStoneCommand)
                                                 .executes(ctx -> {
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                             TranslationHelper.getAsText("dssb.commands.settings.equipment.set_to").append(TranslationHelper.getAsText("dssb.commands.settings.equipment.stone")));
 
                                                     BingoManager.GameSettings.StartingGear.removeIf(gear ->
@@ -66,7 +65,7 @@ public class BingoSettingsEquipmentCommand {
                                                 }))
                                         .then(literal(settingsEquipmentIronCommand)
                                                 .executes(ctx -> {
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                             TranslationHelper.getAsText("dssb.commands.settings.equipment.set_to").append(TranslationHelper.getAsText("dssb.commands.settings.equipment.iron")));
                                                     BingoManager.GameSettings.StartingGear.removeIf(gear ->
                                                             gear.Name.contains("_pickaxe") ||
@@ -82,7 +81,7 @@ public class BingoSettingsEquipmentCommand {
                                                 }))
                                         .then(literal(settingsEquipmentDiamondCommand)
                                                 .executes(ctx -> {
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                             TranslationHelper.getAsText("dssb.commands.settings.equipment.set_to").append(TranslationHelper.getAsText("dssb.commands.settings.equipment.diamond")));
                                                     BingoManager.GameSettings.StartingGear.removeIf(gear ->
                                                             gear.Name.contains("_pickaxe") ||
@@ -101,7 +100,7 @@ public class BingoSettingsEquipmentCommand {
                                                         .executes(ctx -> {
                                                             var bool = BoolArgumentType.getBool(ctx, settingsEquipmentEnabledArgument);
                                                             var text = TranslationHelper.getAsText(bool ? "dssb.commands.settings.equipment.food.given" : "dssb.commands.settings.equipment.food.not_given");
-                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                             BingoManager.GameSettings.StartingGear.removeIf(gear -> gear.Name.equals("minecraft:bread"));
                                                             if (bool)
                                                                 BingoManager.GameSettings.StartingGear.add(new StartingItem("minecraft:bread", 64, true, false));
@@ -109,30 +108,30 @@ public class BingoSettingsEquipmentCommand {
                                                             return Command.SINGLE_SUCCESS;
                                                         })))
                                         .then(literal(settingsEquipmentAddCommand)
-                                                .then(argument(settingsEquipmentItemArgument, ItemStackArgumentType.itemStack(registryAccess))
+                                                .then(argument(settingsEquipmentItemArgument, ItemArgument.item(registryAccess))
                                                         .then(argument(settingsEquipmentAmountArgument, IntegerArgumentType.integer(1))
                                                                 .then(argument(settingsEquipmentRespawnArgument, BoolArgumentType.bool())
                                                                         .then(argument(settingsEquipmentEquipArgument, BoolArgumentType.bool())
                                                                                 .executes(ctx -> {
-                                                                                    var stack = ItemStackArgumentType.getItemStackArgument(ctx, settingsEquipmentItemArgument);
-                                                                                    var item = Registries.ITEM.getId(stack.getItem());
+                                                                                    var stack = ItemArgument.getItem(ctx, settingsEquipmentItemArgument);
+                                                                                    var item = BuiltInRegistries.ITEM.getKey(stack.getItem());
 
                                                                                     var count = IntegerArgumentType.getInteger(ctx, settingsEquipmentAmountArgument);
                                                                                     var onRespawn = BoolArgumentType.getBool(ctx, settingsEquipmentRespawnArgument);
                                                                                     var equip = BoolArgumentType.getBool(ctx, settingsEquipmentEquipArgument);
 
-                                                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                                                             TranslationHelper.getAsText("dssb.commands.settings.equipment.add.item_added", item.toString(), count, onRespawn, equip));
                                                                                     BingoManager.GameSettings.StartingGear.add(new StartingItem(item.toString(), count, onRespawn, equip));
 
                                                                                     return Command.SINGLE_SUCCESS;
                                                                                 }))))))
                                         .then(literal(settingsEquipmentRemoveCommand)
-                                                .then(argument(settingsEquipmentItemArgument, ItemStackArgumentType.itemStack(registryAccess))
+                                                .then(argument(settingsEquipmentItemArgument, ItemArgument.item(registryAccess))
                                                         .executes(ctx -> {
-                                                            var stack = ItemStackArgumentType.getItemStackArgument(ctx, settingsEquipmentItemArgument);
-                                                            var item = Registries.ITEM.getId(stack.getItem());
-                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
+                                                            var stack = ItemArgument.getItem(ctx, settingsEquipmentItemArgument);
+                                                            var item = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
                                                                     TranslationHelper.getAsText("dssb.commands.settings.equipment.remove.item_removed", item.toString()));
                                                             BingoManager.GameSettings.StartingGear.removeIf(gear -> gear.Name.equals(item.toString()));
 

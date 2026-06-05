@@ -1,15 +1,15 @@
 package encrypted.dssb.util;
 
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class TranslationHelper {
-    public static MutableText getAsText(String key) {
-        return Text.translatable(key);
+    public static MutableComponent getAsText(String key) {
+        return Component.translatable(key);
     }
 
-    public static MutableText getAsText(String key, Object... args) {
-        return Text.literal(get(key, args));
+    public static MutableComponent getAsText(String key, Object... args) {
+        return Component.literal(get(key, args));
     }
 
     public static String get(String key) {
@@ -17,6 +17,6 @@ public class TranslationHelper {
     }
 
     public static String get(String key, Object... args) {
-        return Text.translatable(key).getString().formatted(args);
+        return Component.translatable(key).getString().formatted(args);
     }
 }

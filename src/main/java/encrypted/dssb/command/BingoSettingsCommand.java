@@ -4,15 +4,15 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.GameRules;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.gamerules.GameRules;
 
 import static encrypted.dssb.BingoManager.*;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoSettingsCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var bingoCommand = "bingo";
         var settingsCommand = "settings";
 
@@ -27,27 +27,26 @@ public class BingoSettingsCommand {
                                 })));
     }
 
-    public static int tellSettings(ServerPlayerEntity player) throws CommandSyntaxException {
+    public static int tellSettings(ServerPlayer player) throws CommandSyntaxException {
         var text = TranslationHelper.getAsText("dssb.commands.settings.tell.current");
-        player.sendMessage(text, false);
+        player.displayClientMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.game_mode").append(TranslationHelper.getAsText(GameSettings.GameMode));
-        player.sendMessage(text, false);
+        player.displayClientMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.time_limit").append(GameSettings.TimeLimit > 0 ? TranslationHelper.get("dssb.commands.settings.tell.time_limit.minutes", GameSettings.TimeLimit) : TranslationHelper.get("dssb.commands.settings.tell.time_limit.none"));
-        player.sendMessage(text, false);
+        player.displayClientMessage(text, false);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.area_size").append(TranslationHelper.getAsText(String.valueOf(GameSettings.TPRandomizationRadius)));
-        player.sendMessage(text, false);
+        player.displayClientMessage(text, false);
         if (GameSettings != null) {
             text = TranslationHelper.getAsText("dssb.commands.settings.tell.profile").append(TranslationHelper.getAsText(GameSettings.Name));
-            player.sendMessage(text, false);
+            player.displayClientMessage(text, false);
         }
-        var server = player.getEntityWorld().getServer();
-        var PVPEnabled = server.getGameRules().get(GameRules.PVP).get();
+        var PVPEnabled = player.level().getGameRules().get(GameRules.PVP);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.pvp").append(TranslationHelper.getAsText(PVPEnabled ? "dssb.commands.settings.tell.pvp.yes" : "dssb.commands.settings.tell.pvp.no"));
-        player.sendMessage(text, false);
+        player.displayClientMessage(text, false);
 
-        var keepInventoryEnabled = server.getGameRules().get(GameRules.KEEP_INVENTORY).get();
+        var keepInventoryEnabled = player.level().getGameRules().get(GameRules.KEEP_INVENTORY);
         text = TranslationHelper.getAsText("dssb.commands.settings.tell.keep_inventory").append(TranslationHelper.getAsText(keepInventoryEnabled ? "dssb.commands.settings.tell.keep_inventory.yes" : "dssb.commands.settings.tell.keep_inventory.no"));
-        player.sendMessage(text, false);
+        player.displayClientMessage(text, false);
         return Command.SINGLE_SUCCESS;
     }
 }

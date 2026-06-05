@@ -1,19 +1,19 @@
 package encrypted.dssb.mixin;
 
 import encrypted.dssb.event.PlayerInventoryChangedCallback;
-import net.minecraft.advancement.criterion.InventoryChangedCriterion;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InventoryChangedCriterion.class)
+@Mixin(InventoryChangeTrigger.class)
 public class InventoryChangedCriterionMixin {
-    @Inject(at = @At("HEAD"), method = "trigger(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/item/ItemStack;)V")
-    private void inventoryChanged(ServerPlayerEntity player, PlayerInventory inventory, ItemStack stack, CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/item/ItemStack;)V")
+    private void inventoryChanged(ServerPlayer player, Inventory inventory, ItemStack stack, CallbackInfo ci) {
         PlayerInventoryChangedCallback.EVENT.invoker().inventoryChanged(player, stack);
     }
 }

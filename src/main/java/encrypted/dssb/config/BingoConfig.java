@@ -6,10 +6,9 @@ import encrypted.dssb.BingoMod;
 import encrypted.dssb.config.gameprofiles.TPRandomizationSize;
 import encrypted.dssb.util.TranslationHelper;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Blocks;
-import net.minecraft.scoreboard.AbstractTeam;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.scores.Team;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -27,14 +26,14 @@ public class BingoConfig {
     public Boolean AssignRandomTeamOnJoin = false;
 
     public ArrayList<TeamConfig> Teams = new ArrayList<>(List.of(
-        new TeamConfig(1, "Red", Formatting.RED, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.RED_CONCRETE.asItem().toString()),
-        new TeamConfig(2, "Orange", Formatting.GOLD, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.ORANGE_CONCRETE.asItem().toString()),
-        new TeamConfig(3, "Yellow", Formatting.YELLOW, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.YELLOW_CONCRETE.asItem().toString()),
-        new TeamConfig(4, "Green", Formatting.GREEN, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.LIME_CONCRETE.asItem().toString()),
-        new TeamConfig(5, "Cyan", Formatting.AQUA, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.CYAN_CONCRETE.asItem().toString()),
-        new TeamConfig(6, "Blue", Formatting.BLUE, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.BLUE_CONCRETE.asItem().toString()),
-        new TeamConfig(7, "Purple", Formatting.DARK_PURPLE, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.PURPLE_CONCRETE.asItem().toString()),
-        new TeamConfig(8, "Pink", Formatting.LIGHT_PURPLE, AbstractTeam.CollisionRule.PUSH_OWN_TEAM, false, Blocks.PINK_CONCRETE.asItem().toString())
+        new TeamConfig(1, "Red", ChatFormatting.RED, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.RED_CONCRETE.asItem().toString()),
+        new TeamConfig(2, "Orange", ChatFormatting.GOLD, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.ORANGE_CONCRETE.asItem().toString()),
+        new TeamConfig(3, "Yellow", ChatFormatting.YELLOW, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.YELLOW_CONCRETE.asItem().toString()),
+        new TeamConfig(4, "Green", ChatFormatting.GREEN, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.LIME_CONCRETE.asItem().toString()),
+        new TeamConfig(5, "Cyan", ChatFormatting.AQUA, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.CYAN_CONCRETE.asItem().toString()),
+        new TeamConfig(6, "Blue", ChatFormatting.BLUE, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.BLUE_CONCRETE.asItem().toString()),
+        new TeamConfig(7, "Purple", ChatFormatting.DARK_PURPLE, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.PURPLE_CONCRETE.asItem().toString()),
+        new TeamConfig(8, "Pink", ChatFormatting.LIGHT_PURPLE, Team.CollisionRule.PUSH_OWN_TEAM, false, Blocks.PINK_CONCRETE.asItem().toString())
     ));
 
     public ArrayList<String> BingoDimensions = new ArrayList<>(List.of(

@@ -1,10 +1,9 @@
 package encrypted.dssb.util;
 
 import encrypted.dssb.BingoMod;
-import net.minecraft.block.MapColor;
-import net.minecraft.scoreboard.AbstractTeam;
-
 import javax.imageio.ImageIO;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.scores.Team;
 import java.util.ArrayList;
 
 public class MapRenderHelper {
@@ -28,7 +27,7 @@ public class MapRenderHelper {
     private static int[][] blueLockoutSlotArea;
     private static int[][] yellowLockoutSlotArea;
 
-    public static int[][] getColorSlotArea(AbstractTeam team, boolean lockout){
+    public static int[][] getColorSlotArea(Team team, boolean lockout){
         return switch (team.getName()) {
             case "Red" -> lockout ? redLockoutSlotArea : redSlotArea;
             case "Green" -> lockout ? greenLockoutSlotArea : greenSlotArea;
@@ -51,7 +50,7 @@ public class MapRenderHelper {
     public static ArrayList<MapColor> getMapColors() {
         var mapColors = new ArrayList<MapColor>();
         for (var i=0; i<64; i++)
-            mapColors.add(MapColor.get(i));
+            mapColors.add(MapColor.byId(i));
         return mapColors;
     }
 
@@ -60,7 +59,7 @@ public class MapRenderHelper {
     }
 
     private static double[] applyShade(double[] color, int ind) {
-        double brightness = MapColor.Brightness.values()[ind].brightness / 255.0;
+        double brightness = MapColor.Brightness.values()[ind].modifier / 255.0;
         return new double[] { color[0] * brightness, color[1] * brightness, color[2] * brightness };
     }
 
@@ -75,7 +74,7 @@ public class MapRenderHelper {
         int closestColor = 0;
         double lowestDistance = 10000;
         for (var color : colors) {
-            var mcColor = 0xff000000 | color.color;
+            var mcColor = 0xff000000 | color.col;
             var mcColorVec = new double[3];
             mcColorVec[0] = ((mcColor >> 8) & 0xFF) / 255.0;
             mcColorVec[1] = ((mcColor >> 16) & 0xFF) / 255.0;

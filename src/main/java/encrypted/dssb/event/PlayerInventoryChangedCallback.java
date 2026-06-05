@@ -2,8 +2,8 @@ package encrypted.dssb.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 public interface PlayerInventoryChangedCallback {
     Event<PlayerInventoryChangedCallback> EVENT = EventFactory.createArrayBacked(PlayerInventoryChangedCallback.class, (listeners) -> (player, itemStack) -> {
@@ -12,5 +12,5 @@ public interface PlayerInventoryChangedCallback {
         }
     });
 
-    void inventoryChanged(ServerPlayerEntity player, ItemStack itemStack);
+    void inventoryChanged(ServerPlayer player, ItemStack itemStack);
 }

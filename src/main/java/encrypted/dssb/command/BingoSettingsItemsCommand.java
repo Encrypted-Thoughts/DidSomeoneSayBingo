@@ -10,17 +10,16 @@ import encrypted.dssb.BingoMod;
 import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.server.command.ServerCommandSource;
-
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.commands.CommandSourceStack;
 
 import static encrypted.dssb.BingoManager.Game;
 import static encrypted.dssb.BingoManager.GameSettings;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoSettingsItemsCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var bingoCommand = "bingo";
         var settingsCommand = "settings";
         var settingsItemsCommand = "items";
@@ -50,7 +49,7 @@ public class BingoSettingsItemsCommand {
                                                             GameSettings.ItemPools.add(poolName);
 
                                                             var text = TranslationHelper.getAsText("dssb.commands.settings.items.set.pool_set", poolName);
-                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                             return Command.SINGLE_SUCCESS;
                                                         })))
 
@@ -69,7 +68,7 @@ public class BingoSettingsItemsCommand {
                                                             GameSettings.ItemPools.add(poolName);
 
                                                             var text = TranslationHelper.getAsText("dssb.commands.settings.items.add.pool_added", poolName);
-                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                            MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                             return Command.SINGLE_SUCCESS;
                                                         })))
 
@@ -93,7 +92,7 @@ public class BingoSettingsItemsCommand {
                                                                     MessageHelper.sendSystemMessage(player, text);
                                                             } else {
                                                                 var text = TranslationHelper.getAsText("dssb.commands.settings.items.remove.pool_removed", poolName);
-                                                                MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                                MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                             }
                                                             return Command.SINGLE_SUCCESS;
                                                         })))
@@ -109,12 +108,12 @@ public class BingoSettingsItemsCommand {
 
                                                     GameSettings.ItemPools.clear();
                                                     var text = TranslationHelper.getAsText("dssb.commands.settings.items.clear.cleared");
-                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(), text);
+                                                    MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(), text);
                                                     return Command.SINGLE_SUCCESS;
                                                 })))));
     }
 
-    private static CompletableFuture<Suggestions> GetItemPoolSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+    private static CompletableFuture<Suggestions> GetItemPoolSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         for (var pool : BingoMod.ItemPools) {
             if (pool.Name.toLowerCase().contains(builder.getRemainingLowerCase()))
                 builder.suggest(pool.Name);

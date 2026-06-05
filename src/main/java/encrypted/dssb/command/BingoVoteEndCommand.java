@@ -3,12 +3,12 @@ package encrypted.dssb.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import encrypted.dssb.BingoManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoVoteEndCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var bingoCommand = "bingo";
         var voteEndCommand = "voteend";
 

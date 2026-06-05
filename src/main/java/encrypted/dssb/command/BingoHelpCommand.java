@@ -4,14 +4,15 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoHelpCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var bingoCommand = "bingo";
 
         dispatcher.register(
@@ -23,9 +24,9 @@ public class BingoHelpCommand {
                 }));
     }
 
-    private static int execute(ServerPlayerEntity player) {
-        var isOp = player.hasPermissionLevel(2);
-        MessageHelper.sendSystemMessage(player, Text.translatable("dssb.commands.help.available_commands"));
+    private static int execute(ServerPlayer player) {
+        var isOp = player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
+        MessageHelper.sendSystemMessage(player, Component.translatable("dssb.commands.help.available_commands"));
         sendHelpMessage(player, "dssb.commands.help.generate_description", false);
         sendHelpMessage(player, "dssb.commands.help.start_description", false);
         if (isOp) sendHelpMessage(player, "dssb.commands.help.end_description", true);
@@ -51,7 +52,7 @@ public class BingoHelpCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static void sendHelpMessage(ServerPlayerEntity player, String descriptionId, boolean isOp){
+    private static void sendHelpMessage(ServerPlayer player, String descriptionId, boolean isOp){
         var descriptionText = TranslationHelper.getAsText(descriptionId);
 
         if (isOp) {

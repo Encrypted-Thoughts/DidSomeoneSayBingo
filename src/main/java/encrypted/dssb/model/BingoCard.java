@@ -1,16 +1,15 @@
 package encrypted.dssb.model;
 
 import encrypted.dssb.util.MapRenderHelper;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.MapIdComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.map.MapState;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.saveddata.maps.MapId;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import java.util.ArrayList;
 
 import static encrypted.dssb.util.MapRenderHelper.nearestColor;
@@ -21,7 +20,7 @@ public class BingoCard {
     public int[][] bingoPixels;
     private ItemStack map;
 
-    public BingoCard(ServerWorld world, ArrayList<Item> items) throws Exception {
+    public BingoCard(ServerLevel world, ArrayList<Item> items) throws Exception {
         if (items.size() < (size * size))
             throw new Exception("Not enough possible items in item pools to generate a bingo card.");
 
@@ -44,7 +43,7 @@ public class BingoCard {
         resetCard(world);
     }
 
-    public void redrawCard(ServerWorld world) {
+    public void redrawCard(ServerLevel world) {
         var sideOffset = 2;
         var offsetBetweenSlots = 1;
         var slotOffset = 24;
@@ -69,7 +68,7 @@ public class BingoCard {
         createMap(world);
     }
 
-    public void resetCard(ServerWorld world) {
+    public void resetCard(ServerLevel world) {
         bingoPixels = new int[128][128];
         for (int i = 0; i < MapRenderHelper.getBingoCardBorder().length; i++)
             bingoPixels[i] = MapRenderHelper.getBingoCardBorder()[i].clone();
@@ -93,21 +92,21 @@ public class BingoCard {
         return map.copy();
     }
 
-    private void createMap(ServerWorld world) {
+    private void createMap(ServerLevel world) {
         map = new ItemStack(Items.FILLED_MAP);
-        var mapState = MapState.of((byte) 3, true, world.getRegistryKey());
-        var mapIdComponent = new MapIdComponent(1);
-        world.putMapState(mapIdComponent, mapState);
-        map.set(DataComponentTypes.MAP_ID, mapIdComponent);
+        var mapState = MapItemSavedData.createForClient((byte) 3, true, world.dimension());
+        var mapIdComponent = new MapId(1);
+        world.setMapData(mapIdComponent, mapState);
+        map.set(DataComponents.MAP_ID, mapIdComponent);
         updateMapState(mapState);
     }
 
-    public void updateMap(PlayerEntity player, int rowIndex, int colIndex, boolean lockout) {
+    public void updateMap(Player player, int rowIndex, int colIndex, boolean lockout) {
         var sideOffset = 2;
         var offsetBetweenSlots = 1;
         var slotOffset = 24;
 
-        var team = player.getScoreboardTeam();
+        var team = player.getTeam();
         if (team == null)
             return;
 
@@ -124,28 +123,28 @@ public class BingoCard {
                 }
             }
 
-            updateMaps(player.getEntityWorld().getServer());
+            updateMaps(player.level().getServer());
         }
     }
 
     public void updateMaps(MinecraftServer server) {
         if (server != null && map != null) {
-            createMap(server.getOverworld());
-            var mapId = map.get(DataComponentTypes.MAP_ID);
+            createMap(server.overworld());
+            var mapId = map.get(DataComponents.MAP_ID);
             if (mapId != null) {
-                for (var p : server.getPlayerManager().getPlayerList()) {
+                for (var p : server.getPlayerList().getPlayers()) {
                     var inventory = p.getInventory();
-                    for (int i = 0; i < inventory.size(); ++i) {
-                        var id = inventory.getStack(i).get(DataComponentTypes.MAP_ID);
+                    for (int i = 0; i < inventory.getContainerSize(); ++i) {
+                        var id = inventory.getItem(i).get(DataComponents.MAP_ID);
                         if (id != null && id.id() == mapId.id())
-                            inventory.setStack(i, map.copy());
+                            inventory.setItem(i, map.copy());
                     }
                 }
             }
         }
     }
 
-    private void updateMapState(MapState mapState) {
+    private void updateMapState(MapItemSavedData mapState) {
         var count = 0;
         for (var row : bingoPixels) {
             for (var pixel : row) {

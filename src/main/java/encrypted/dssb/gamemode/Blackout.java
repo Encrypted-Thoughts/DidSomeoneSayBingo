@@ -5,12 +5,10 @@ import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
 import encrypted.dssb.util.WorldHelper;
-import net.minecraft.item.Item;
-import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.scores.Team;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +25,7 @@ public class Blackout extends GameModeBase {
     public void start() {
         Status = GameStatus.Loading;
         var text = TranslationHelper.getAsText("dssb.game.blackout.starting");
-        MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), text);
+        MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), text);
 
         initialize();
     }
@@ -46,11 +44,11 @@ public class Blackout extends GameModeBase {
         if (CurrentCountdownSecond < elapsedSeconds) {
             CurrentCountdownSecond = elapsedSeconds;
             var text = TranslationHelper.getAsText("dssb.game.countdown", 30 - elapsedSeconds);
-            MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
+            MessageHelper.broadcastOverlay(Server.getPlayerList(), text);
 
             if (elapsedSeconds >= 30) {
-                for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
-                    player.setMovementSpeed(1);
+                for (var player : BingoManager.getValidPlayers(Server.getPlayerList())) {
+                    player.setSpeed(1);
                     player.setNoGravity(false);
                     givePlayerEquipment(player, false);
                     givePlayerStatusEffects(player, false);
@@ -83,7 +81,7 @@ public class Blackout extends GameModeBase {
             minuteText = minutes == 0 ? "" : minuteText;
             var secondText = seconds < 10 ? "0" + seconds : String.valueOf(seconds);
             var text = TranslationHelper.getAsText("dssb.game.timer", hourText, minuteText, secondText);
-            MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
+            MessageHelper.broadcastOverlay(Server.getPlayerList(), text);
 
             if (remaining <= 0) {
                 TimerRunning = false;
@@ -93,8 +91,8 @@ public class Blackout extends GameModeBase {
     }
 
     private void handleGameTimeout() {
-        var teams = new HashMap<AbstractTeam, Integer>();
-        for (var team : Server.getScoreboard().getTeams().stream().filter(t -> !t.getPlayerList().isEmpty()).toList())
+        var teams = new HashMap<Team, Integer>();
+        for (var team : Server.getScoreboard().getPlayerTeams().stream().filter(t -> !t.getPlayers().isEmpty()).toList())
             teams.put(team, 0);
 
         for (var row : Card.slots) {
@@ -106,7 +104,7 @@ public class Blackout extends GameModeBase {
             }
         }
 
-        Map.Entry<AbstractTeam, Integer> maxTeam = null;
+        Map.Entry<Team, Integer> maxTeam = null;
         var tie = false;
         for (var team : teams.entrySet()) {
             if (maxTeam == null || team.getValue() > maxTeam.getValue()) {
@@ -124,14 +122,14 @@ public class Blackout extends GameModeBase {
         else {
             end();
             var text = TranslationHelper.getAsText("dssb.game.tie");
-            MessageHelper.broadcastOverlay(Server.getPlayerManager(), text);
+            MessageHelper.broadcastOverlay(Server.getPlayerList(), text);
         }
 
-        for (var player : BingoManager.getValidPlayers(Server.getPlayerManager()))
-            player.playSoundToPlayer(SoundEvents.ENTITY_ENDER_DRAGON_DEATH, SoundCategory.MASTER, 0.5f, 1);
+        for (var player : BingoManager.getValidPlayers(Server.getPlayerList()))
+            player.playSound(SoundEvents.ENDER_DRAGON_DEATH, 0.5f, 1);
     }
 
-    private boolean parseCardForBingo(AbstractTeam team) {
+    private boolean parseCardForBingo(Team team) {
         // check slots
         for (var row : Card.slots) {
             for (var slot : row) {
@@ -142,7 +140,7 @@ public class Blackout extends GameModeBase {
         return true;
     }
 
-    public boolean checkBingo(AbstractTeam team) {
+    public boolean checkBingo(Team team) {
 
         if (parseCardForBingo(team)) {
             handleWin(team);

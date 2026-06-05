@@ -4,14 +4,15 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.config.Coordinates;
-import net.minecraft.command.argument.BlockPosArgumentType;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.server.permissions.Permissions;
 
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoSpawnCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var bingoCommand = "bingo";
         var spawnCommand = "spawn";
         var spawnPointArgument = "spawnPoint";
@@ -21,13 +22,13 @@ public class BingoSpawnCommand {
         dispatcher.register(
                 literal(bingoCommand)
                         .then(literal(spawnCommand)
-                                .requires(source -> source.hasPermissionLevel(2))
+                                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
 
                                 // Set the spawn point location in the spawn hub
                                 .then(literal(spawnPointArgument)
-                                        .then(argument(positionArgument, BlockPosArgumentType.blockPos())
+                                        .then(argument(positionArgument, BlockPosArgument.blockPos())
                                                 .executes(ctx -> {
-                                                    var pos = BlockPosArgumentType.getBlockPos(ctx, positionArgument);
+                                                    var pos = BlockPosArgument.getBlockPos(ctx, positionArgument);
                                                     BingoMod.CONFIG.SpawnSettings.HubCoords = new Coordinates(pos.getX(), pos.getY(), pos.getZ());
                                                     BingoMod.CONFIG.saveToFile();
                                                     return Command.SINGLE_SUCCESS;
@@ -35,9 +36,9 @@ public class BingoSpawnCommand {
 
                                 // Set where the bingo display board should go
                                 .then(literal(displayPointArgument)
-                                        .then(argument(positionArgument, BlockPosArgumentType.blockPos())
+                                        .then(argument(positionArgument, BlockPosArgument.blockPos())
                                                 .executes(ctx -> {
-                                                    var pos = BlockPosArgumentType.getBlockPos(ctx, positionArgument);
+                                                    var pos = BlockPosArgument.getBlockPos(ctx, positionArgument);
                                                     BingoMod.CONFIG.DisplayBoardCoords = new Coordinates(pos.getX(), pos.getY(), pos.getZ());
                                                     BingoMod.CONFIG.saveToFile();
                                                     return Command.SINGLE_SUCCESS;

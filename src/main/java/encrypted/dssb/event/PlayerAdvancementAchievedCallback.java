@@ -2,8 +2,8 @@ package encrypted.dssb.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.server.level.ServerPlayer;
 
 public interface PlayerAdvancementAchievedCallback {
     Event<PlayerAdvancementAchievedCallback> EVENT = EventFactory.createArrayBacked(PlayerAdvancementAchievedCallback.class, (listeners) -> (player, advancement) -> {
@@ -12,5 +12,5 @@ public interface PlayerAdvancementAchievedCallback {
         }
     });
 
-    void advancementAchieved(ServerPlayerEntity player, Advancement advancement);
+    void advancementAchieved(ServerPlayer player, Advancement advancement);
 }

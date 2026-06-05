@@ -5,8 +5,9 @@ import com.google.gson.GsonBuilder;
 import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoItem;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,10 +44,10 @@ public class ItemPool {
             var possibleItems = new ArrayList<String>();
             for (var itemId : itemGroup.Items) {
                 try {
-                    var item = Registries.ITEM.get(Identifier.of(itemId));
-                    var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(Registries.ITEM.getId(item).getPath()));
+                    var item = BuiltInRegistries.ITEM.getValue(Identifier.parse(itemId));
+                    var stream = BingoItem.class.getResourceAsStream("/assets/dssb/items/%s.png".formatted(BuiltInRegistries.ITEM.getKey(item).getPath()));
                     if (stream == null)
-                        throw new Exception("Can't obtain stream for: /assets/dssb/items/%s.png".formatted(Registries.ITEM.getId(item).getPath()));
+                        throw new Exception("Can't obtain stream for: /assets/dssb/items/%s.png".formatted(BuiltInRegistries.ITEM.getKey(item).getPath()));
                     ImageIO.read(stream);
                     possibleItems.add(itemId);
                 } catch (Exception e) {

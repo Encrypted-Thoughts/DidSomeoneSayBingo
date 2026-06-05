@@ -2,10 +2,9 @@ package encrypted.dssb.config.itempools.defaultpools;
 
 import encrypted.dssb.config.itempools.ItemGroup;
 import encrypted.dssb.config.itempools.ItemPool;
-import net.minecraft.registry.Registries;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 public class AllItemPool extends ItemPool {
 
@@ -134,8 +133,8 @@ public class AllItemPool extends ItemPool {
 
         Name = "All";
         Items = new ArrayList<>();
-        for (var item : Registries.ITEM.getKeys()) {
-            var itemId = item.getValue().toString();
+        for (var item : BuiltInRegistries.ITEM.registryKeySet()) {
+            var itemId = item.identifier().toString();
             if (!creativeOnly.contains(itemId))
                 Items.add(new ItemGroup(new String[]{itemId}));
         }

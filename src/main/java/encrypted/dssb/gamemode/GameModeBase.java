@@ -6,37 +6,39 @@ import encrypted.dssb.BingoMod;
 import encrypted.dssb.model.BingoCard;
 import encrypted.dssb.model.BingoItem;
 import encrypted.dssb.util.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.GlowItemFrameEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.scoreboard.AbstractTeam;
-import net.minecraft.scoreboard.ScoreHolder;
-import net.minecraft.scoreboard.Team;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldProperties;
-import net.minecraft.world.biome.BiomeKeys;
-
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.GlowItemFrame;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.ScoreHolder;
+import net.minecraft.world.scores.Team;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
@@ -47,7 +49,7 @@ public abstract class GameModeBase {
 
     protected BingoCard Card;
 
-    public HashMap<AbstractTeam, BlockPos> TeamSpawns = new HashMap<>();
+    public HashMap<Team, BlockPos> TeamSpawns = new HashMap<>();
 
     public GameStatus Status = GameStatus.Idle;
     public long CountDownStart;
@@ -69,7 +71,7 @@ public abstract class GameModeBase {
 
     public abstract void handleTimer();
 
-    public abstract boolean checkBingo(AbstractTeam team);
+    public abstract boolean checkBingo(Team team);
 
     public void initialize() {
         var world = WorldHelper.getWorldByName(Server, BingoManager.GameSettings.Dimension);
@@ -91,38 +93,38 @@ public abstract class GameModeBase {
         );
 
         CompletableFuture.runAsync(() -> {
-            for (var team : world.getScoreboard().getTeams()) {
+            for (var team : world.getScoreboard().getPlayerTeams()) {
                 var pos = findTeamSpawn(
                         TeamSpawns,
                         world,
-                        new Vec2f(origin.getX(), origin.getZ()),
+                        new Vec2(origin.getX(), origin.getZ()),
                         100,
                         BingoManager.GameSettings.TPRandomizationRadius,
                         BingoManager.GameSettings.MaxYLevel);
                 if (pos != null)
                     TeamSpawns.put(team, pos);
                 else {
-                    MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), TranslationHelper.getAsText("dssb.error.unable_to_find_spawn", team.getName()));
+                    MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), TranslationHelper.getAsText("dssb.error.unable_to_find_spawn", team.getName()));
                     end();
                 }
             }
 
-            for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
-                player.getInventory().clear();
-                player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, Card.getMap());
-                player.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
+            for (var player : BingoManager.getValidPlayers(Server.getPlayerList())) {
+                player.getInventory().clearContent();
+                player.getInventory().setItem(Inventory.SLOT_OFFHAND, Card.getMap());
+                player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
             }
             Status = GameStatus.Initializing;
         }).exceptionally(e -> {
-            MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), TranslationHelper.getAsText("dssb.error.spawn_problem"));
+            MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), TranslationHelper.getAsText("dssb.error.spawn_problem"));
             BingoMod.LOGGER.error(e.getMessage());
             return null;
         });
     }
 
-    public boolean checkItem(Item item, PlayerEntity player) {
-        var foundByTeam = player.getScoreboardTeam();
-        var server = player.getEntityWorld().getServer();
+    public boolean checkItem(Item item, Player player) {
+        var foundByTeam = player.getTeam();
+        var server = player.level().getServer();
         if (foundByTeam == null || server == null)
             return false;
 
@@ -139,9 +141,9 @@ public abstract class GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, false);
 
-                    final Text itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).formatted(foundByTeam.getColor());
-                    MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), itemFound);
-                    playNotificationSound(player.getEntityWorld());
+                    final Component itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.getName().getString()).withStyle(foundByTeam.getColor());
+                    MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), itemFound);
+                    playNotificationSound(player.level());
                     return true;
                 }
                 colIndex++;
@@ -151,7 +153,7 @@ public abstract class GameModeBase {
         return false;
     }
 
-    public void handleWin(AbstractTeam team) {
+    public void handleWin(Team team) {
         TimerRunning = false;
 
         var timeDif = System.currentTimeMillis() - TimerStart;
@@ -163,17 +165,17 @@ public abstract class GameModeBase {
         if (hour > 0) readableTime = String.format("%d:%02d:%02d.%d", hour, minute, second, millis);
         else readableTime = String.format("%d:%02d.%d", minute, second, millis);
 
-        final Text bingoFinished = TranslationHelper.getAsText("dssb.game.team_wins",team.getName(), readableTime).formatted(team.getColor());
-        MessageHelper.broadcastChatToPlayers(Server.getPlayerManager(), bingoFinished);
+        final Component bingoFinished = TranslationHelper.getAsText("dssb.game.team_wins",team.getName(), readableTime).withStyle(team.getColor());
+        MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), bingoFinished);
 
         var world = WorldHelper.getWorldByName(Server, BingoMod.CONFIG.SpawnSettings.Dimension);
         if (world != null) {
             for (var i = 0; i < Card.size; i++) {
                 for (var j = 0; j < Card.size; j++) {
                     var slot = Card.slots[i][j];
-                    var framePos = BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
+                    var framePos = BingoMod.CONFIG.DisplayBoardCoords.getBlockPos().relative(Direction.Axis.Y, Card.size - 1 - i).relative(Direction.EAST, j);
                     if (slot.teams.contains(team))
-                        world.setBlockState(framePos, getConcrete(team));
+                        world.setBlockAndUpdate(framePos, getConcrete(team));
                 }
             }
         }
@@ -182,60 +184,60 @@ public abstract class GameModeBase {
         Status = GameStatus.Idle;
     }
 
-    public void playNotificationSound(World world) {
-        for (var player : world.getPlayers())
-            player.getEntityWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.MASTER, 1, 1);
+    public void playNotificationSound(Level world) {
+        for (var player : world.players())
+            player.level().playSound(null, player.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.MASTER, 1, 1);
     }
 
-    public void teleportPlayersToTeamSpawns(ServerWorld world) {
+    public void teleportPlayersToTeamSpawns(ServerLevel world) {
         for (var team : TeamSpawns.entrySet()) {
-            if (team.getKey() == null || team.getKey().getPlayerList().isEmpty())
+            if (team.getKey() == null || team.getKey().getPlayers().isEmpty())
                 continue;
 
-            for (var name : team.getKey().getPlayerList()) {
-                var player = Server.getPlayerManager().getPlayer(name);
+            for (var name : team.getKey().getPlayers()) {
+                var player = Server.getPlayerList().getPlayerByName(name);
                 if (player != null) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
                     player.setNoGravity(true);
-                    teleportPlayerToTeamSpawn(world, player, team.getValue().offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset));
+                    teleportPlayerToTeamSpawn(world, player, team.getValue().relative(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset));
                 }
             }
         }
     }
 
-    public void teleportPlayerToTeamSpawn(ServerWorld world, ServerPlayerEntity player, BlockPos spawn) {
-        if (player != null && BingoManager.BingoPlayers.contains(player.getUuid())) {
+    public void teleportPlayerToTeamSpawn(ServerLevel world, ServerPlayer player, BlockPos spawn) {
+        if (player != null && BingoManager.BingoPlayers.contains(player.getUUID())) {
             try {
-                player.setMovementSpeed(0);
-                player.getHungerManager().setFoodLevel(20);
+                player.setSpeed(0);
+                player.getFoodData().setFoodLevel(20);
                 TeleportHelper.teleport(player, world, spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5, 0, 0);
-                player.changeGameMode(net.minecraft.world.GameMode.SURVIVAL);
-                player.setSpawnPoint(new ServerPlayerEntity.Respawn(WorldProperties.SpawnPoint.create(player.getEntityWorld().getRegistryKey(), spawn, 0.0f, 0.0f), true), false);
+                player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+                player.setRespawnPosition(new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(player.level().dimension(), spawn, 0.0f, 0.0f), true), false);
             } catch (CommandSyntaxException e) {
                 BingoMod.LOGGER.error(e.getMessage());
             }
         }
     }
 
-    public BlockPos getRandomPos(ServerWorld world, int xMin, int xMax, int zMin, int zMax) {
+    public BlockPos getRandomPos(ServerLevel world, int xMin, int xMax, int zMin, int zMax) {
         while (true) {
             var x = ThreadLocalRandom.current().nextInt(xMin, xMax + 1);
             var z = ThreadLocalRandom.current().nextInt(zMin, zMax + 1);
             var pos = new BlockPos(x, 200, z);
             var biome = world.getBiome(pos);
 
-            if (biome.getKey().isPresent() && biome.getKey().get() != BiomeKeys.OCEAN && biome.getKey().get() != BiomeKeys.BEACH)
+            if (biome.unwrapKey().isPresent() && biome.unwrapKey().get() != Biomes.OCEAN && biome.unwrapKey().get() != Biomes.BEACH)
                 return pos;
         }
     }
 
-    public BlockPos findTeamSpawn(HashMap<AbstractTeam, BlockPos> spawns, ServerWorld world, Vec2f center, float spreadDistance, float maxRange, int maxY) {
-        var random = Random.create();
+    public BlockPos findTeamSpawn(HashMap<Team, BlockPos> spawns, ServerLevel world, Vec2 center, float spreadDistance, float maxRange, int maxY) {
+        var random = RandomSource.create();
         var attempts = 0;
         while (attempts < 100) {
             attempts++;
-            var x = Math.floor(MathHelper.nextDouble(random, center.x - maxRange, center.x + maxRange));
-            var z = Math.floor(MathHelper.nextDouble(random, center.y - maxRange, center.y + maxRange));
+            var x = Math.floor(Mth.nextDouble(random, center.x - maxRange, center.x + maxRange));
+            var z = Math.floor(Mth.nextDouble(random, center.y - maxRange, center.y + maxRange));
 
             // check if point is withing spread distance to another spawn
             var tooClose = spawns.values().stream().anyMatch(spawn -> {
@@ -245,19 +247,19 @@ public abstract class GameModeBase {
             if (tooClose) continue;
 
             // get the top block
-            var mutable = new BlockPos.Mutable(x, maxY + 1, z);
+            var mutable = new BlockPos.MutableBlockPos(x, maxY + 1, z);
             var headValid = world.getBlockState(mutable).isAir();
             mutable.move(Direction.DOWN);
             var footValid = world.getBlockState(mutable).isAir();
             if (!headValid || !footValid) continue;
 
-            while (world.getBlockState(mutable).isAir() && mutable.getY() > world.getBottomY())
+            while (world.getBlockState(mutable).isAir() && mutable.getY() > world.getMinY())
                 mutable.move(Direction.DOWN);
 
             // check if top block is valid
             var state = world.getBlockState(mutable);
             //noinspection deprecation
-            if (state.isLiquid() || state.isIn(BlockTags.FIRE)) continue;
+            if (state.liquid() || state.is(BlockTags.FIRE)) continue;
 
             return mutable.move(Direction.UP);
         }
@@ -272,179 +274,174 @@ public abstract class GameModeBase {
         return Card.getMap();
     }
 
-    public void addNewPlayer(ServerPlayerEntity player, Team team) {
+    public void addNewPlayer(ServerPlayer player, PlayerTeam team) {
         var scoreboard = Server.getScoreboard();
-        scoreboard.addScoreHolderToTeam(player.getName().getString(), team);
-        if (!BingoManager.BingoPlayers.contains(player.getUuid()))
-            BingoManager.BingoPlayers.add(player.getUuid());
-        var text = TranslationHelper.getAsText("dssb.game.team_joined", PlayerHelper.getPlayerName(player), team.getName()).formatted(team.getColor());
-        MessageHelper.broadcastChat(Server.getPlayerManager(), text);
+        scoreboard.addPlayerToTeam(player.getName().getString(), team);
+        if (!BingoManager.BingoPlayers.contains(player.getUUID()))
+            BingoManager.BingoPlayers.add(player.getUUID());
+        var text = TranslationHelper.getAsText("dssb.game.team_joined", PlayerHelper.getPlayerName(player), team.getName()).withStyle(team.getColor());
+        MessageHelper.broadcastChat(Server.getPlayerList(), text);
         if (Status == GameStatus.Playing) {
-            var server = player.getEntityWorld().getServer();
-            player.getInventory().clear();
-            player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
+            var server = player.level().getServer();
+            player.getInventory().clearContent();
+            player.getInventory().setItem(Inventory.SLOT_OFFHAND, getMap());
             givePlayerStatusEffects(player, true);
             givePlayerEquipment(player, true);
             BingoManager.Game.teleportPlayerToTeamSpawn(
                     WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
                     player,
-                    BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
+                    BingoManager.Game.TeamSpawns.get(team).relative(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
             );
         }
         else if (Status == GameStatus.Starting) {
-            var server = player.getEntityWorld().getServer();
-            player.getInventory().clear();
-            player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
+            var server = player.level().getServer();
+            player.getInventory().clearContent();
+            player.getInventory().setItem(Inventory.SLOT_OFFHAND, getMap());
+            player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 300 * 20, 255, false, false, false));
             player.setNoGravity(true);
             BingoManager.Game.teleportPlayerToTeamSpawn(
                     WorldHelper.getWorldByName(server, BingoManager.GameSettings.Dimension),
                     player,
-                    BingoManager.Game.TeamSpawns.get(team).offset(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
+                    BingoManager.Game.TeamSpawns.get(team).relative(Direction.Axis.Y, BingoManager.GameSettings.YSpawnOffset)
             );
         }
     }
 
-    public void buildBingoBoard(ServerWorld world, BlockPos pos) {
-        var frames = world.getEntitiesByType(EntityType.GLOW_ITEM_FRAME, (glowItemFrame) -> pos.isWithinDistance(glowItemFrame.getBlockPos(), 20));
+    public void buildBingoBoard(ServerLevel world, BlockPos pos) {
+        var frames = world.getEntities(EntityType.GLOW_ITEM_FRAME, (glowItemFrame) -> pos.closerThan(glowItemFrame.blockPosition(), 20));
         for (var frame : frames)
             frame.remove(Entity.RemovalReason.DISCARDED);
 
         for (var i = 0; i < Card.size; i++) {
             for (var j = 0; j < Card.size; j++) {
                 var slot = Card.slots[i][j];
-                var framePos = pos.offset(Direction.Axis.Y, Card.size - 1 - i).offset(Direction.EAST, j);
-                var frame = new GlowItemFrameEntity(world, framePos.offset(Direction.SOUTH, 1), Direction.SOUTH);
+                var framePos = pos.relative(Direction.Axis.Y, Card.size - 1 - i).relative(Direction.EAST, j);
+                var frame = new GlowItemFrame(world, framePos.relative(Direction.SOUTH, 1), Direction.SOUTH);
                 frame.setInvulnerable(true);
-                frame.setHeldItemStack(new ItemStack(slot.item, 1), true);
-                world.setBlockState(framePos, Blocks.BLACK_CONCRETE.getDefaultState());
-                world.spawnEntity(frame);
+                frame.setItem(new ItemStack(slot.item, 1), true);
+                world.setBlockAndUpdate(framePos, Blocks.BLACK_CONCRETE.defaultBlockState());
+                world.addFreshEntity(frame);
             }
         }
     }
 
-    public void runAfterRespawn(ServerPlayerEntity player) {
-        if (Status == GameStatus.Playing && BingoManager.BingoPlayers.contains(player.getUuid())) {
+    public void runAfterRespawn(ServerPlayer player) {
+        if (Status == GameStatus.Playing && BingoManager.BingoPlayers.contains(player.getUUID())) {
             givePlayerEquipment(player, true);
             givePlayerStatusEffects(player, true);
-            player.getInventory().setStack(PlayerInventory.OFF_HAND_SLOT, getMap());
+            player.getInventory().setItem(Inventory.SLOT_OFFHAND, getMap());
         } else if (BingoMod.CONFIG.SpawnSettings.TeleportToHubOnRespawn) {
-            var world = WorldHelper.getWorldRegistryKeyByName(player.getEntityWorld().getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
-            player.setSpawnPoint(new ServerPlayerEntity.Respawn(WorldProperties.SpawnPoint.create(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0.0f, 0.0f), true), false);
+            var world = WorldHelper.getWorldRegistryKeyByName(player.level().getServer(), BingoMod.CONFIG.SpawnSettings.Dimension);
+            player.setRespawnPosition(new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(world, BingoMod.CONFIG.SpawnSettings.HubCoords.getBlockPos(), 0.0f, 0.0f), true), false);
             BingoManager.tpToBingoSpawn(player);
         }
     }
 
-    public void givePlayerEquipment(ServerPlayerEntity player, boolean respawn) {
-        var team = player.getScoreboardTeam();
+    public void givePlayerEquipment(ServerPlayer player, boolean respawn) {
+        var team = player.getTeam();
         if (team == null) return;
 
         for (var gear : BingoManager.GameSettings.StartingGear) {
             if (!gear.OnRespawn && respawn) continue;
 
-            var item = Registries.ITEM.get(Identifier.of(gear.Name));
+            var item = BuiltInRegistries.ITEM.getValue(Identifier.parse(gear.Name));
             var stack = new ItemStack(item, gear.Amount);
             if (stack.isEnchantable()) {
-                var server = player.getEntityWorld().getServer();
+                var server = player.level().getServer();
                 for (var enchantment : gear.Enchantments) {
-                    var entry = server.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getEntry(Identifier.of(enchantment.Type));
-                    entry.ifPresent(enchantmentReference -> stack.addEnchantment(enchantmentReference, enchantment.Level));
+                    var entry = server.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(Identifier.parse(enchantment.Type));
+                    entry.ifPresent(enchantmentReference -> stack.enchant(enchantmentReference, enchantment.Level));
                 }
             }
 
             if (gear.AutoEquip) {
-                var slot = player.getPreferredEquipmentSlot(stack);
-                player.equipStack(slot, stack);
+                var slot = player.getEquipmentSlotForItem(stack);
+                player.setItemSlot(slot, stack);
             } else {
-                player.giveItemStack(stack);
+                player.addItem(stack);
             }
         }
     }
 
-    public void givePlayerStatusEffects(PlayerEntity player, boolean respawn) {
-        var team = player.getScoreboardTeam();
+    public void givePlayerStatusEffects(Player player, boolean respawn) {
+        var team = player.getTeam();
         if (team == null) return;
 
-        player.clearStatusEffects();
+        player.removeAllEffects();
 
         for (var entry : BingoManager.GameSettings.Effects) {
             if (!entry.OnRespawn && respawn) continue;
-            var effect = Registries.STATUS_EFFECT.getEntry(Identifier.of(entry.Type));
+            var effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.parse(entry.Type));
             effect.ifPresent(statusEffectReference ->
-                player.addStatusEffect(new StatusEffectInstance(statusEffectReference, entry.Duration < 0 ? -1 : entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon))
+                player.addEffect(new MobEffectInstance(statusEffectReference, entry.Duration < 0 ? -1 : entry.Duration * 20, entry.Amplifier, entry.Ambient, entry.ShowParticles, entry.ShowIcon))
             );
         }
     }
 
-    public void clarify(ServerPlayerEntity player, int rowIndex, int columnIndex) {
+    public void clarify(ServerPlayer player, int rowIndex, int columnIndex) {
         var item = getSlot(rowIndex, columnIndex);
 
-        Text text;
+        Component text;
         if (item == null)
             text = TranslationHelper.getAsText("dssb.error.clarify_fail",rowIndex + 1, columnIndex + 1);
         else
             text = TranslationHelper.getAsText("dssb.game.clarify",rowIndex + 1, columnIndex + 1, item.item.getName().getString());
 
         if (player != null)
-            player.sendMessage(text);
+            player.sendSystemMessage(text);
     }
 
     public void setScoreboardStats(int teamNumber){
         var scoreboard = Server.getScoreboard();
-        var updatePending = scoreboard.getNullableObjective("bingo_update_pending");
-        var winningTeam = scoreboard.getNullableObjective("bingo_winning_team");
-        var gamesPlayed = scoreboard.getNullableObjective("bingo_games_played");
-        var win = scoreboard.getNullableObjective("bingo_win");
-        var loss = scoreboard.getNullableObjective("bingo_loss");
-        var percentage = scoreboard.getNullableObjective("bingo_percentage");
+        var updatePending = scoreboard.getObjective("bingo_update_pending");
+        var winningTeam = scoreboard.getObjective("bingo_winning_team");
+        var gamesPlayed = scoreboard.getObjective("bingo_games_played");
+        var win = scoreboard.getObjective("bingo_win");
+        var loss = scoreboard.getObjective("bingo_loss");
+        var percentage = scoreboard.getObjective("bingo_percentage");
 
         if (updatePending == null || winningTeam == null || gamesPlayed == null || win == null || loss == null || percentage == null )
             return;
 
         // Set overall #bingo statistics
-        var scoreHolder = ScoreHolder.fromName("#bingo");
-        var updateScore = scoreboard.getOrCreateScore(scoreHolder, updatePending);
-        var winningScore = scoreboard.getOrCreateScore(scoreHolder, winningTeam);
-        var totalPlayedScore = scoreboard.getOrCreateScore(scoreHolder, gamesPlayed);
-        if (updateScore != null && winningScore != null && totalPlayedScore != null) {
-            winningScore.setScore(teamNumber);
-            updateScore.setScore(1);
-            totalPlayedScore.incrementScore();
-        }
+        var scoreHolder = ScoreHolder.forNameOnly("#bingo");
+        var updateScore = scoreboard.getOrCreatePlayerScore(scoreHolder, updatePending);
+        var winningScore = scoreboard.getOrCreatePlayerScore(scoreHolder, winningTeam);
+        var totalPlayedScore = scoreboard.getOrCreatePlayerScore(scoreHolder, gamesPlayed);
+        winningScore.set(teamNumber);
+        updateScore.set(1);
+        totalPlayedScore.increment();
 
         // Set player specific statistics
-        for (var player : BingoManager.getValidPlayers(Server.getPlayerManager())) {
-            var playerTeam = player.getScoreboardTeam();
+        for (var player : BingoManager.getValidPlayers(Server.getPlayerList())) {
+            var playerTeam = player.getTeam();
             if (playerTeam != null) {
-                var playerScoreHolder = ScoreHolder.fromProfile(player.getGameProfile());
-                var playedScore = scoreboard.getOrCreateScore(playerScoreHolder, gamesPlayed);
-                var winScore = scoreboard.getOrCreateScore(playerScoreHolder, win);
-                var lossScore = scoreboard.getOrCreateScore(playerScoreHolder, loss);
-                var percentageScore = scoreboard.getOrCreateScore(playerScoreHolder, percentage);
+                var playerScoreHolder = ScoreHolder.fromGameProfile(player.getGameProfile());
+                var playedScore = scoreboard.getOrCreatePlayerScore(playerScoreHolder, gamesPlayed);
+                var winScore = scoreboard.getOrCreatePlayerScore(playerScoreHolder, win);
+                var lossScore = scoreboard.getOrCreatePlayerScore(playerScoreHolder, loss);
+                var percentageScore = scoreboard.getOrCreatePlayerScore(playerScoreHolder, percentage);
 
-                if (playedScore == null || winScore == null || lossScore == null || percentageScore == null)
-                    continue;
-
-                playedScore.incrementScore();
+                playedScore.increment();
                 if (getTeamNumber(playerTeam) == teamNumber)
-                    winScore.incrementScore();
+                    winScore.increment();
                 else
-                    lossScore.incrementScore();
-                if (playedScore.getScore() > 0)
-                    percentageScore.setScore((int)(((double)winScore.getScore()) / playedScore.getScore() * 100));
+                    lossScore.increment();
+                if (playedScore.get() > 0)
+                    percentageScore.set((int)(((double)winScore.get()) / playedScore.get() * 100));
             }
         }
     }
 
-    protected BlockState getConcrete(AbstractTeam team) {
+    protected BlockState getConcrete(Team team) {
         for (var configTeam : BingoMod.CONFIG.Teams) {
             if (configTeam.Name.equals(team.getName()))
-                return Registries.BLOCK.get(Identifier.of(configTeam.BlockId)).getDefaultState();
+                return BuiltInRegistries.BLOCK.getValue(Identifier.parse(configTeam.BlockId)).defaultBlockState();
         }
         return null;
     }
 
-    protected int getTeamNumber(AbstractTeam team) {
+    protected int getTeamNumber(Team team) {
         for (var configTeam : BingoMod.CONFIG.Teams) {
             if (configTeam.Name.equals(team.getName()))
                 return configTeam.Number;

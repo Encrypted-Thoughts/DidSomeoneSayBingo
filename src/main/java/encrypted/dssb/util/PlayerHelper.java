@@ -1,12 +1,9 @@
 package encrypted.dssb.util;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class PlayerHelper {
-    public static String getPlayerName(PlayerEntity player){
-        var displayName = player.getDisplayName();
-        if (displayName == null)
-            return player.getName().getString();
-        return displayName.getString();
+    public static String getPlayerName(Player player){
+        return player.getDisplayName().getString();
     }
 }

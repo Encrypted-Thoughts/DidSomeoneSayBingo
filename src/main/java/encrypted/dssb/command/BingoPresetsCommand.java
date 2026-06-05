@@ -12,18 +12,17 @@ import encrypted.dssb.config.gameprofiles.GamePreset;
 import encrypted.dssb.gamemode.GameStatus;
 import encrypted.dssb.util.MessageHelper;
 import encrypted.dssb.util.TranslationHelper;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 
 import static encrypted.dssb.BingoManager.Game;
 import static encrypted.dssb.BingoManager.GameSettings;
-import static net.minecraft.server.command.CommandManager.argument;
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
 
 public class BingoPresetsCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var bingoCommand = "bingo";
         var presetCommand = "preset";
         var nameArgument = "name";
@@ -40,8 +39,8 @@ public class BingoPresetsCommand {
                                                 for (var preset : BingoMod.GamePresets) {
                                                     if (preset.Name.equals(profileName)) {
                                                         GameSettings = new GamePreset(preset);
-                                                        MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerManager(),
-                                                                TranslationHelper.getAsText("dssb.commands.preset.set_to").append(Text.literal(profileName)));
+                                                        MessageHelper.broadcastChat(ctx.getSource().getServer().getPlayerList(),
+                                                                TranslationHelper.getAsText("dssb.commands.preset.set_to").append(Component.literal(profileName)));
                                                         BingoManager.generate(player, ctx.getSource().getServer(), false);
                                                         return Command.SINGLE_SUCCESS;
                                                     }
@@ -56,7 +55,7 @@ public class BingoPresetsCommand {
                                         }))));
     }
 
-    private static CompletableFuture<Suggestions> GetGameProfileSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+    private static CompletableFuture<Suggestions> GetGameProfileSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         for (var preset : BingoMod.GamePresets) {
             if (preset.Name.toLowerCase().contains(builder.getRemainingLowerCase()))
                 builder.suggest(preset.Name);
