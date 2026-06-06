@@ -119,7 +119,7 @@ public class Lockout extends GameModeBase {
                     bingoItem.teams.add(foundByTeam);
                     Card.updateMap(player, rowIndex, colIndex, true);
 
-                    final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY)).withStyle(foundByTeam.getColor());
+                    final var itemFound = TranslationHelper.getAsText("dssb.game.item_found", PlayerHelper.getPlayerName(player), item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY).getString()).withStyle(foundByTeam.getColor());
                     MessageHelper.broadcastChatToPlayers(Server.getPlayerList(), itemFound);
                     playNotificationSound(player.level());
                     return true;

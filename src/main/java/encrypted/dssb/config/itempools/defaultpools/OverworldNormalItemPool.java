@@ -740,7 +740,8 @@ public class OverworldNormalItemPool extends ItemPool {
                         "minecraft:open_eyeblossom",
                         "minecraft:closed_eyeblossom",
                         "minecraft:wildflowers",
-                        "minecraft:cactus_flower"
+                        "minecraft:cactus_flower",
+                        "minecraft:golden_dandelion"
                 }),
                 new ItemGroup(new String[]{"minecraft:cartography_table"}),
                 new ItemGroup(new String[]{

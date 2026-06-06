@@ -3,7 +3,7 @@ plugins {
 	id 'maven-publish'
 }
 
-version = project.mod_version
+version = project.minecraft_version + '-' + project.mod_version
 group = project.maven_group
 
 repositories {
@@ -37,7 +37,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	implementation "xyz.nucleoid:server-translations-api:${project.nucleoid_version}"
+	implementation include("xyz.nucleoid:server-translations-api:${project.nucleoid_version}")
 }
 
 processResources {

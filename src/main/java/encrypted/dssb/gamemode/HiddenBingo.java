@@ -446,7 +446,7 @@ public class HiddenBingo extends GameModeBase {
         else {
             var item = getSlot(rowIndex, columnIndex);
             if (item == null) text = TranslationHelper.getAsText("dssb.error.clarify_fail",rowIndex + 1, columnIndex + 1);
-            else text = TranslationHelper.getAsText("dssb.game.clarify", rowIndex + 1, columnIndex + 1, item.item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY));
+            else text = TranslationHelper.getAsText("dssb.game.clarify", rowIndex + 1, columnIndex + 1, item.item.components().getOrDefault(DataComponents.ITEM_NAME, CommonComponents.EMPTY).getString());
         }
         if (player != null) player.sendSystemMessage(text);
     }

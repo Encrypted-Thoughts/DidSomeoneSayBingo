@@ -40,7 +40,8 @@ public class OverworldHardItemPool extends ItemPool {
                         "minecraft:blue_orchid",
                         "minecraft:cornflower",
                         "minecraft:azure_bluet",
-                        "minecraft:allium"
+                        "minecraft:allium",
+                        "minecraft:golden_dandelion"
                 }),
                 new ItemGroup(new String[]{
                         "minecraft:black_wool",
