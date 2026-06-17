@@ -68,7 +68,7 @@
                     [
                       { "text": "Dimension:\n\n", "underlined": true, "bold": true},
                       { "text": "Overworld\n", "underlined": false, "bold": false, "color":"dark_green", "click_event": { "action": "run_command", "command": "/bingo settings dimension bingo:duplicate_overworld 200 50" } },
-                      { "text": "Tinyworld\n", "underlined": false, "bold": false, "color":"dark_green", "click_event": { "action": "run_command", "command": "/bingo settings bingo:tiny_biomes_overworld 200 50" } },
+                      { "text": "Tinyworld\n", "underlined": false, "bold": false, "color":"dark_green", "click_event": { "action": "run_command", "command": "/bingo settings dimension bingo:tiny_biomes_overworld 200 50" } },
                       { "text": "Nether\n\n", "underlined": false, "bold": false, "color":"dark_green", "click_event": { "action": "run_command", "command": "/bingo settings dimension dimension bingo:duplicate_nether 110 0" } },
 
                       { "text": "Spawn Radius:\n\n", "underlined": true, "bold": true},
